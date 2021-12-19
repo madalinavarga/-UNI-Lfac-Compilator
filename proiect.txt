@@ -1,0 +1,16 @@
+main ()
+{
+    #comentariu
+    #declarare variabile
+    Integer x=25
+    Real y=2.5
+    String str="Test sir"
+    Char z='d'
+    
+
+    #operatii
+    x=x+5
+    y=x
+
+
+}
