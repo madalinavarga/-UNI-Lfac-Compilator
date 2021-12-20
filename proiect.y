@@ -27,7 +27,7 @@ char* tip;
 %start s
 
 //token 
-%token PRINT MAIN RETURN ASSIGN CONST
+%token PRINT MAIN RETURN ASSIGN CONST EXIT
 %token TIP
 %token DACA ALTFEL PENTRU CATtIMP
 %token GEQ EQ LEQ NEQ
