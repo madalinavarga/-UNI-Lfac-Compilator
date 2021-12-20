@@ -51,7 +51,17 @@ s: declaratii_globale functii_clase main_prog {printf("program corect sintactic\
  ;
 
  // declaratii globale sectiune 1 
- declaratii_globale: 
+declaratii_globale : declaratii_globale declaratie_glob ';'
+                    | declaratie_glob ';'
+                    ;
+declaratie_glob : TIP lista_var
+                ;
+lista_var : lista_var ',' var
+          | var
+          ;
+var : ID
+    | ID '['NR_INT']'
+    ;
  // declaratii functii clase sectiunea 2 
 functii_clase : functii_declaratie
                 ;
