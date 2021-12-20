@@ -5,7 +5,7 @@
 %option noyywrap
 %%
 "Print"                                  {return PRINT;}
-"Integer"|"Float"|"Char"|"String"|"Bool" {return TIP} 
+"Integer"|"Float"|"Char"|"String"|"Bool" {yylval.tip=strdup(yytext);return TIP;}
 "Const"                                  {return CONST;}
 
 "daca"     {return DACA;}

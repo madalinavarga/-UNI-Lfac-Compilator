@@ -878,7 +878,7 @@ YY_RULE_SETUP
 case 2:
 YY_RULE_SETUP
 #line 8 "proiect.l"
-{return TIP} 
+{yylval.tip=strdup(yytext);return TIP;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
