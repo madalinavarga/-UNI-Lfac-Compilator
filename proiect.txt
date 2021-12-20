@@ -1,19 +1,9 @@
 Integer x
 Float y=2.7
 
-main ()
+main()
 {
-    #comentariu
-    #declarare variabile
-    x=25
-    Float w=2.5
-    String str="Test sir"
-    Char z='d'
-    
-
-    #operatii
-    x=x+5
-    y=x
-
-
+x=8
 }
+
+

@@ -24,10 +24,10 @@ char* tip;
 }
 
 //start 
-%start program
+%start s
 
 //token 
-%token PRINT MAIN RETURN ASSIGN 
+%token PRINT MAIN RETURN ASSIGN CONST
 %token TIP
 %token DACA ALTFEL PENTRU CATtIMP
 %token GEQ EQ LEQ NEQ
@@ -41,6 +41,32 @@ char* tip;
 %token<string_val> STRING
 
 //prioritati 
-
+%left PLUS MINUS
+%left PROD DIV
 %%
-program : 
+s: declaratii_globale functii_clase main_prog {printf("program corect sintactic\n");}
+ | declaratii_globale main_prog {printf("program corect sintactic\n");}
+ | functii_clase main_prog {printf("program corect sintactic\n");}
+ | main_prog {printf("program corect sintactic\n");}
+ ;
+
+ // declaratii globale sectiune 1 
+ // declaratii functii clase sectiunea 2 
+ // main 
+main_prog : main'('')' acolade
+           ;
+acolade : '{' '}'
+        | '{' main_list '}'
+        ;
+main_list : TIP ID // de modificat 
+          ;
+%%
+int yyerror(char * s){
+printf("eroare: %s la linia:%d\n",s,yylineno);
+}
+
+int main(int argc, char** argv){
+yyin=fopen(argv[1],"r");
+yyparse();
+} 
+

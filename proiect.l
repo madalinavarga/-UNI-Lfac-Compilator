@@ -5,7 +5,8 @@
 %option noyywrap
 %%
 "Print"                                  {return PRINT;}
-"Integer"|"Float"|"Char"|"String"|"Bool" {yylval.string=strdup(yytext);return TIP} // not sure asa sau fiecare separat 
+"Integer"|"Float"|"Char"|"String"|"Bool" {yylval.string=strdup(yytext);return TIP} 
+"Const"                                  {return CONST;}
 
 "daca"     {return DACA;}
 "altfel"   {return ALTFEL;}
@@ -21,6 +22,8 @@
 "<=" { return LEQ; }
 "!=" { return NEQ; }
 "=" {return ASSIGN;}
+
+
 
 
 "+"                             	{return PLUS;}
