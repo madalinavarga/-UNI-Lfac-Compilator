@@ -1,9 +1,12 @@
+Integer x
+Float y=2.7
+
 main ()
 {
     #comentariu
     #declarare variabile
-    Integer x=25
-    Real y=2.5
+    x=25
+    Float w=2.5
     String str="Test sir"
     Char z='d'
     
