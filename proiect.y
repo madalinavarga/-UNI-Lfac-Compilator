@@ -16,7 +16,7 @@ int check_compile = 1;
 %union {
 int int_val;
 float real_val;
-int bool_val;
+char* bool_val;
 char char_val;
 char* string_val;
 char* nume_var;
@@ -51,9 +51,23 @@ s: declaratii_globale functii_clase main_prog {printf("program corect sintactic\
  ;
 
  // declaratii globale sectiune 1 
+ declaratii_globale: 
  // declaratii functii clase sectiunea 2 
+functii_clase : functii_declaratie
+                ;
+functii_declaratie : ID '(' lista_param ')' '{' list '}'
+                | ID '(' ')' '{' list '}'
+                ;
+lista_param : param
+            | lista_param ','  param 
+            ;
+            
+param : TIP ID
+      ; 
+list : TIP ID
+     ;
  // main 
-main_prog : main'('')' acolade
+main_prog : MAIN'('')' acolade
            ;
 acolade : '{' '}'
         | '{' main_list '}'

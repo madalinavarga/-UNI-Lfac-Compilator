@@ -5,7 +5,7 @@
 %option noyywrap
 %%
 "Print"                                  {return PRINT;}
-"Integer"|"Float"|"Char"|"String"|"Bool" {yylval.string=strdup(yytext);return TIP} 
+"Integer"|"Float"|"Char"|"String"|"Bool" {return TIP} 
 "Const"                                  {return CONST;}
 
 "daca"     {return DACA;}
@@ -13,7 +13,7 @@
 "pentru"   {return PENTRU;}
 "cat timp" {return CATtIMP;}
 
-"main"      {return MAIN;}
+"Main"      {return MAIN;}
 "return"    {return RETURN;}
 "exit"      {return EXIT;}
 
@@ -33,13 +33,12 @@
 "<"                             	{return LESS;}
 ">"                             	{return GREATER;}
 
-[a-zA-Z]+([a-zA-Z]*[_]*[0-9]*)*	    {strcpy(yylval.string, yytext); return ID;}
-\'[^ \']\'                          {yylval.caraval=yytext[1]; return CHAR;}
-\"[^ \"]*\"                         {yylval.sirval=strdup(yytext); return STRING;}
--?([1-9][0-9]*|0)                   {yylval.intval=atoi(yytext); return NR_INT;}
--?([1-9][0-9]*|0)\.([0-9]*)         {yylval.realval=atof(yytext); return NR_REAL;}
-("false")|("true")                  {yylval.bulval=strdup(yytext); return BOOLEAN;}
+[a-zA-Z]+([a-zA-Z]*[_]*[0-9]*)*	    {strcpy(yylval.string_val, yytext); return ID;}
+\'[^ \']\'                          {yylval.char_val=yytext[1]; return CHAR;}
+\"[^ \"]*\"                         {yylval.string_val=strdup(yytext); return STRING;}
+-?([1-9][0-9]*|0)                   {yylval.int_val=atoi(yytext); return NR_INT;}
+-?([1-9][0-9]*|0)\.([0-9]*)         {yylval.real_val=atof(yytext); return NR_REAL;}
+("false")|("true")                  {yylval.bool_val=strdup(yytext); return BOOLEAN;}
 "#"[^\n\r]* ;
 [ \t\r] ;
-\n {return 0;}
-. {return yytext[0];}
+\n {yylineno++;}
