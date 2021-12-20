@@ -31,6 +31,7 @@ char* tip;
 %token TIP
 %token DACA ALTFEL PENTRU CATtIMP
 %token GEQ EQ LEQ NEQ
+%token LESS GREATER PLUS PROD DIV
 
 %token<nume_var> ID
 %token<int_val> NR_INT

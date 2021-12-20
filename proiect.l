@@ -7,13 +7,14 @@
 "Print"                                  {return PRINT;}
 "Integer"|"Float"|"Char"|"String"|"Bool" {yylval.string=strdup(yytext);return TIP} // not sure asa sau fiecare separat 
 
-"daca" {return DACA;}
-"altfel" {return ALTFEL;}
-"pentru" {return PENTRU;}
+"daca"     {return DACA;}
+"altfel"   {return ALTFEL;}
+"pentru"   {return PENTRU;}
 "cat timp" {return CATtIMP;}
 
 "main"      {return MAIN;}
-"return"    {return RETURN; }
+"return"    {return RETURN;}
+"exit"      {return EXIT;}
 
 ">=" { return GEQ; }
 "==" { return EQ; }
@@ -21,6 +22,13 @@
 "!=" { return NEQ; }
 "=" {return ASSIGN;}
 
+
+"+"                             	{return PLUS;}
+"-"                             	{return MINUS;}
+"*"                             	{return PROD;}
+"/"                             	{return DIV;}
+"<"                             	{return LESS;}
+">"                             	{return GREATER;}
 
 [a-zA-Z]+([a-zA-Z]*[_]*[0-9]*)*	    {strcpy(yylval.string, yytext); return ID;}
 \'[^ \']\'                          {yylval.caraval=yytext[1]; return CHAR;}
