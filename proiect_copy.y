@@ -70,33 +70,21 @@ declaratii_globale : declaratie ';'
              | declaratii_globale declaratie ';'
              ;
 
-declaratie  : variabila_initializata
-            | variabila_declarata
-            | array 
+declaratie  : CONST TIP ID 
+            | TIP lista_declaratii
+            | CONST TIP ID ASSIGN NR_INT
+            | TIP ID ASSIGN NR_INT
+            | CONST TIP ID ASSIGN ID 
+            | TIP ID ASSIGN ID 
+            | TIP ID dimensiune 
             ;
-variabila_declarata:  CONST TIP ID 
-                    | TIP lista_declaratii
-                    ;
-variabila_initializata: CONST TIP ID ASSIGN ID 
-                      | CONST TIP ID ASSIGN valoare_tip_date
-                      | TIP ID ASSIGN valoare_tip_date
-                      | TIP ID ASSIGN ID 
-                    ;
-
-valoare_tip_date : NR_REAL ';'
-                 | NR_INT ';'
-                 | CHAR ';'
-                 | STRING ';'
-                 ;
 lista_declaratii : ID
                  | lista_declaratii ',' ID
                  ;
-//de modificat
-array: TIP ID dimensiune
-     ;
-dimensiune: '['NR_INT']'
-          | dimensiune '['NR_INT']'
-          ;
+
+dimensiune: '[' NR_INT ']'
+           | dimensiune '['NR_INT']'
+           ;
     
  // declaratii functii clase sectiunea 2 
 functii_clase : functii_declaratie clase_declaratie
