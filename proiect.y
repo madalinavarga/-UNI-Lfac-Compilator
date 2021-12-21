@@ -83,10 +83,10 @@ variabila_initializata: CONST TIP ID ASSIGN ID
                       | TIP ID ASSIGN ID 
                     ;
 
-valoare_tip_date : NR_REAL ';'
-                 | NR_INT ';'
-                 | CHAR ';'
-                 | STRING ';'
+valoare_tip_date : NR_REAL
+                 | NR_INT 
+                 | CHAR 
+                 | STRING 
                  ;
 lista_declaratii : ID
                  | lista_declaratii ',' ID
