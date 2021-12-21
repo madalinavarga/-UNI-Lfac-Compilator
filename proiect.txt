@@ -1,23 +1,28 @@
 #comentariu pe o linie
-Integer x;
-Float c=3;
-Integer b[10][2];
-Float d[]=[3,6,0];
+Integer a,b;
+Float c=3.9;
+Integer d[10][2];
+Float e[]=[3,6,0];
 String nume[]=["Ana","Maria"];
-Float y,z;
+Float f,g;
 
-functie(Integer x){
+functie(Integer a){
     Integer y;
     }
 Class ana {
-    Integer p;
-    Float j;
+    Integer h;
+    Float i;
            };
 
 Main()
 {
- String ana;
- daca (5==6){}
+#declaratii main
+String nume;
+Integer aux=x;
+
+#if, loops
+daca (5==6){}
  altfel {}
+
 }
 

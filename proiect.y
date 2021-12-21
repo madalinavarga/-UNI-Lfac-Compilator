@@ -127,6 +127,7 @@ param : TIP ID
       ; 
 list : TIP ID ';'
      ;
+
  // main 
 main_prog : MAIN'('')' acolade
            ;
@@ -138,8 +139,9 @@ main_list : cod
            | declaratie_main
            | main_list declaratie_main
           ;
-declaratie_main : TIP ID ';'
+declaratie_main : declaratie ';'
                 ;
+
 //de completat la cod 
 cod : interogari
     | bucle
