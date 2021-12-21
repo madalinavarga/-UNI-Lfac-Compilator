@@ -22,7 +22,9 @@
 "==" { return EQ; }
 "<=" { return LEQ; }
 "!=" { return NEQ; }
-"=" {return ASSIGN;}
+"="  {return ASSIGN;}
+"||" {return OR;}
+"&&" {return AND;}
 
 
 

@@ -65,18 +65,20 @@ extern int yydebug;
     EQ = 271,
     LEQ = 272,
     NEQ = 273,
-    LESS = 274,
-    GREATER = 275,
-    PLUS = 276,
-    PROD = 277,
-    DIV = 278,
-    ID = 279,
-    NR_INT = 280,
-    NR_REAL = 281,
-    BOOLEAN = 282,
-    CHAR = 283,
-    STRING = 284,
-    MINUS = 285
+    OR = 274,
+    AND = 275,
+    LESS = 276,
+    GREATER = 277,
+    PLUS = 278,
+    PROD = 279,
+    DIV = 280,
+    ID = 281,
+    NR_INT = 282,
+    NR_REAL = 283,
+    BOOLEAN = 284,
+    CHAR = 285,
+    STRING = 286,
+    MINUS = 287
   };
 #endif
 /* Tokens.  */
@@ -96,18 +98,20 @@ extern int yydebug;
 #define EQ 271
 #define LEQ 272
 #define NEQ 273
-#define LESS 274
-#define GREATER 275
-#define PLUS 276
-#define PROD 277
-#define DIV 278
-#define ID 279
-#define NR_INT 280
-#define NR_REAL 281
-#define BOOLEAN 282
-#define CHAR 283
-#define STRING 284
-#define MINUS 285
+#define OR 274
+#define AND 275
+#define LESS 276
+#define GREATER 277
+#define PLUS 278
+#define PROD 279
+#define DIV 280
+#define ID 281
+#define NR_INT 282
+#define NR_REAL 283
+#define BOOLEAN 284
+#define CHAR 285
+#define STRING 286
+#define MINUS 287
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -123,7 +127,7 @@ char* string_val;
 char* nume_var;
 char* tip;
 
-#line 127 "y.tab.h"
+#line 131 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -31,6 +31,7 @@ char* tip;
 %token TIP
 %token DACA ALTFEL PENTRU CATtIMP
 %token GEQ EQ LEQ NEQ
+%token OR AND
 %token LESS GREATER PLUS PROD DIV
 
 %token<nume_var> ID
@@ -41,8 +42,16 @@ char* tip;
 %token<string_val> STRING
 
 //prioritati 
+%right ASSIGN
+
+%left EQ
+%left GEQ LEQ LESS GREATER
+
 %left PLUS MINUS
 %left PROD DIV
+
+%left OR
+%left AND
 %%
 s : program
 {     
@@ -108,8 +117,52 @@ main_prog : MAIN'('')' acolade
 acolade : '{' '}'
         | '{' main_list '}'
         ;
-main_list : TIP ID // de modificat 
+main_list : cod
+           | main_list cod
+           | declaratie_main
+           | main_list declaratie_main
           ;
+declaratie_main : TIP ID ';'
+                ;
+//de completat la cod 
+cod : interogari
+    | bucle
+    | ID '(' ')'
+    | ID ASSIGN ID ';'
+    
+    ;
+//if = interogari 
+interogari : interogari interogare
+           | interogare
+           ;
+interogare : DACA '(' conditie ')' acolade
+           | DACA '(' conditie ')' acolade ALTFEL acolade
+           ;
+// lipsa 
+conditie : terminal                     	
+     	| '(' conditie ')'			  
+       	| conditie PLUS conditie              
+       	| conditie MINUS conditie            
+       	| conditie PROD conditie              
+        | conditie DIV conditie          	   	
+
+		| conditie AND conditie              	
+		| conditie OR conditie               
+		| conditie LESS conditie 				
+		| conditie GREATER conditie 			
+		| conditie LEQ conditie 				
+		| conditie GEQ conditie 			
+		| conditie EQ conditie 				
+		;
+terminal : ID
+         | NR_INT
+         | NR_REAL
+bucle : bucle bucla 
+      | bucla
+      ;
+bucla : PENTRU ID acolade
+     | CATtIMP conditie acolade
+     ;
 %%
 int yyerror(char * s){
 printf("eroare: %s la linia:%d\n",s,yylineno);
