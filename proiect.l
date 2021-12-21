@@ -16,6 +16,7 @@
 "Main"      {return MAIN;}
 "return"    {return RETURN;}
 "exit"      {return EXIT;}
+"Class"     {return CLASS;}
 
 ">=" { return GEQ; }
 "==" { return EQ; }
@@ -38,7 +39,9 @@
 \"[^ \"]*\"                         {yylval.string_val=strdup(yytext); return STRING;}
 -?([1-9][0-9]*|0)                   {yylval.int_val=atoi(yytext); return NR_INT;}
 -?([1-9][0-9]*|0)\.([0-9]*)         {yylval.real_val=atof(yytext); return NR_REAL;}
-("false")|("true")                  {yylval.bool_val=strdup(yytext); return BOOLEAN;}
+
 "#"[^\n\r]* ;
 [ \t\r] ;
 \n {yylineno++;}
+. {return yytext[0];}
+

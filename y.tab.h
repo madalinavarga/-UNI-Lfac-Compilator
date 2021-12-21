@@ -55,27 +55,28 @@ extern int yydebug;
     ASSIGN = 261,
     CONST = 262,
     EXIT = 263,
-    TIP = 264,
-    DACA = 265,
-    ALTFEL = 266,
-    PENTRU = 267,
-    CATtIMP = 268,
-    GEQ = 269,
-    EQ = 270,
-    LEQ = 271,
-    NEQ = 272,
-    LESS = 273,
-    GREATER = 274,
-    PLUS = 275,
-    PROD = 276,
-    DIV = 277,
-    ID = 278,
-    NR_INT = 279,
-    NR_REAL = 280,
-    BOOLEAN = 281,
-    CHAR = 282,
-    STRING = 283,
-    MINUS = 284
+    CLASS = 264,
+    TIP = 265,
+    DACA = 266,
+    ALTFEL = 267,
+    PENTRU = 268,
+    CATtIMP = 269,
+    GEQ = 270,
+    EQ = 271,
+    LEQ = 272,
+    NEQ = 273,
+    LESS = 274,
+    GREATER = 275,
+    PLUS = 276,
+    PROD = 277,
+    DIV = 278,
+    ID = 279,
+    NR_INT = 280,
+    NR_REAL = 281,
+    BOOLEAN = 282,
+    CHAR = 283,
+    STRING = 284,
+    MINUS = 285
   };
 #endif
 /* Tokens.  */
@@ -85,27 +86,28 @@ extern int yydebug;
 #define ASSIGN 261
 #define CONST 262
 #define EXIT 263
-#define TIP 264
-#define DACA 265
-#define ALTFEL 266
-#define PENTRU 267
-#define CATtIMP 268
-#define GEQ 269
-#define EQ 270
-#define LEQ 271
-#define NEQ 272
-#define LESS 273
-#define GREATER 274
-#define PLUS 275
-#define PROD 276
-#define DIV 277
-#define ID 278
-#define NR_INT 279
-#define NR_REAL 280
-#define BOOLEAN 281
-#define CHAR 282
-#define STRING 283
-#define MINUS 284
+#define CLASS 264
+#define TIP 265
+#define DACA 266
+#define ALTFEL 267
+#define PENTRU 268
+#define CATtIMP 269
+#define GEQ 270
+#define EQ 271
+#define LEQ 272
+#define NEQ 273
+#define LESS 274
+#define GREATER 275
+#define PLUS 276
+#define PROD 277
+#define DIV 278
+#define ID 279
+#define NR_INT 280
+#define NR_REAL 281
+#define BOOLEAN 282
+#define CHAR 283
+#define STRING 284
+#define MINUS 285
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -121,7 +123,7 @@ char* string_val;
 char* nume_var;
 char* tip;
 
-#line 125 "y.tab.h"
+#line 127 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

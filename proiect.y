@@ -27,7 +27,7 @@ char* tip;
 %start s
 
 //token 
-%token PRINT MAIN RETURN ASSIGN CONST EXIT
+%token PRINT MAIN RETURN ASSIGN CONST EXIT CLASS 
 %token TIP
 %token DACA ALTFEL PENTRU CATtIMP
 %token GEQ EQ LEQ NEQ
@@ -44,37 +44,63 @@ char* tip;
 %left PLUS MINUS
 %left PROD DIV
 %%
-s: declaratii_globale functii_clase main_prog {printf("program corect sintactic\n");}
- | declaratii_globale main_prog {printf("program corect sintactic\n");}
- | functii_clase main_prog {printf("program corect sintactic\n");}
- | main_prog {printf("program corect sintactic\n");}
+s : program
+{     
+      if(check_compile == 1)
+            printf("Limbaj acceptat! Well done!\n");
+      else printf("Eroare de compilare! \n");
+}
+program: declaratii_globale functii_clase main_prog 
+ | declaratii_globale main_prog 
+ | functii_clase main_prog 
+ | main_prog 
  ;
 
  // declaratii globale sectiune 1 
-declaratii_globale : declaratii_globale declaratie_glob ';'
-                    | declaratie_glob ';'
-                    ;
-declaratie_glob : TIP lista_var
-                ;
-lista_var : lista_var ',' var
-          | var
-          ;
-var : ID
-    | ID '['NR_INT']'
-    ;
+declaratii_globale : declaratie ';'
+             | declaratii_globale declaratie ';'
+             ;
+
+declaratie  : CONST TIP ID 
+            | TIP lista_declaratii
+            | CONST TIP ID ASSIGN NR_INT
+            | TIP ID ASSIGN NR_INT
+            | CONST TIP ID ASSIGN ID 
+            | TIP ID ASSIGN ID 
+            | TIP ID dimensiune 
+            ;
+lista_declaratii : ID
+                 | lista_declaratii ',' ID
+                 ;
+
+dimensiune: '[' NR_INT ']'
+           | dimensiune '['NR_INT']'
+           ;
+    
  // declaratii functii clase sectiunea 2 
-functii_clase : functii_declaratie
-                ;
+functii_clase : functii_declaratie clase_declaratie
+              ;
+clase_declaratie : class
+                 | clase_declaratie class
+                 ;
+class : CLASS ID '{' date_membru'}' ';'
+      ;
+date_membru : data_membru ';'
+            | date_membru data_membru ';'
+            ;
+data_membru : TIP ID
+            ;
+
 functii_declaratie : ID '(' lista_param ')' '{' list '}'
                 | ID '(' ')' '{' list '}'
                 ;
-lista_param : param
+lista_param : param 
             | lista_param ','  param 
             ;
             
 param : TIP ID
       ; 
-list : TIP ID
+list : TIP ID ';'
      ;
  // main 
 main_prog : MAIN'('')' acolade
@@ -93,4 +119,3 @@ int main(int argc, char** argv){
 yyin=fopen(argv[1],"r");
 yyparse();
 } 
-

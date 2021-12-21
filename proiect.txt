@@ -1,9 +1,19 @@
-Integer x
-Float y=2.7
+#comentariu pe o linie
+Integer x;
+Float c=3;
+Integer b[10][2];
+Float y,z;
+
+functie(Integer x){
+    Integer y;
+    }
+Class ana {
+    Integer p;
+    Float j;
+           };
 
 Main()
 {
-x=8
+ String ana
 }
-
 
