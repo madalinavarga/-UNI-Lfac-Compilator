@@ -2,6 +2,8 @@
 Integer x;
 Float c=3;
 Integer b[10][2];
+Float d[]=[3,6,0];
+String nume[]=["Ana","Maria"];
 Float y,z;
 
 functie(Integer x){

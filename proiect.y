@@ -93,11 +93,15 @@ lista_declaratii : ID
                  ;
 //de modificat
 array: TIP ID dimensiune
+     | TIP ID '[' ']' ASSIGN '[' lista_valori ']'
+     | TIP ID '[' ']' ASSIGN '[' ']'
      ;
 dimensiune: '['NR_INT']'
           | dimensiune '['NR_INT']'
           ;
-    
+lista_valori : valoare_tip_date
+             | lista_valori ',' valoare_tip_date
+            ;
  // declaratii functii clase sectiunea 2 
 functii_clase : functii_declaratie clase_declaratie
               ;
