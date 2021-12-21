@@ -73,6 +73,7 @@ declaratii_globale : declaratie ';'
 declaratie  : variabila_initializata
             | variabila_declarata
             | array 
+            | print
             ;
 variabila_declarata:  CONST TIP ID 
                     | TIP lista_declaratii
@@ -102,7 +103,9 @@ dimensiune: '['NR_INT']'
 lista_valori : valoare_tip_date
              | lista_valori ',' valoare_tip_date
             ;
- // declaratii functii clase sectiunea 2 
+print: PRINT '(' STRING ',' ID ')'
+            ;
+ // declaratii functii clase SECTIUNEA 2
 functii_clase : functii_declaratie clase_declaratie
               ;
 clase_declaratie : class
@@ -128,7 +131,8 @@ param : TIP ID
 list : TIP ID ';'
      ;
 
- // main 
+
+ // MAIN SECTIUNEA 3 
 main_prog : MAIN'('')' acolade
            ;
 acolade : '{' '}'
@@ -138,6 +142,7 @@ main_list : cod
            | main_list cod
            | declaratie_main
            | main_list declaratie_main
+           | print 
           ;
 declaratie_main : declaratie ';'
                 ;

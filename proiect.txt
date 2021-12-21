@@ -5,6 +5,7 @@ Integer d[10][2];
 Float e[]=[3,6,0];
 String nume[]=["Ana","Maria"];
 Float f,g;
+Print("Madalina" ,a);
 
 functie(Integer a){
     Integer y;
