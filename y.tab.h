@@ -72,13 +72,19 @@ extern int yydebug;
     PLUS = 278,
     PROD = 279,
     DIV = 280,
-    ID = 281,
-    NR_INT = 282,
-    NR_REAL = 283,
-    BOOLEAN = 284,
-    CHAR = 285,
-    STRING = 286,
-    MINUS = 287
+    INCR = 281,
+    DECR = 282,
+    PLSEQ = 283,
+    MINEQ = 284,
+    MULEQ = 285,
+    DIVEQ = 286,
+    ID = 287,
+    NR_INT = 288,
+    NR_REAL = 289,
+    BOOLEAN = 290,
+    CHAR = 291,
+    STRING = 292,
+    MINUS = 293
   };
 #endif
 /* Tokens.  */
@@ -105,13 +111,19 @@ extern int yydebug;
 #define PLUS 278
 #define PROD 279
 #define DIV 280
-#define ID 281
-#define NR_INT 282
-#define NR_REAL 283
-#define BOOLEAN 284
-#define CHAR 285
-#define STRING 286
-#define MINUS 287
+#define INCR 281
+#define DECR 282
+#define PLSEQ 283
+#define MINEQ 284
+#define MULEQ 285
+#define DIVEQ 286
+#define ID 287
+#define NR_INT 288
+#define NR_REAL 289
+#define BOOLEAN 290
+#define CHAR 291
+#define STRING 292
+#define MINUS 293
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -127,7 +139,7 @@ char* string_val;
 char* nume_var;
 char* tip;
 
-#line 131 "y.tab.h"
+#line 143 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

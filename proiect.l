@@ -11,7 +11,7 @@
 "daca"     {return DACA;}
 "altfel"   {return ALTFEL;}
 "pentru"   {return PENTRU;}
-"cat timp" {return CATtIMP;}
+"cat_timp" {return CATtIMP;}
 
 "Main"      {return MAIN;}
 "return"    {return RETURN;}
@@ -25,6 +25,10 @@
 "="  {return ASSIGN;}
 "||" {return OR;}
 "&&" {return AND;}
+"+=" {return PLSEQ;}
+"-=" {return MINEQ;}
+"*=" {return MULEQ;}
+"/=" {return DIVEQ;}
 
 
 
@@ -35,6 +39,8 @@
 "/"                             	{return DIV;}
 "<"                             	{return LESS;}
 ">"                             	{return GREATER;}
+"++"                                {return INCR;}
+"--"                                {return DECR;}
 
 [a-zA-Z]+([a-zA-Z]*[_]*[0-9]*)*	    {strcpy(yylval.string_val, yytext); return ID;}
 \'[^ \']\'                          {yylval.char_val=yytext[1]; return CHAR;}

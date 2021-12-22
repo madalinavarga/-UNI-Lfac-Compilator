@@ -21,11 +21,13 @@ Main()
 String nume;
 Integer aux=x;
 
+x=f(x);
+x=functie(a,b);
+x[10]=3;
+
 #if, loops
 daca ((8+9>0) && (6==9)){}
 altfel {}
-
-
 
 }
 

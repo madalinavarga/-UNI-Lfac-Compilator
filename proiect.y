@@ -33,6 +33,7 @@ char* tip;
 %token GEQ EQ LEQ NEQ
 %token OR AND
 %token LESS GREATER PLUS PROD DIV
+%token INCR DECR PLSEQ MINEQ MULEQ DIVEQ
 
 %token<nume_var> ID
 %token<int_val> NR_INT
@@ -145,21 +146,24 @@ bloc_cod : cod
 
 //de completat la cod 
 cod : interogari                    
-    | bucle                        
+    | functie_for 
+    | functie_while                      
     | apel_functie ';'              
     | ID ASSIGN apel_functie ';'    
-    | ID ASSIGN expresie ';'        
+    | ID ASSIGN expresie ';' 
+    | ID '[' NR_INT ']' ASSIGN expresie ';'       
     | declaratie ';'                
     | print
     ;
 apel_functie: ID '(' ')'              
-            | ID '(' variabila ')' 
+            | ID '(' lista_variabile ')' 
             ;
+lista_variabile: variabila
+               | lista_variabile ',' variabila
+               ;
 //if = interogari 
-interogari : interogari interogare
-           | interogare
-           ;
-interogare : DACA '(' conditii ')' acolade 
+
+interogari : DACA '(' conditii ')' acolade 
            | DACA '(' conditii ')' acolade ALTFEL acolade
            ;
 // lipsa 
@@ -174,13 +178,31 @@ conditie    : expresie LESS expresie
 		| expresie EQ expresie 
             | expresie NEQ expresie 				
 		;
-bucle : bucle bucla 
-      | bucla
-      ;
 //de modificat 
-bucla : PENTRU '(' TIP ID ASSIGN variabila ')' acolade
-     | CATtIMP '(' conditie ')' acolade
-     ;
+
+functie_while: CATtIMP '(' conditie')' '{' '}'
+            ;
+
+functie_for: PENTRU '('for_list')' '{' '}'
+           ;
+for_list: asignare ';' conditie ';' statement
+        ;
+asignare: ID ASSIGN expresie
+        ;
+
+statement : ID INCR
+          | ID DECR
+          | INCR ID
+          | DECR ID
+          | ID ASSIGN expresie
+          | ID PLSEQ expresie 
+          | ID MINEQ expresie 
+          | ID MULEQ expresie
+          | ID DIVEQ expresie
+          ; 
+
+
+
 %%
 int yyerror(char * s){
 printf("eroare: %s la linia:%d\n",s,yylineno);
