@@ -158,33 +158,34 @@ cod : interogari
 interogari : interogari interogare
            | interogare
            ;
-interogare : DACA '(' conditie ')' acolade
-           | DACA '(' conditie ')' acolade ALTFEL acolade
+interogare : DACA '(' conditii ')' acolade
+           | DACA '(' conditii ')' acolade ALTFEL acolade
            ;
 // lipsa 
-conditie : terminal                     	
-     	| '(' conditie ')'			  
-       	| conditie PLUS conditie              
-       	| conditie MINUS conditie            
-       	| conditie PROD conditie              
-        | conditie DIV conditie          	   	
-
-		| conditie AND conditie              	
-		| conditie OR conditie               
-		| conditie LESS conditie 				
-		| conditie GREATER conditie 			
-		| conditie LEQ conditie 				
-		| conditie GEQ conditie 			
-		| conditie EQ conditie 				
+conditii :  '(' conditie ')' OR '(' conditii ')'
+            | '(' conditie ')' AND '(' conditii ')'
+            |conditie
+            ;			  
+conditie:    variabile LESS variabile 				
+		| variabile GREATER variabile 			
+		| variabile LEQ variabile 				
+		| variabile GEQ variabile 			
+		| variabile EQ variabile 
+            | variabile NEQ variabile 				
 		;
-terminal : ID
+variabile : ID
          | NR_INT
          | NR_REAL
+         | variabile PLUS variabile              
+         | variabile MINUS variabile            
+         | variabile PROD variabile              
+         | variabile DIV variabile
+         ;
 bucle : bucle bucla 
       | bucla
       ;
 bucla : PENTRU ID acolade
-     | CATtIMP conditie acolade
+     | CATtIMP variabile acolade
      ;
 %%
 int yyerror(char * s){
