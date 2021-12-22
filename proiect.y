@@ -80,6 +80,7 @@ variabila_declarata:  CONST TIP ID
                     ;
 variabila_initializata: CONST TIP ID ASSIGN variabila
                       | TIP ID ASSIGN expresie
+                      | TIP ID ASSIGN apel_functie
                       ;
 expresie : variabila
          | variabila PLUS expresie              
@@ -92,6 +93,7 @@ variabila   : ID
             | NR_INT 
             | CHAR 
             | STRING 
+            | BOOLEAN
             ;
 lista_declaratii : ID
                  | lista_declaratii ',' ID
@@ -121,47 +123,43 @@ continut_clasa : declaratie ';'
             | continut_clasa declaratie ';'
             ;
 
-functii_declaratie : ID '(' lista_param ')' '{' list '}'
-                | ID '(' ')' '{' list '}'
+functii_declaratie : ID '(' lista_param ')' acolade
+                | ID '(' ')' acolade
                 ;
-lista_param : param 
-            | lista_param ','  param 
+lista_param : TIP ID 
+            | lista_param ','  TIP ID
             ;
-            
-param : TIP ID
-      ; 
-list : TIP ID ';'
-     ;
 
 
  // MAIN SECTIUNEA 3 
-main_prog : MAIN'('')' acolade
+main_prog : MAIN'('')' acolade  
            ;
-acolade : '{' '}'
-        | '{' main_list '}'
+acolade : '{' '}'              
+        | '{' bloc_cod '}' 
         ;
-main_list : cod
-           | main_list cod 
-          ;
+
+bloc_cod : cod               
+           | bloc_cod cod
+           ;
 
 
 //de completat la cod 
-cod : interogari
-    | bucle
-    | ID '(' ')' ';'
-    | ID '(' lista_param ')' ';'
-    | ID ASSIGN ID '(' lista_param ')' ';'
-    | ID ASSIGN ID '('  ')' ';'
-    | ID ASSIGN expresie ';'
-    | declaratie ';'
-    
-    
+cod : interogari                    
+    | bucle                        
+    | apel_functie ';'              
+    | ID ASSIGN apel_functie ';'    
+    | ID ASSIGN expresie ';'        
+    | declaratie ';'                
+    | print
     ;
+apel_functie: ID '(' ')'              
+            | ID '(' variabila ')' 
+            ;
 //if = interogari 
 interogari : interogari interogare
            | interogare
            ;
-interogare : DACA '(' conditii ')' acolade
+interogare : DACA '(' conditii ')' acolade 
            | DACA '(' conditii ')' acolade ALTFEL acolade
            ;
 // lipsa 
@@ -180,7 +178,7 @@ bucle : bucle bucla
       | bucla
       ;
 //de modificat 
-bucla : PENTRU '(' ')' acolade
+bucla : PENTRU '(' TIP ID ASSIGN variabila ')' acolade
      | CATtIMP '(' conditie ')' acolade
      ;
 %%
