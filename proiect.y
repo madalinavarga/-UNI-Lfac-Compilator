@@ -78,17 +78,21 @@ declaratie  : variabila_initializata
 variabila_declarata:  CONST TIP ID 
                     | TIP lista_declaratii
                     ;
-variabila_initializata: CONST TIP ID ASSIGN ID 
-                      | CONST TIP ID ASSIGN valoare_tip_date
-                      | TIP ID ASSIGN valoare_tip_date
-                      | TIP ID ASSIGN ID 
-                    ;
-
-valoare_tip_date : NR_REAL
-                 | NR_INT 
-                 | CHAR 
-                 | STRING 
-                 ;
+variabila_initializata: CONST TIP ID ASSIGN variabila
+                      | TIP ID ASSIGN expresie
+                      ;
+expresie : variabila
+         | variabila PLUS expresie              
+         | variabila MINUS expresie            
+         | variabila PROD expresie              
+         | variabila DIV expresie
+         ;
+variabila   : ID
+            | NR_REAL
+            | NR_INT 
+            | CHAR 
+            | STRING 
+            ;
 lista_declaratii : ID
                  | lista_declaratii ',' ID
                  ;
@@ -100,8 +104,8 @@ array: TIP ID dimensiune
 dimensiune: '['NR_INT']'
           | dimensiune '['NR_INT']'
           ;
-lista_valori : valoare_tip_date
-             | lista_valori ',' valoare_tip_date
+lista_valori : variabila
+             | lista_valori ',' variabila
             ;
 print: PRINT '(' STRING ',' ID ')'
             ;
@@ -111,12 +115,10 @@ functii_clase : functii_declaratie clase_declaratie
 clase_declaratie : class
                  | clase_declaratie class
                  ;
-class : CLASS ID '{' date_membru'}' ';'
+class : CLASS ID '{' continut_clasa'}' ';'
       ;
-date_membru : data_membru ';'
-            | date_membru data_membru ';'
-            ;
-data_membru : TIP ID
+continut_clasa : declaratie ';'
+            | continut_clasa declaratie ';'
             ;
 
 functii_declaratie : ID '(' lista_param ')' '{' list '}'
@@ -139,19 +141,20 @@ acolade : '{' '}'
         | '{' main_list '}'
         ;
 main_list : cod
-           | main_list cod
-           | declaratie_main
-           | main_list declaratie_main
-           | print 
+           | main_list cod 
           ;
-declaratie_main : declaratie ';'
-                ;
+
 
 //de completat la cod 
 cod : interogari
     | bucle
-    | ID '(' ')'
-    | ID ASSIGN ID ';'
+    | ID '(' ')' ';'
+    | ID '(' lista_param ')' ';'
+    | ID ASSIGN ID '(' lista_param ')' ';'
+    | ID ASSIGN ID '('  ')' ';'
+    | ID ASSIGN expresie ';'
+    | declaratie ';'
+    
     
     ;
 //if = interogari 
@@ -162,30 +165,23 @@ interogare : DACA '(' conditii ')' acolade
            | DACA '(' conditii ')' acolade ALTFEL acolade
            ;
 // lipsa 
-conditii :  '(' conditie ')' OR '(' conditii ')'
-            | '(' conditie ')' AND '(' conditii ')'
-            |conditie
+conditii :  '(' conditii ')' OR '(' conditii ')'
+            | '(' conditii ')' AND '(' conditii ')'
+            | conditie
             ;			  
-conditie:    variabile LESS variabile 				
-		| variabile GREATER variabile 			
-		| variabile LEQ variabile 				
-		| variabile GEQ variabile 			
-		| variabile EQ variabile 
-            | variabile NEQ variabile 				
+conditie    : expresie LESS expresie 				
+		| expresie GREATER expresie 			
+		| expresie LEQ expresie 				
+		| expresie GEQ expresie 			
+		| expresie EQ expresie 
+            | expresie NEQ expresie 				
 		;
-variabile : ID
-         | NR_INT
-         | NR_REAL
-         | variabile PLUS variabile              
-         | variabile MINUS variabile            
-         | variabile PROD variabile              
-         | variabile DIV variabile
-         ;
 bucle : bucle bucla 
       | bucla
       ;
-bucla : PENTRU ID acolade
-     | CATtIMP variabile acolade
+//de modificat 
+bucla : PENTRU '(' ')' acolade
+     | CATtIMP '(' conditie ')' acolade
      ;
 %%
 int yyerror(char * s){
