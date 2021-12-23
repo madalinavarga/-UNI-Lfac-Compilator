@@ -89,8 +89,8 @@ expresie : variabila
          | variabila PROD expresie              
          | variabila DIV expresie
          ;
-variabila   : ID
-            | NR_REAL
+variabila   :  NR_REAL
+            | ID
             | NR_INT 
             | CHAR 
             | STRING 
@@ -178,12 +178,12 @@ conditie    : expresie LESS expresie
 		;
 //de modificat 
 
-functie_while: CATtIMP '(' conditie')' acolade
+functie_while: CATtIMP '(' conditii ')' acolade
             ;
 
 functie_for: PENTRU '('for_list')' acolade
            ;
-for_list: asignare ';' conditie ';' statement
+for_list: asignare ';' conditii ';' statement
         ;
 asignare: ID ASSIGN expresie
         ;
