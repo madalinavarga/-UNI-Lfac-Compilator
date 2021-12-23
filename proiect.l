@@ -44,7 +44,7 @@
 
 [a-zA-Z]+([a-zA-Z]*[_]*[0-9]*)*	    {strcpy(yylval.string_val, yytext); return ID;}
 \'[^ \']\'                          {yylval.char_val=yytext[1]; return CHAR;}
-\"[^ \"]*\"                         {yylval.string_val=strdup(yytext); return STRING;}
+\"[^\"]*\"                         {yylval.string_val=strdup(yytext); return STRING;}
 -?([1-9][0-9]*|0)                   {yylval.int_val=atoi(yytext); return NR_INT;}
 -?([1-9][0-9]*|0)\.([0-9]*)         {yylval.real_val=atof(yytext); return NR_REAL;}
 

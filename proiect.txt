@@ -1,33 +1,44 @@
 #comentariu pe o linie
+#diferite tipuri de date
 Integer a,b;
 Float c=3.9;
 Integer d[10][2];
-Float e[]=[3,6,0];
 String nume[]=["Ana","Maria"];
-Float f,g;
-Print("Madalina" ,a);
+Bool var="true";
 
-functie(Integer a){
-    Integer y;
+#sectiunea 2: functii si clase 
+
+Integer suma(Integer a,Integer b){
+    Integer suma=a+b;
     }
-Class ana {
-    Integer h;
-    Float i;
-           };
 
+Class masina {
+    Integer an;
+    String model;
+    String culoare;
+
+    String getCuloare(){}
+
+ };
+
+#sectiunea 3 main
 Main()
 {
-#declaratii main
-String nume;
-Integer aux=x;
+#declaratii main + apel functii
+Integer rezultat;
+rezultat=suma(a,b);
 
-x=f(x);
-x=functie(a,b);
-x[10]=3;
+#!!!! rezultat=suma(7,9); nu merge
 
-#if, loops
-daca ((8+9>0) && (6==9)){}
-altfel {}
+#if
+daca ((a!=b) && (6<9)){
+    Print("Am intrat in daca si a are valoarea :",a);
+}
+altfel {
+    Print("Am intrat in altfel si a are valoarea :",a);
+}
+
+#loops
 
 }
 

@@ -118,14 +118,11 @@ functii_clase : functii_declaratie clase_declaratie
 clase_declaratie : class
                  | clase_declaratie class
                  ;
-class : CLASS ID '{' continut_clasa'}' ';'
+class : CLASS ID acolade ';'
       ;
-continut_clasa : declaratie ';'
-            | continut_clasa declaratie ';'
-            ;
 
-functii_declaratie : ID '(' lista_param ')' acolade
-                | ID '(' ')' acolade
+functii_declaratie :TIP ID '(' lista_param ')' acolade
+                | TIP ID '(' ')' acolade
                 ;
 lista_param : TIP ID 
             | lista_param ','  TIP ID
@@ -152,7 +149,8 @@ cod : interogari
     | ID ASSIGN apel_functie ';'    
     | ID ASSIGN expresie ';' 
     | ID '[' NR_INT ']' ASSIGN expresie ';'       
-    | declaratie ';'                
+    | declaratie ';' 
+    |functii_declaratie               
     | print
     ;
 apel_functie: ID '(' ')'              
@@ -180,10 +178,10 @@ conditie    : expresie LESS expresie
 		;
 //de modificat 
 
-functie_while: CATtIMP '(' conditie')' '{' '}'
+functie_while: CATtIMP '(' conditie')' acolade
             ;
 
-functie_for: PENTRU '('for_list')' '{' '}'
+functie_for: PENTRU '('for_list')' acolade
            ;
 for_list: asignare ';' conditie ';' statement
         ;
