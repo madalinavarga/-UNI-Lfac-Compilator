@@ -11,6 +11,24 @@ extern int yylineno;
 
 // programul compileaza corect
 int check_compile = 1;
+char tabel_file[]="symbol_table.txt";
+char functions_file[]="symbol_table_functions.txt ";
+
+struct variabile{
+
+}local_var[100],global_var[100];
+
+struct functii{
+
+}functii[100];
+
+File* files_ptr, tabel_ptr;
+
+// declarare functii + implementare jos dupa seciuni
+void openFileRead(File* fd,char * fileName);
+void openFileWrite(File* fd,char * fileName);
+void openFileAppend(File* fd,char * fileName);
+
 %}
 
 %union {
@@ -217,3 +235,17 @@ int main(int argc, char** argv){
 yyin=fopen(argv[1],"r");
 yyparse();
 } 
+
+
+void openFileRead(File* fd ,char * fileName)
+{
+      fd=fopen(fileName,"r");
+}
+void openFileWrite(File* fd,char * fileName)
+{
+      fd=fopen(fileName,"w");
+}
+void openFileAppend(File* fd,char * fileName)
+{
+      fd=fopen(fileName,"a");
+}

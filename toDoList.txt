@@ -1,0 +1,6 @@
+-diferentiere global de local ( si pentru functii) 
+Functii:
+-scriere variabile si functii in fisiere 
+-cautare daca o variabila exista sau nu 
+-verificare tipul variabilelor
+- functie de conversie tipuri maybe
