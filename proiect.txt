@@ -32,6 +32,7 @@ functie(6,8);
 #declaratii main + apel functii
 Integer rezultat;
 functie(6,8);
+functie(6,8);
 
 
 Integer rezultat;
@@ -59,7 +60,8 @@ cat_timp( 4 )
 
 pentru(a=0; a!=v; a--)
 {
-
+ a=-99;
+ b=a - 0;
 }
 
 functie(5,6);
