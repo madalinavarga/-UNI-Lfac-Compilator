@@ -40,6 +40,10 @@ extern int yylineno;
 
 %%
 s: declaratii_globale functii_clase  main_prog {printf("program corect sintactic\n");}
+ | declaratii_globale main_prog 
+ | functii_clase main_prog 
+ | main_prog 
+ ;
      ;
 /*sectiunea 1*/
 declaratii_globale :  declaratie ';'
@@ -48,6 +52,7 @@ declaratii_globale :  declaratie ';'
 declaratie  : variabila_initializata
             | variabila_declarata
             | array 
+            | print
             ;
 variabila_initializata: CONST TIP ID ASSIGN expresie 
                       | TIP ID ASSIGN expresie 
@@ -80,6 +85,8 @@ valoare :  NR_INT
         | NR_REAL
         | STRING
         ;
+print:  PRINT '(' STRING ',' ID ')'
+     ;
 
 /* sectiunea 2 */
 functii_clase : functii_declaratie clase_declaratie
@@ -87,12 +94,13 @@ functii_clase : functii_declaratie clase_declaratie
 clase_declaratie : class
                  | clase_declaratie class
                  ;
-class : CLASS ID acolade ';'
+class : CLASS ID  '{' cod_bloc '}' ';'
       ;
 
 functii_declaratie :TIP ID '(' lista_param ')' acolade
-                | TIP ID '(' ')' acolade
-                ;
+                   | TIP ID '(' ')' acolade
+                   ;
+                   
 lista_param : TIP ID 
             | lista_param ','  TIP ID
             ;

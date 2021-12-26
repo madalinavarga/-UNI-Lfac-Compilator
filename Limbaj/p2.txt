@@ -37,6 +37,7 @@ Main ()
 
     daca ( a !=v){
         x=a/v;
+        Print("rezultatul este: " , x);
     }
     altfel {
         x=(x*8)/(3*9);
@@ -44,8 +45,8 @@ Main ()
     
     rezultat=suma(a,b);
     
-    # nu ii convine AND/OR   
-    daca ( a OR v){
+       
+    daca ( a || v){
         sum(3,6,8);
     }
     altfel {

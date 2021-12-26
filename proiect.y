@@ -46,6 +46,7 @@ char* tip;
 %right ASSIGN
 
 %left EQ
+%left ','
 %left GEQ LEQ LESS GREATER
 
 %left PLUS MINUS
@@ -53,6 +54,9 @@ char* tip;
 
 %left OR
 %left AND
+%left NEQ
+%left INCR DECR
+
 %%
 s : program
 {     
@@ -143,14 +147,13 @@ bloc_cod : cod
 
 //de completat la cod 
 cod : interogari                    
-    | functie_for 
-    | functie_while                      
+    | bucle                    
     | apel_functie ';'              
     | ID ASSIGN apel_functie ';'    
     | ID ASSIGN expresie ';' 
     | ID '[' NR_INT ']' ASSIGN expresie ';'       
     | declaratie ';' 
-    |functii_declaratie               
+    | functii_declaratie               
     | print
     ;
 apel_functie: ID '(' ')'              
@@ -174,18 +177,22 @@ conditie    : expresie LESS expresie
 		| expresie LEQ expresie 				
 		| expresie GEQ expresie 			
 		| expresie EQ expresie 
-            | expresie NEQ expresie 				
+            | expresie NEQ expresie 
+            | expresie				
 		;
-//de modificat 
 
+bucle:  functie_for 
+     | functie_while
+     ;
+     
 functie_while: CATtIMP '(' conditii ')' acolade
             ;
 
 functie_for: PENTRU '('for_list')' acolade
            ;
-for_list: asignare ';' conditii ';' statement
+for_list: asignare ';' conditie ';' statement
         ;
-asignare: ID ASSIGN expresie
+asignare: ID ASSIGN variabila
         ;
 
 statement : ID INCR
