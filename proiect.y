@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <stdbool.h> 
 
 //Esentiale
 extern FILE* yyin;
@@ -43,6 +44,8 @@ FILE *functii_fisier_ptr, *var_fisier_ptr;
 
 void openFileWrite(FILE* fd,char * fileName);
 void scrieVariabileFisier();
+bool cautaVariabila(char* nume, char* tip, char* vizibilitate);
+void seteazaAtributeStruct(char* tip, char* id, char* valoare, int constante, int dimensiune);
 
 %}
 
@@ -61,7 +64,7 @@ char* tip;
 
 //token 
 %token PRINT MAIN RETURN ASSIGN CONST EXIT CLASS 
-%token TIP
+%token<tip> TIP
 %token DACA ALTFEL PENTRU CATtIMP
 %token GEQ EQ LEQ NEQ
 %token OR AND
@@ -108,7 +111,7 @@ declaratii_globale : declaratie ';'              {var[count_var].vizibilitate=st
              | declaratii_globale declaratie ';' {var[count_var].vizibilitate=strdup("global");}
              ;
 
-declaratie  : variabila_initializata
+declaratie  : variabila_initializata 
             | variabila_declarata
             | array 
             | print
@@ -116,7 +119,7 @@ declaratie  : variabila_initializata
 variabila_declarata:  CONST TIP ID 
                     | TIP lista_declaratii
                     ;
-variabila_initializata: CONST TIP ID ASSIGN variabila
+variabila_initializata: CONST TIP ID ASSIGN variabila {if(cautaNume($3,var[count_var].vizibilitate)==true){seteazaAtributeStruct($2,$3,$5,1,NaN),count_var++;} else{ exit(0);}}
                       | TIP ID ASSIGN expresie
                       | TIP ID ASSIGN apel_functie
                       ;
@@ -158,8 +161,8 @@ clase_declaratie : class
 class : CLASS ID acolade ';'
       ;
 
-functii_declaratie :TIP ID '(' lista_param ')' acolade {var[count_var].vizibilitate=strdup("global");}
-                | TIP ID '(' ')' acolade
+functii_declaratie :TIP ID '(' lista_param ')' acolade {var[count_var].vizibilitate=strdup("local");}
+                | TIP ID '(' ')' acolade               {var[count_var].vizibilitate=strdup("local");}
                 ;
 lista_param : TIP ID 
             | lista_param ','  TIP ID
@@ -169,8 +172,8 @@ lista_param : TIP ID
  // MAIN SECTIUNEA 3 
 main_prog : MAIN'('')' acolade  
            ;
-acolade : '{' '}'              
-        | '{' bloc_cod '}' 
+acolade : '{' '}'              {var[count_var].vizibilitate=strdup("local");}
+        | '{' bloc_cod '}'      {var[count_var].vizibilitate=strdup("local");}
         ;
 
 bloc_cod : cod               
@@ -268,4 +271,36 @@ void scrieVariabileFisier()
      
       }
       fclose(var_fisier_ptr);
+}
+
+bool cautaVariabila(char* nume, char* vizibilitate)
+{
+      for(int i=0;i<count_var;i++)
+      {
+            if ((strcmp(var[i].vizibilitate,vizibilitate)==0) && (strcmp(var[i].id,nume)==0 ))
+            {
+                  check_compile=0;
+                  printf("EROARE: Variabila deja declarata\n");
+                  return false;
+                  
+            }
+            
+      }
+      return true;
+}
+
+void seteazaAtributeStruct(char* tip, char* id, char* valoare, int constante, int dimensiune)
+{
+      var[count_var].tip=(char*) malloc(strlen(tip));
+      strcpy(var[count_var].tip,tip);
+
+      var[count_var].id=(char*) malloc(strlen(id));
+      strcpy(var[count_var].id,id);
+
+      var[count_var].valoare=(char*) malloc(strlen(valoare));
+      strcpy(var[count_var].valoare,valoare);
+
+      var[count_var].constante=constante;
+      var[count_var].dimensiune=dimensiune;
+      
 }
