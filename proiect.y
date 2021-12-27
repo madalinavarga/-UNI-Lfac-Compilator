@@ -15,19 +15,33 @@ char tabel_file[]="symbol_table.txt";
 char functions_file[]="symbol_table_functions.txt ";
 
 struct variabile{
+      char* tip;
+      char* id;
+      char* valoare;
+      char* scop;
+      char* constante;
+}local_var[100],global_var[100],main_var[100];
 
-}local_var[100],global_var[100];
+struct parametru{
+      char* tip;
+      char* id;
+};
 
 struct functii{
+      char* tip_return;
+      char* id;
+      struct parametru parametrii_functii[10];
+      struct variabile variabile_functii[100];
 
 }functii[100];
 
-File* files_ptr, tabel_ptr;
+FILE* files_ptr, tabel_ptr;
 
 // declarare functii + implementare jos dupa seciuni
-void openFileRead(File* fd,char * fileName);
-void openFileWrite(File* fd,char * fileName);
-void openFileAppend(File* fd,char * fileName);
+int cautaVariabila(char* nume,char* tip,char* scope);
+void openFileRead(FILE* fd,char * fileName);
+void openFileWrite(FILE* fd,char * fileName);
+void openFileAppend(FILE* fd,char * fileName);
 
 %}
 
@@ -237,15 +251,18 @@ yyparse();
 } 
 
 
-void openFileRead(File* fd ,char * fileName)
+void openFileRead(FILE* fd ,char * fileName)
 {
       fd=fopen(fileName,"r");
 }
-void openFileWrite(File* fd,char * fileName)
+void openFileWrite(FILE* fd,char * fileName)
 {
       fd=fopen(fileName,"w");
 }
-void openFileAppend(File* fd,char * fileName)
+void openFileAppend(FILE* fd,char * fileName)
 {
       fd=fopen(fileName,"a");
 }
+
+int cautaVariabila(char* nume,char* tip,char* scope)
+{}

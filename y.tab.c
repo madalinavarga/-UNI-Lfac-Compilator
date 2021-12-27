@@ -80,8 +80,40 @@ extern int yylineno;
 
 // programul compileaza corect
 int check_compile = 1;
+char tabel_file[]="symbol_table.txt";
+char functions_file[]="symbol_table_functions.txt ";
 
-#line 85 "y.tab.c"
+struct variabile{
+      char* tip;
+      char* id;
+      char* valoare;
+      char* scop;
+      char* constante;
+}local_var[100],global_var[100],main_var[100];
+
+struct parametru{
+      char* tip;
+      char* id;
+};
+
+struct functii{
+      char* tip_return;
+      char* id;
+      struct parametru parametrii_functii[10];
+      struct variabile variabile_functii[100];
+
+}functii[100];
+
+FILE* files_ptr, tabel_ptr;
+
+// declarare functii + implementare jos dupa seciuni
+int cautaVariabila(char* nume,char* tip,char* scope);
+void openFileRead(FILE* fd,char * fileName);
+void openFileWrite(FILE* fd,char * fileName);
+void openFileAppend(FILE* fd,char * fileName);
+
+
+#line 117 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -209,7 +241,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 16 "proiect.y"
+#line 48 "proiect.y"
 
 int int_val;
 float real_val;
@@ -219,7 +251,7 @@ char* string_val;
 char* nume_var;
 char* tip;
 
-#line 223 "y.tab.c"
+#line 255 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -598,16 +630,16 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    61,    61,    67,    68,    69,    70,    74,    75,    78,
-      79,    80,    81,    83,    84,    86,    87,    88,    90,    91,
-      92,    93,    94,    96,    97,    98,    99,   100,   101,   103,
-     104,   107,   108,   109,   111,   112,   114,   115,   117,   120,
-     122,   123,   125,   128,   129,   131,   132,   137,   139,   140,
-     143,   144,   149,   150,   151,   152,   153,   154,   155,   156,
-     157,   159,   160,   162,   163,   167,   168,   171,   172,   173,
-     175,   176,   177,   178,   179,   180,   181,   184,   185,   188,
-     191,   193,   195,   198,   199,   200,   201,   202,   203,   204,
-     205,   206
+       0,    93,    93,    99,   100,   101,   102,   106,   107,   110,
+     111,   112,   113,   115,   116,   118,   119,   120,   122,   123,
+     124,   125,   126,   128,   129,   130,   131,   132,   133,   135,
+     136,   139,   140,   141,   143,   144,   146,   147,   149,   152,
+     154,   155,   157,   160,   161,   163,   164,   169,   171,   172,
+     175,   176,   181,   182,   183,   184,   185,   186,   187,   188,
+     189,   191,   192,   194,   195,   199,   200,   203,   204,   205,
+     207,   208,   209,   210,   211,   212,   213,   216,   217,   220,
+     223,   225,   227,   230,   231,   232,   233,   234,   235,   236,
+     237,   238
 };
 #endif
 
@@ -1528,17 +1560,17 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 62 "proiect.y"
+#line 94 "proiect.y"
 {     
       if(check_compile == 1)
             printf("Limbaj acceptat! Well done!\n");
       else printf("Eroare de compilare! \n");
 }
-#line 1538 "y.tab.c"
+#line 1570 "y.tab.c"
     break;
 
 
-#line 1542 "y.tab.c"
+#line 1574 "y.tab.c"
 
       default: break;
     }
@@ -1770,7 +1802,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 211 "proiect.y"
+#line 243 "proiect.y"
 
 int yyerror(char * s){
 printf("eroare: %s la linia:%d\n",s,yylineno);
@@ -1780,3 +1812,20 @@ int main(int argc, char** argv){
 yyin=fopen(argv[1],"r");
 yyparse();
 } 
+
+
+void openFileRead(FILE* fd ,char * fileName)
+{
+      fd=fopen(fileName,"r");
+}
+void openFileWrite(FILE* fd,char * fileName)
+{
+      fd=fopen(fileName,"w");
+}
+void openFileAppend(FILE* fd,char * fileName)
+{
+      fd=fopen(fileName,"a");
+}
+
+int cautaVariabila(char* nume,char* tip,char* scope)
+{}
