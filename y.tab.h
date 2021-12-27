@@ -129,7 +129,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 48 "proiect.y"
+#line 49 "proiect.y"
 
 int int_val;
 float real_val;

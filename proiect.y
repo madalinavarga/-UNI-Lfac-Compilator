@@ -11,16 +11,18 @@ extern int yylineno;
 
 // programul compileaza corect
 int check_compile = 1;
-char tabel_file[]="symbol_table.txt";
-char functions_file[]="symbol_table_functions.txt ";
+int count_var;
+char fisier_variabile[]="symbol_table.txt";
+char fisier_functii[]="symbol_table_functions.txt ";
 
 struct variabile{
       char* tip;
       char* id;
       char* valoare;
-      char* scop;
-      char* constante;
-}local_var[100],global_var[100],main_var[100];
+      char* vizibilitate;
+      int constante;
+      int dimensiune;
+}var[100];
 
 struct parametru{
       char* tip;
@@ -35,13 +37,12 @@ struct functii{
 
 }functii[100];
 
-FILE* files_ptr, tabel_ptr;
+FILE *functii_fisier_ptr, *var_fisier_ptr;
 
 // declarare functii + implementare jos dupa seciuni
-int cautaVariabila(char* nume,char* tip,char* scope);
-void openFileRead(FILE* fd,char * fileName);
+
 void openFileWrite(FILE* fd,char * fileName);
-void openFileAppend(FILE* fd,char * fileName);
+void scrieVariabileFisier();
 
 %}
 
@@ -103,8 +104,8 @@ program: declaratii_globale functii_clase main_prog
  ;
 
  // declaratii globale sectiune 1 
-declaratii_globale : declaratie ';'
-             | declaratii_globale declaratie ';'
+declaratii_globale : declaratie ';'              {var[count_var].vizibilitate=strdup("global");}
+             | declaratii_globale declaratie ';' {var[count_var].vizibilitate=strdup("global");}
              ;
 
 declaratie  : variabila_initializata
@@ -157,7 +158,7 @@ clase_declaratie : class
 class : CLASS ID acolade ';'
       ;
 
-functii_declaratie :TIP ID '(' lista_param ')' acolade
+functii_declaratie :TIP ID '(' lista_param ')' acolade {var[count_var].vizibilitate=strdup("global");}
                 | TIP ID '(' ')' acolade
                 ;
 lista_param : TIP ID 
@@ -251,18 +252,20 @@ yyparse();
 } 
 
 
-void openFileRead(FILE* fd ,char * fileName)
-{
-      fd=fopen(fileName,"r");
-}
+
 void openFileWrite(FILE* fd,char * fileName)
 {
       fd=fopen(fileName,"w");
 }
-void openFileAppend(FILE* fd,char * fileName)
-{
-      fd=fopen(fileName,"a");
-}
 
-int cautaVariabila(char* nume,char* tip,char* scope)
-{}
+
+void scrieVariabileFisier()
+{
+      var_fisier_ptr=fopen(fisier_variabile,"a"); // dechidere fisier 
+      for(int i=0;i<count_var;i++){
+    
+     fprintf(var_fisier_ptr,"%s %s %s %s %d %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
+     
+      }
+      fclose(var_fisier_ptr);
+}

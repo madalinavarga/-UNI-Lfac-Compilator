@@ -80,16 +80,18 @@ extern int yylineno;
 
 // programul compileaza corect
 int check_compile = 1;
-char tabel_file[]="symbol_table.txt";
-char functions_file[]="symbol_table_functions.txt ";
+int count_var;
+char fisier_variabile[]="symbol_table.txt";
+char fisier_functii[]="symbol_table_functions.txt ";
 
 struct variabile{
       char* tip;
       char* id;
       char* valoare;
-      char* scop;
-      char* constante;
-}local_var[100],global_var[100],main_var[100];
+      char* vizibilitate;
+      int constante;
+      int dimensiune;
+}var[100];
 
 struct parametru{
       char* tip;
@@ -104,16 +106,15 @@ struct functii{
 
 }functii[100];
 
-FILE* files_ptr, tabel_ptr;
+FILE *functii_fisier_ptr, *var_fisier_ptr;
 
 // declarare functii + implementare jos dupa seciuni
-int cautaVariabila(char* nume,char* tip,char* scope);
-void openFileRead(FILE* fd,char * fileName);
+
 void openFileWrite(FILE* fd,char * fileName);
-void openFileAppend(FILE* fd,char * fileName);
+void scrieVariabileFisier();
 
 
-#line 117 "y.tab.c"
+#line 118 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -241,7 +242,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 48 "proiect.y"
+#line 49 "proiect.y"
 
 int int_val;
 float real_val;
@@ -251,7 +252,7 @@ char* string_val;
 char* nume_var;
 char* tip;
 
-#line 255 "y.tab.c"
+#line 256 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -630,16 +631,16 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    93,    93,    99,   100,   101,   102,   106,   107,   110,
-     111,   112,   113,   115,   116,   118,   119,   120,   122,   123,
-     124,   125,   126,   128,   129,   130,   131,   132,   133,   135,
-     136,   139,   140,   141,   143,   144,   146,   147,   149,   152,
-     154,   155,   157,   160,   161,   163,   164,   169,   171,   172,
-     175,   176,   181,   182,   183,   184,   185,   186,   187,   188,
-     189,   191,   192,   194,   195,   199,   200,   203,   204,   205,
-     207,   208,   209,   210,   211,   212,   213,   216,   217,   220,
-     223,   225,   227,   230,   231,   232,   233,   234,   235,   236,
-     237,   238
+       0,    94,    94,   100,   101,   102,   103,   107,   108,   111,
+     112,   113,   114,   116,   117,   119,   120,   121,   123,   124,
+     125,   126,   127,   129,   130,   131,   132,   133,   134,   136,
+     137,   140,   141,   142,   144,   145,   147,   148,   150,   153,
+     155,   156,   158,   161,   162,   164,   165,   170,   172,   173,
+     176,   177,   182,   183,   184,   185,   186,   187,   188,   189,
+     190,   192,   193,   195,   196,   200,   201,   204,   205,   206,
+     208,   209,   210,   211,   212,   213,   214,   217,   218,   221,
+     224,   226,   228,   231,   232,   233,   234,   235,   236,   237,
+     238,   239
 };
 #endif
 
@@ -1560,17 +1561,35 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 94 "proiect.y"
+#line 95 "proiect.y"
 {     
       if(check_compile == 1)
             printf("Limbaj acceptat! Well done!\n");
       else printf("Eroare de compilare! \n");
 }
-#line 1570 "y.tab.c"
+#line 1571 "y.tab.c"
+    break;
+
+  case 7:
+#line 107 "proiect.y"
+                                                 {var[count_var].vizibilitate=strdup("global");}
+#line 1577 "y.tab.c"
+    break;
+
+  case 8:
+#line 108 "proiect.y"
+                                                 {var[count_var].vizibilitate=strdup("global");}
+#line 1583 "y.tab.c"
+    break;
+
+  case 43:
+#line 161 "proiect.y"
+                                                       {var[count_var].vizibilitate=strdup("global");}
+#line 1589 "y.tab.c"
     break;
 
 
-#line 1574 "y.tab.c"
+#line 1593 "y.tab.c"
 
       default: break;
     }
@@ -1802,7 +1821,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 243 "proiect.y"
+#line 244 "proiect.y"
 
 int yyerror(char * s){
 printf("eroare: %s la linia:%d\n",s,yylineno);
@@ -1814,18 +1833,20 @@ yyparse();
 } 
 
 
-void openFileRead(FILE* fd ,char * fileName)
-{
-      fd=fopen(fileName,"r");
-}
+
 void openFileWrite(FILE* fd,char * fileName)
 {
       fd=fopen(fileName,"w");
 }
-void openFileAppend(FILE* fd,char * fileName)
-{
-      fd=fopen(fileName,"a");
-}
 
-int cautaVariabila(char* nume,char* tip,char* scope)
-{}
+
+void scrieVariabileFisier()
+{
+      var_fisier_ptr=fopen(fisier_variabile,"a"); // dechidere fisier 
+      for(int i=0;i<count_var;i++){
+    
+     fprintf(var_fisier_ptr,"%s %s %s %s %d %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
+     
+      }
+      fclose(var_fisier_ptr);
+}
