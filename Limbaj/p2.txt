@@ -1,4 +1,4 @@
-Integer x, y,z;
+Integer x;
 Integer v[10];
 Integer x=x+3;
 Integer w[]={5.7,3,9};
@@ -44,6 +44,8 @@ Main ()
     }
     
     rezultat=suma(a,b);
+
+    functie(7,f(x));
     
        
     daca ( a || v){

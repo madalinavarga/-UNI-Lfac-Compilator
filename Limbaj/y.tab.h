@@ -74,11 +74,11 @@ extern int yydebug;
     GREATER = 280,
     INCR = 281,
     DECR = 282,
-    ID = 283,
-    CHAR = 284,
-    STRING = 285,
-    NR_INT = 286,
-    NR_REAL = 287,
+    CHAR = 283,
+    STRING = 284,
+    NR_INT = 285,
+    NR_REAL = 286,
+    ID = 287,
     TIP = 288
   };
 #endif
@@ -108,20 +108,20 @@ extern int yydebug;
 #define GREATER 280
 #define INCR 281
 #define DECR 282
-#define ID 283
-#define CHAR 284
-#define STRING 285
-#define NR_INT 286
-#define NR_REAL 287
+#define CHAR 283
+#define STRING 284
+#define NR_INT 285
+#define NR_REAL 286
+#define ID 287
 #define TIP 288
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 13 "p2.y"
+#line 66 "p2.y"
 
-    int num;
+    double num;
     char* str;
 
 #line 128 "y.tab.h"

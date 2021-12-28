@@ -7,18 +7,75 @@
 extern FILE* yyin;
 extern char* yytext;
 extern int yylineno;
+
+struct variabile{
+      char* tip;
+      char* id;
+      double valoare;
+      char* vizibilitate;
+      int constante;
+      int dimensiune;
+}var[100];
+int v=0;
+
+int variabila_deja_declarata(char* nume){
+        for (int i = 0; i < v; i++)
+        {
+                if (strcmp(var[i].id, nume) == 0) return i;
+                printf("%lf\n",var[i].valoare);
+        }
+        return -1;
+}
+
+void declarare_fara_initializare(char* tip,char* nume, int este_const){
+        if(variabila_deja_declarata(nume)!=-1){
+                char error_msg[250];
+                sprintf(error_msg, "Variabila %s este deja declarata", nume);
+                yyerror(error_msg);
+                exit(0);
+        }
+        if(este_const==1){
+                char error_msg[250];
+                sprintf(error_msg, "Variabila constanta %s nu poate fi declarata fara initializare", nume);
+                yyerror(error_msg);
+                exit(0);
+        }
+        var[v].tip=strdup(tip);
+        var[v].id=strdup(nume);
+        var[v].vizibilitate=strdup("globala");
+        var[v].constante=0;
+        v++;
+}
+void declarare_cu_initializare(char* tip,char* nume,double val,int este_const){
+        if(variabila_deja_declarata(nume)!=-1){
+                char error_msg[250];
+                sprintf(error_msg, "Variabila %s este deja declarata", nume);
+                yyerror(error_msg);
+                exit(0);
+        }
+        var[v].tip=strdup(tip);
+        var[v].id=strdup(nume);
+        var[v].valoare=val;
+        var[v].constante=este_const;
+        var[v].vizibilitate=strdup("globala");
+        v++;
+}
 %}
 
 %union
 {
-    int num;
+    double num;
     char* str;
 }
 
 %token PRINT CONST DACA ALTFEL PENTRU CAT_TIMP MAIN RETURN EXIT CLASS 
 %token GEQ EQ LEQ NEQ ASSIGN OR AND 
 %token PLUS MINUS PROD DIV LESS GREATER INCR DECR 
-%token ID CHAR STRING NR_INT NR_REAL TIP
+%token CHAR STRING  
+%token<num>NR_INT NR_REAL
+%token<str> ID TIP
+
+%type<num> expresie
 
 %start s
 
@@ -43,8 +100,9 @@ s: declaratii_globale functii_clase  main_prog {printf("program corect sintactic
  | declaratii_globale main_prog 
  | functii_clase main_prog 
  | main_prog 
+ | declaratii_globale {printf("program corect sintactic\n");}
  ;
-     ;
+     
 /*sectiunea 1*/
 declaratii_globale :  declaratie ';'
 	   | declaratii_globale declaratie ';'
@@ -54,23 +112,25 @@ declaratie  : variabila_initializata
             | array 
             | print
             ;
-variabila_initializata: CONST TIP ID ASSIGN expresie 
-                      | TIP ID ASSIGN expresie 
+variabila_initializata: CONST TIP ID ASSIGN expresie {declarare_cu_initializare($2,$3,$5,1);}
+                      | TIP ID ASSIGN expresie {declarare_cu_initializare($1,$2,$4,0);}
                       ;
-variabila_declarata: TIP lista_declaratii
+variabila_declarata: TIP ID {declarare_fara_initializare($1,$2,0);}
                    ;
+/*
 lista_declaratii : ID
                  | lista_declaratii ',' ID
                  ;
-expresie : expresie PLUS expresie
-         | expresie MINUS expresie
-         | expresie PROD expresie
-         | expresie DIV expresie
-         |'(' expresie ')'
-         | ID
-         | NR_INT
-         | NR_REAL
-         | ID '[' NR_REAL ']'
+*/
+expresie : expresie PLUS expresie  {$$ = $1 + $3;}
+         | expresie MINUS expresie {$$ = $1 - $3;}
+         | expresie PROD expresie {$$ = $1 * $3;}
+         | expresie DIV expresie {$$ = $1 / $3;}
+         |'(' expresie ')' {$$ = $2;}
+         //| ID 
+         | NR_INT {$$ = $1;} 
+         | NR_REAL {$$ = $1;} 
+         //| ID '[' NR_REAL ']'
          ;
 array : TIP ID dimensiune
       | TIP ID '[' ']' ASSIGN '{' lista_valori '}'
