@@ -31,16 +31,21 @@ void scrieVariabileFisier();
 {
     double num;
     char* str;
+    int integer;
+    float real;
+    int boolean;
 }
 
 %token PRINT CONST DACA ALTFEL PENTRU CAT_TIMP MAIN RETURN EXIT CLASS 
 %token GEQ EQ LEQ NEQ ASSIGN OR AND 
 %token PLUS MINUS PROD DIV LESS GREATER INCR DECR 
-%token CHAR STRING  
-%token<num>NR_INT NR_REAL
+//%token<boolean> BOOLEAN
+%token<str> CHAR STRING  
+%token<real>NR_REAL
+%token<integer>NR_INT
 %token<str> ID TIP
-
 %type<num> expresie
+
 
 %start s
 
@@ -103,7 +108,7 @@ expresie : expresie PLUS expresie  {$$ = $1 + $3;}
          | expresie PROD expresie {$$ = $1 * $3;}
          | expresie DIV expresie {$$ = $1 / $3;}
          |'(' expresie ')' {$$ = $2;}
-         //| ID 
+        // | ID {$$=get_valoare_dupa_nume($1);} // ar trebuii sa returneze numar 
          | NR_INT {$$ = $1;} 
          | NR_REAL {$$ = $1;} 
          //| ID '[' NR_REAL ']'
@@ -120,8 +125,9 @@ lista_valori : lista_valori ',' valoare
 valoare :  NR_INT
         | NR_REAL
         | STRING
+        | CHAR
         ;
-print:  PRINT '(' STRING ',' ID ')'
+print:  PRINT '(' STRING ',' expresie ')' {printf("%s %f",$3,$5);}
      ;
 
 /* sectiunea 2 */

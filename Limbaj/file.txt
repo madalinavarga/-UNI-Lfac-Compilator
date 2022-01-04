@@ -7,7 +7,7 @@ Main ()
 {
     Integer m=9;
     Float z=2.5;
-   
-   
+    #nu merge expresie ca nu avem tip acolo
+    Print("value of expression x+2 is:",2); 
 
 }

@@ -8,6 +8,7 @@
 "Integer"|"Float"|"Char"|"String"|"Bool" {yylval.str = strdup(yytext);return TIP;}
 "Const"                                  {yylval.str = strdup(yytext);return CONST;}
 
+
 "daca"     {return DACA;}
 "altfel"   {return ALTFEL;}
 "pentru"   {return PENTRU;}
@@ -41,8 +42,9 @@
 [a-zA-Z]+([a-zA-Z]*[_]*[0-9]*)*	     {yylval.str=strdup(yytext); return ID;}
 \"[^\"]*\"                           {yylval.str=strdup(yytext); return STRING;}
 
-([1-9][0-9]*|0)                   {yylval.num=atoi(yytext); return NR_INT;}
-([1-9][0-9]*|0)\.([0-9]*)         {yylval.num=atoi(yytext); return NR_REAL;}
+([1-9][0-9]*|0)                      {yylval.integer=atoi(yytext); return NR_INT;}
+([1-9][0-9]*|0)\.([0-9]*)            {yylval.real=atoi(yytext); return NR_REAL;}
+
 
 "#"[^\n\r]* ;
 [ \t\r] ;

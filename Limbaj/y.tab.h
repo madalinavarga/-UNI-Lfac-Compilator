@@ -76,8 +76,8 @@ extern int yydebug;
     DECR = 282,
     CHAR = 283,
     STRING = 284,
-    NR_INT = 285,
-    NR_REAL = 286,
+    NR_REAL = 285,
+    NR_INT = 286,
     ID = 287,
     TIP = 288
   };
@@ -110,8 +110,8 @@ extern int yydebug;
 #define DECR 282
 #define CHAR 283
 #define STRING 284
-#define NR_INT 285
-#define NR_REAL 286
+#define NR_REAL 285
+#define NR_INT 286
 #define ID 287
 #define TIP 288
 
@@ -123,8 +123,11 @@ union YYSTYPE
 
     double num;
     char* str;
+    int integer;
+    float real;
+    int boolean;
 
-#line 128 "y.tab.h"
+#line 131 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
