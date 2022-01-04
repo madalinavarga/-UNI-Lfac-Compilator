@@ -581,8 +581,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "p2.l"
-#line 2 "p2.l"
+#line 1 "p2_copie.l"
+#line 2 "p2_copie.l"
 #include <stdio.h>
 #include "y.tab.h"
 #line 589 "lex.yy.c"
@@ -803,7 +803,7 @@ YY_DECL
 		}
 
 	{
-#line 6 "p2.l"
+#line 6 "p2_copie.l"
 
 #line 809 "lex.yy.c"
 
@@ -864,179 +864,179 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 7 "p2.l"
+#line 7 "p2_copie.l"
 {yylval.str = strdup(yytext);return PRINT;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 8 "p2.l"
+#line 8 "p2_copie.l"
 {yylval.str = strdup(yytext);return TIP;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 9 "p2.l"
+#line 9 "p2_copie.l"
 {yylval.str = strdup(yytext);return CONST;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 11 "p2.l"
+#line 11 "p2_copie.l"
 {return DACA;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 12 "p2.l"
+#line 12 "p2_copie.l"
 {return ALTFEL;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 13 "p2.l"
+#line 13 "p2_copie.l"
 {return PENTRU;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 14 "p2.l"
+#line 14 "p2_copie.l"
 {return CAT_TIMP;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 16 "p2.l"
+#line 16 "p2_copie.l"
 {return MAIN;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 17 "p2.l"
+#line 17 "p2_copie.l"
 {return RETURN;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 18 "p2.l"
+#line 18 "p2_copie.l"
 {return EXIT;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 19 "p2.l"
+#line 19 "p2_copie.l"
 {return CLASS;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 21 "p2.l"
+#line 21 "p2_copie.l"
 { return GEQ; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 22 "p2.l"
+#line 22 "p2_copie.l"
 { return EQ; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 23 "p2.l"
+#line 23 "p2_copie.l"
 { return LEQ; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 24 "p2.l"
+#line 24 "p2_copie.l"
 { return NEQ; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 25 "p2.l"
+#line 25 "p2_copie.l"
 {return ASSIGN;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 26 "p2.l"
+#line 26 "p2_copie.l"
 {return OR;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 27 "p2.l"
+#line 27 "p2_copie.l"
 {return AND;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 32 "p2.l"
+#line 32 "p2_copie.l"
 {return PLUS;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 33 "p2.l"
+#line 33 "p2_copie.l"
 {return MINUS;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 34 "p2.l"
+#line 34 "p2_copie.l"
 {return PROD;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 35 "p2.l"
+#line 35 "p2_copie.l"
 {return DIV;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 36 "p2.l"
+#line 36 "p2_copie.l"
 {return LESS;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 37 "p2.l"
+#line 37 "p2_copie.l"
 {return GREATER;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 38 "p2.l"
+#line 38 "p2_copie.l"
 {return INCR;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 39 "p2.l"
+#line 39 "p2_copie.l"
 {return DECR;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 41 "p2.l"
+#line 41 "p2_copie.l"
 {yylval.str=strdup(yytext); return ID;}
 	YY_BREAK
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 42 "p2.l"
+#line 42 "p2_copie.l"
 {yylval.str=strdup(yytext); return STRING;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 44 "p2.l"
+#line 44 "p2_copie.l"
 {yylval.num=atoi(yytext); return NR_INT;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 45 "p2.l"
+#line 45 "p2_copie.l"
 {yylval.num=atoi(yytext); return NR_REAL;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 47 "p2.l"
+#line 47 "p2_copie.l"
 ;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 48 "p2.l"
+#line 48 "p2_copie.l"
 ;
 	YY_BREAK
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 49 "p2.l"
+#line 49 "p2_copie.l"
 {yylineno++;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 50 "p2.l"
+#line 50 "p2_copie.l"
 {return yytext[0];}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 52 "p2.l"
+#line 52 "p2_copie.l"
 ECHO;
 	YY_BREAK
 #line 1043 "lex.yy.c"
@@ -2044,4 +2044,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 52 "p2.l"
+#line 52 "p2_copie.l"
