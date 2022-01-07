@@ -86,7 +86,20 @@ struct variabile{
       int dimensiune;
 }var[100];
 
-int count_v=0;
+struct parametru{
+      char* tip;
+      char* id;
+};
+
+struct functii{
+      char* tip_return;
+      char* id;
+      struct parametru parametrii_functii[10];
+      struct variabile variabile_functii[100];
+
+}functii[100];
+
+int count_v=0,count_f=0;
 char fisier_variabile[]="symbol_table.txt";
 char fisier_functii[]="symbol_table_functions.txt ";
 
@@ -94,10 +107,11 @@ int variabila_deja_declarata(char* nume,char* vizibilitate);
 void declarare_fara_initializare(char* tip,char* nume, int este_const,char* vizibilitate);
 void declarare_cu_initializare(char* tip,char* nume,int val,int este_const,char* vizibilitate);
 void scrieVariabileFisier();
+void scrieFunctiiInFisier();
 int get_valoare_dupa_nume(char * nume);
 char *citeste_fisier(char *file);
 
-#line 101 "y.tab.c"
+#line 115 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -215,7 +229,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 33 "tema.y"
+#line 47 "tema.y"
 
     double num;
     char* str;
@@ -223,7 +237,7 @@ union YYSTYPE
     float real;
     int boolean;
 
-#line 227 "y.tab.c"
+#line 241 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -601,16 +615,16 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    71,    71,    72,    73,    74,    75,    80,    81,    83,
-      84,    85,    86,    88,    89,    90,    91,    93,    94,    96,
-      98,    99,   101,   108,   109,   110,   111,   112,   113,   114,
-     117,   118,   120,   121,   123,   124,   126,   127,   128,   129,
-     131,   135,   137,   138,   140,   143,   144,   147,   148,   153,
-     155,   156,   158,   159,   161,   162,   163,   164,   165,   166,
-     167,   169,   170,   172,   173,   174,   175,   176,   177,   178,
-     179,   180,   181,   183,   184,   186,   187,   189,   190,   191,
-     192,   193,   196,   197,   200,   201,   202,   203,   204,   205,
-     206,   207,   208,   211,   213,   215
+       0,    85,    85,    86,    87,    88,    89,    94,    95,    97,
+      98,    99,   100,   102,   103,   104,   105,   107,   108,   110,
+     112,   113,   115,   122,   123,   124,   125,   126,   127,   128,
+     131,   132,   134,   135,   137,   138,   140,   141,   142,   143,
+     145,   149,   151,   152,   154,   157,   158,   161,   162,   167,
+     169,   170,   172,   173,   175,   176,   177,   178,   179,   180,
+     181,   183,   184,   186,   187,   188,   189,   190,   191,   192,
+     193,   194,   195,   197,   198,   200,   201,   203,   204,   205,
+     206,   207,   210,   211,   214,   215,   216,   217,   218,   219,
+     220,   221,   222,   225,   227,   229
 };
 #endif
 
@@ -1553,139 +1567,139 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 71 "tema.y"
+#line 85 "tema.y"
                                                {printf("1   program corect sintactic\n"); scrieVariabileFisier();}
-#line 1559 "y.tab.c"
+#line 1573 "y.tab.c"
     break;
 
   case 3:
-#line 72 "tema.y"
-                                {printf("2   program corect sintactic\n"); scrieVariabileFisier();}
-#line 1565 "y.tab.c"
+#line 86 "tema.y"
+                                {printf("2   program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
+#line 1579 "y.tab.c"
     break;
 
   case 4:
-#line 73 "tema.y"
+#line 87 "tema.y"
                            {printf("3   program corect sintactic\n"); scrieVariabileFisier();}
-#line 1571 "y.tab.c"
+#line 1585 "y.tab.c"
     break;
 
   case 5:
-#line 74 "tema.y"
+#line 88 "tema.y"
              {printf("4   program corect sintactic\n"); scrieVariabileFisier();}
-#line 1577 "y.tab.c"
+#line 1591 "y.tab.c"
     break;
 
   case 6:
-#line 75 "tema.y"
+#line 89 "tema.y"
                       {printf("5   program corect sintactic\n"); scrieVariabileFisier();}
-#line 1583 "y.tab.c"
+#line 1597 "y.tab.c"
     break;
 
   case 7:
-#line 80 "tema.y"
+#line 94 "tema.y"
                                     { var[count_v-1].vizibilitate=strdup("global");}
-#line 1589 "y.tab.c"
+#line 1603 "y.tab.c"
     break;
 
   case 8:
-#line 81 "tema.y"
+#line 95 "tema.y"
                                                        { var[count_v-1].vizibilitate=strdup("global");}
-#line 1595 "y.tab.c"
+#line 1609 "y.tab.c"
     break;
 
   case 17:
-#line 93 "tema.y"
+#line 107 "tema.y"
                                                            {declarare_cu_initializare((yyvsp[-3].str),(yyvsp[-2].str),(yyvsp[0].integer),1,"local");}
-#line 1601 "y.tab.c"
+#line 1615 "y.tab.c"
     break;
 
   case 18:
-#line 94 "tema.y"
+#line 108 "tema.y"
                                                {declarare_cu_initializare((yyvsp[-3].str),(yyvsp[-2].str),(yyvsp[0].integer),0,"local");}
-#line 1607 "y.tab.c"
+#line 1621 "y.tab.c"
     break;
 
   case 19:
-#line 96 "tema.y"
+#line 110 "tema.y"
                                   {declarare_fara_initializare((yyvsp[-1].str),(yyvsp[0].str),0,"local");}
-#line 1613 "y.tab.c"
+#line 1627 "y.tab.c"
     break;
 
   case 20:
-#line 98 "tema.y"
+#line 112 "tema.y"
                                                             {declarare_cu_initializare((yyvsp[-3].str),(yyvsp[-2].str),(yyvsp[0].integer),1,"global");}
-#line 1619 "y.tab.c"
+#line 1633 "y.tab.c"
     break;
 
   case 21:
-#line 99 "tema.y"
+#line 113 "tema.y"
                                                {declarare_cu_initializare((yyvsp[-3].str),(yyvsp[-2].str),(yyvsp[0].integer),0,"global");}
-#line 1625 "y.tab.c"
+#line 1639 "y.tab.c"
     break;
 
   case 22:
-#line 101 "tema.y"
+#line 115 "tema.y"
                                    {declarare_fara_initializare((yyvsp[-1].str),(yyvsp[0].str),0,"global");}
-#line 1631 "y.tab.c"
+#line 1645 "y.tab.c"
     break;
 
   case 23:
-#line 108 "tema.y"
+#line 122 "tema.y"
                                    {(yyval.integer) = (yyvsp[-2].integer) + (yyvsp[0].integer);}
-#line 1637 "y.tab.c"
+#line 1651 "y.tab.c"
     break;
 
   case 24:
-#line 109 "tema.y"
+#line 123 "tema.y"
                                    {(yyval.integer) = (yyvsp[-2].integer) - (yyvsp[0].integer);}
-#line 1643 "y.tab.c"
+#line 1657 "y.tab.c"
     break;
 
   case 25:
-#line 110 "tema.y"
+#line 124 "tema.y"
                                   {(yyval.integer) = (yyvsp[-2].integer) * (yyvsp[0].integer);}
-#line 1649 "y.tab.c"
+#line 1663 "y.tab.c"
     break;
 
   case 26:
-#line 111 "tema.y"
+#line 125 "tema.y"
                                  {(yyval.integer) = (yyvsp[-2].integer) / (yyvsp[0].integer);}
-#line 1655 "y.tab.c"
+#line 1669 "y.tab.c"
     break;
 
   case 27:
-#line 112 "tema.y"
+#line 126 "tema.y"
                            {(yyval.integer) = (yyvsp[-1].integer);}
-#line 1661 "y.tab.c"
+#line 1675 "y.tab.c"
     break;
 
   case 28:
-#line 113 "tema.y"
+#line 127 "tema.y"
               {(yyval.integer)=get_valoare_dupa_nume((yyvsp[0].str));}
-#line 1667 "y.tab.c"
+#line 1681 "y.tab.c"
     break;
 
   case 29:
-#line 114 "tema.y"
+#line 128 "tema.y"
                   {(yyval.integer) = (yyvsp[0].integer);}
-#line 1673 "y.tab.c"
+#line 1687 "y.tab.c"
     break;
 
   case 40:
-#line 131 "tema.y"
+#line 145 "tema.y"
                                           {printf("%s %d\n",(yyvsp[-3].str),(yyvsp[-1].integer));}
-#line 1679 "y.tab.c"
+#line 1693 "y.tab.c"
     break;
 
   case 57:
-#line 164 "tema.y"
+#line 178 "tema.y"
                            {var[count_v-1].vizibilitate=strdup("local");}
-#line 1685 "y.tab.c"
+#line 1699 "y.tab.c"
     break;
 
 
-#line 1689 "y.tab.c"
+#line 1703 "y.tab.c"
 
       default: break;
     }
@@ -1917,7 +1931,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 218 "tema.y"
+#line 232 "tema.y"
 
 int yyerror(char * s){
 printf("eroare: %s la linia:%d\n",s,yylineno);
@@ -2020,4 +2034,15 @@ void scrieVariabileFisier()
      
       }
       fclose(var_fisier_ptr);
+}
+
+void scrieFunctiiInFisier()
+{
+        //id,tip,parametri,variabile
+        FILE* functii_fisier_ptr;
+        functii_fisier_ptr=fopen(fisier_functii,"w+");
+        fprintf(functii_fisier_ptr,"tip  id parametrii  variabile\n");
+        fprintf(functii_fisier_ptr,"---------------------------------------------------------\n");
+        fclose(functii_fisier_ptr);
+
 }

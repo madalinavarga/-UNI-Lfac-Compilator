@@ -17,7 +17,20 @@ struct variabile{
       int dimensiune;
 }var[100];
 
-int count_v=0;
+struct parametru{
+      char* tip;
+      char* id;
+};
+
+struct functii{
+      char* tip_return;
+      char* id;
+      struct parametru parametrii_functii[10];
+      struct variabile variabile_functii[100];
+
+}functii[100];
+
+int count_v=0,count_f=0;
 char fisier_variabile[]="symbol_table.txt";
 char fisier_functii[]="symbol_table_functions.txt ";
 
@@ -25,6 +38,7 @@ int variabila_deja_declarata(char* nume,char* vizibilitate);
 void declarare_fara_initializare(char* tip,char* nume, int este_const,char* vizibilitate);
 void declarare_cu_initializare(char* tip,char* nume,int val,int este_const,char* vizibilitate);
 void scrieVariabileFisier();
+void scrieFunctiiInFisier();
 int get_valoare_dupa_nume(char * nume);
 char *citeste_fisier(char *file);
 %}
@@ -69,7 +83,7 @@ char *citeste_fisier(char *file);
 
 %%
 s: declaratii_globale functii_clase  main_prog {printf("1   program corect sintactic\n"); scrieVariabileFisier();}
- | declaratii_globale main_prog {printf("2   program corect sintactic\n"); scrieVariabileFisier();}
+ | declaratii_globale main_prog {printf("2   program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
  | functii_clase main_prog {printf("3   program corect sintactic\n"); scrieVariabileFisier();}
  | main_prog {printf("4   program corect sintactic\n"); scrieVariabileFisier();}
  | declaratii_globale {printf("5   program corect sintactic\n"); scrieVariabileFisier();}
@@ -317,4 +331,15 @@ void scrieVariabileFisier()
      
       }
       fclose(var_fisier_ptr);
+}
+
+void scrieFunctiiInFisier()
+{
+        //id,tip,parametri,variabile
+        FILE* functii_fisier_ptr;
+        functii_fisier_ptr=fopen(fisier_functii,"w+");
+        fprintf(functii_fisier_ptr,"tip  id parametrii  variabile\n");
+        fprintf(functii_fisier_ptr,"---------------------------------------------------------\n");
+        fclose(functii_fisier_ptr);
+
 }

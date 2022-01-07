@@ -7,7 +7,7 @@ Main ()
 {
     Integer m=9;
     Float z;
-    #nu merge expresie ca nu avem id acolo
-    Print("value of expression y is:",y); 
+    #comentariu
+    Print("value of expression y+1 is:",y+3); 
 
 }
