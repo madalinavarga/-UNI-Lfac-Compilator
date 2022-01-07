@@ -4,5 +4,6 @@ Float  x  (null)  global  0  0
 Integer  y  7  global  0  0
 Integer  a  3  global  1  0
 Float  z  (null)  global  0  0
+Integer  a  (null)  functie-0  0  0
 Integer  m  9  local  0  0
 Float  z  (null)  local  0  0

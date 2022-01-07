@@ -2,12 +2,20 @@ Float x;
 Integer y=7;
 Const Integer a=3;
 Float z;
+Print("inainte de functie"); 
+#momentan nu merge cu parametru => segmentation
+Integer suma () { 
+    Integer a;
+}
 
 Main ()
 {
     Integer m=9;
     Float z;
     #comentariu
-    Print("value of expression y+1 is:",y+3); 
+    Print("value of expression y is:",y); 
+   
+    
+
 
 }
