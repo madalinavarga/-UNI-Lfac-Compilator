@@ -80,7 +80,7 @@ extern int yylineno;
 struct variabile{
       char* tip;
       char* id;
-      double valoare;
+      char* valoare;
       char* vizibilitate;
       int constante;
       int dimensiune;
@@ -92,7 +92,7 @@ char fisier_functii[]="symbol_table_functions.txt ";
 
 int variabila_deja_declarata(char* nume,char* vizibilitate);
 void declarare_fara_initializare(char* tip,char* nume, int este_const,char* vizibilitate);
-void declarare_cu_initializare(char* tip,char* nume,double val,int este_const,char* vizibilitate);
+void declarare_cu_initializare(char* tip,char* nume,int val,int este_const,char* vizibilitate);
 void scrieVariabileFisier();
 int get_valoare_dupa_nume(char * nume);
 char *citeste_fisier(char *file);
@@ -1662,7 +1662,7 @@ yyreduce:
 
   case 28:
 #line 113 "tema.y"
-              {int numar=get_valoare_dupa_nume((yyvsp[0].str)); if(numar!=0) (yyval.integer)=numar; else printf("Nu exista variabila\n");}
+              {(yyval.integer)=get_valoare_dupa_nume((yyvsp[0].str));}
 #line 1667 "y.tab.c"
     break;
 
@@ -1674,7 +1674,7 @@ yyreduce:
 
   case 40:
 #line 131 "tema.y"
-                                          {printf("%s %d",(yyvsp[-3].str),(yyvsp[-1].integer));}
+                                          {printf("%s %d\n",(yyvsp[-3].str),(yyvsp[-1].integer));}
 #line 1679 "y.tab.c"
     break;
 
@@ -1960,7 +1960,7 @@ void declarare_fara_initializare(char* tip,char* nume, int este_const,char* vizi
         var[count_v].constante=0;
         count_v++;
 }
-void declarare_cu_initializare(char* tip,char* nume,double val,int este_const,char* vizibilitate){
+void declarare_cu_initializare(char* tip,char* nume,int val,int este_const,char* vizibilitate){
         //verificare daca exista 
         
 
@@ -1973,75 +1973,40 @@ void declarare_cu_initializare(char* tip,char* nume,double val,int este_const,ch
         //seteaza valorile si incrementeaza
         var[count_v].tip=strdup(tip);
         var[count_v].id=strdup(nume);
-        var[count_v].valoare=val;
+        char valoare[50];
+        snprintf(valoare,50,"%d",val);
+        var[count_v].valoare=strdup(valoare);
         var[count_v].constante=este_const;
         count_v++;
       
 }
 
 int get_valoare_dupa_nume(char * nume)
-{
-        char* continut_fisier=citeste_fisier(fisier_variabile); // iau continut tabela 
-        int lungime=strlen(continut_fisier);
-        char delimitator[]="\n";
+{ 
+       // printf("Nume cautat: %s\n",nume);
         int gasit=0;
-        int numar_return;
-        char linie_cautata[100];
+         for (int i = 0; i < count_v; i++)
+         {
+                 //printf("variabile: %s %s\n",var[i].id,var[i].tip);
+                 if(strcmp(var[i].id,nume)==0 && strcmp(var[i].tip,"Integer")==0){
+                 gasit++;
+                // printf("return:%s\n",var[i].valoare);
+                 int valoare=atoi(var[i].valoare);
+                 return valoare;
+                 }
+         }
 
-        char text_cautat[100];
-        
-        snprintf(text_cautat,100,"Integer %s ",nume); // Integer x 
-        printf("continut cautat: %s\n",text_cautat);
-        char* linie_curenta=strtok(continut_fisier,delimitator); // caut linie cu linie variabila 
+         if(gasit==0) 
+         {
+                char error_msg[250];
+                sprintf(error_msg, "Variabila nu exista");
+                yyerror(error_msg);
+                exit(0);
+         }
 
-          while (linie_curenta)
-    {
-        printf("linie curenta: %s\n", linie_curenta);
-        if (strstr(linie_curenta, text_cautat))
-        {
-                printf("intru aici\n");
-            strcpy(linie_cautata, linie_curenta);
-            gasit++;
-            break;
-        }
-        linie_curenta = strtok(NULL, delimitator);
-    }
-    printf("gasit: %d\n", gasit);
-    if (gasit == 1) // am linia dorita in linie_cautata
-    {
-        char *numar_string = strtok(linie_cautata, "  ");
-        printf("Element 1: %s\n", numar_string);
-
-        numar_string = strtok(NULL, "  ");
-        printf("Element 2: %s\n", numar_string);
-        numar_string = strtok(NULL, "  ");
-        printf("Element 3: %s\n", numar_string);
-
-        numar_return = atoi(numar_string);
-        return numar_return;
-    }
-    else
-        return 0;
 }
 
-char *citeste_fisier(char *file)
-{
-    FILE *file_fd;
-    if ((file_fd = fopen(file, "r")) == NULL)
-        printf("eroare deschidere fisier\n"); 
 
-    fseek(file_fd, 0, SEEK_END);     
-    long file_size = ftell(file_fd);
-    fseek(file_fd, 0, SEEK_SET);     
-
-    char *fileContent = (char *)malloc(file_size + 1);
-    fread(fileContent, 1, file_size, file_fd); 
-    fclose(file_fd);
-
-    fileContent[file_size] = 0;
-
-    return fileContent;
-}
 void scrieVariabileFisier()
 {
       FILE* var_fisier_ptr;
@@ -2050,10 +2015,9 @@ void scrieVariabileFisier()
       fprintf(var_fisier_ptr,"---------------------------------------------------------\n");
       for(int i=0;i<count_v;i++){
     
-       fprintf(var_fisier_ptr,"%s  %s  %f  %s  %d  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
+       fprintf(var_fisier_ptr,"%s  %s  %s  %s  %d  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
        //modificari nr spatii => modifica si in get valoare dupa nume
      
       }
       fclose(var_fisier_ptr);
 }
-
