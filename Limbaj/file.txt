@@ -1,13 +1,13 @@
 Float x;
-Integer y=7+9;
+Integer y=7;
 Const Integer a=3;
-Float z=2.5;
+Float z;
 
 Main ()
 {
     Integer m=9;
-    Float z=2.5;
-    #nu merge expresie ca nu avem tip acolo
-    Print("value of expression x+2 is:",2); 
+    Float z;
+    #nu merge expresie ca nu avem id acolo
+    Print("value of expression y is:",y); 
 
 }

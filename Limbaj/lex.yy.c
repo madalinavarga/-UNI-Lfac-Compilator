@@ -581,8 +581,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "p2_copie.l"
-#line 2 "p2_copie.l"
+#line 1 "tema.l"
+#line 2 "tema.l"
 #include <stdio.h>
 #include "y.tab.h"
 #line 589 "lex.yy.c"
@@ -803,7 +803,7 @@ YY_DECL
 		}
 
 	{
-#line 6 "p2_copie.l"
+#line 6 "tema.l"
 
 #line 809 "lex.yy.c"
 
@@ -864,179 +864,179 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 7 "p2_copie.l"
+#line 7 "tema.l"
 {yylval.str = strdup(yytext);return PRINT;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 8 "p2_copie.l"
+#line 8 "tema.l"
 {yylval.str = strdup(yytext);return TIP;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 9 "p2_copie.l"
+#line 9 "tema.l"
 {yylval.str = strdup(yytext);return CONST;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 12 "p2_copie.l"
+#line 12 "tema.l"
 {return DACA;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 13 "p2_copie.l"
+#line 13 "tema.l"
 {return ALTFEL;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 14 "p2_copie.l"
+#line 14 "tema.l"
 {return PENTRU;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 15 "p2_copie.l"
+#line 15 "tema.l"
 {return CAT_TIMP;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 17 "p2_copie.l"
+#line 17 "tema.l"
 {return MAIN;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 18 "p2_copie.l"
+#line 18 "tema.l"
 {return RETURN;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 19 "p2_copie.l"
+#line 19 "tema.l"
 {return EXIT;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 20 "p2_copie.l"
+#line 20 "tema.l"
 {return CLASS;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 22 "p2_copie.l"
+#line 22 "tema.l"
 { return GEQ; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 23 "p2_copie.l"
+#line 23 "tema.l"
 { return EQ; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 24 "p2_copie.l"
+#line 24 "tema.l"
 { return LEQ; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 25 "p2_copie.l"
+#line 25 "tema.l"
 { return NEQ; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 26 "p2_copie.l"
+#line 26 "tema.l"
 {return ASSIGN;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 27 "p2_copie.l"
+#line 27 "tema.l"
 {return OR;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 28 "p2_copie.l"
+#line 28 "tema.l"
 {return AND;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 33 "p2_copie.l"
+#line 33 "tema.l"
 {return PLUS;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 34 "p2_copie.l"
+#line 34 "tema.l"
 {return MINUS;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 35 "p2_copie.l"
+#line 35 "tema.l"
 {return PROD;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 36 "p2_copie.l"
+#line 36 "tema.l"
 {return DIV;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 37 "p2_copie.l"
+#line 37 "tema.l"
 {return LESS;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 38 "p2_copie.l"
+#line 38 "tema.l"
 {return GREATER;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 39 "p2_copie.l"
+#line 39 "tema.l"
 {return INCR;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 40 "p2_copie.l"
+#line 40 "tema.l"
 {return DECR;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 42 "p2_copie.l"
+#line 42 "tema.l"
 {yylval.str=strdup(yytext); return ID;}
 	YY_BREAK
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 43 "p2_copie.l"
+#line 43 "tema.l"
 {yylval.str=strdup(yytext); return STRING;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 45 "p2_copie.l"
+#line 45 "tema.l"
 {yylval.integer=atoi(yytext); return NR_INT;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 46 "p2_copie.l"
+#line 46 "tema.l"
 {yylval.real=atoi(yytext); return NR_REAL;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 49 "p2_copie.l"
+#line 49 "tema.l"
 ;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 50 "p2_copie.l"
+#line 50 "tema.l"
 ;
 	YY_BREAK
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 51 "p2_copie.l"
+#line 51 "tema.l"
 {yylineno++;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 52 "p2_copie.l"
+#line 52 "tema.l"
 {return yytext[0];}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 54 "p2_copie.l"
+#line 54 "tema.l"
 ECHO;
 	YY_BREAK
 #line 1043 "lex.yy.c"
@@ -2044,4 +2044,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 54 "p2_copie.l"
+#line 54 "tema.l"

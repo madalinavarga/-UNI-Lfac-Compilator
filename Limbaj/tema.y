@@ -25,6 +25,8 @@ int variabila_deja_declarata(char* nume,char* vizibilitate);
 void declarare_fara_initializare(char* tip,char* nume, int este_const,char* vizibilitate);
 void declarare_cu_initializare(char* tip,char* nume,double val,int este_const,char* vizibilitate);
 void scrieVariabileFisier();
+int get_valoare_dupa_nume(char * nume);
+char *citeste_fisier(char *file);
 %}
 
 %union
@@ -44,7 +46,7 @@ void scrieVariabileFisier();
 %token<real>NR_REAL
 %token<integer>NR_INT
 %token<str> ID TIP
-%type<num> expresie
+%type<integer> expresie
 
 
 %start s
@@ -108,10 +110,9 @@ expresie : expresie PLUS expresie  {$$ = $1 + $3;}
          | expresie PROD expresie {$$ = $1 * $3;}
          | expresie DIV expresie {$$ = $1 / $3;}
          |'(' expresie ')' {$$ = $2;}
-        // | ID {$$=get_valoare_dupa_nume($1);} // ar trebuii sa returneze numar 
+         | ID {int numar=get_valoare_dupa_nume($1); if(numar!=0) $$=numar; else printf("Nu exista variabila\n"); exit(0);} 
          | NR_INT {$$ = $1;} 
-         | NR_REAL {$$ = $1;} 
-         //| ID '[' NR_REAL ']'
+         //| ID '[' NR_INT ']'
          ;
 array : TIP ID dimensiune
       | TIP ID '[' ']' ASSIGN '{' lista_valori '}'
@@ -127,7 +128,7 @@ valoare :  NR_INT
         | STRING
         | CHAR
         ;
-print:  PRINT '(' STRING ',' expresie ')' {printf("%s %f",$3,$5);}
+print:  PRINT '(' STRING ',' expresie ')' {printf("%s %d",$3,$5);}
      ;
 
 /* sectiunea 2 */
@@ -275,6 +276,69 @@ void declarare_cu_initializare(char* tip,char* nume,double val,int este_const,ch
       
 }
 
+int get_valoare_dupa_nume(char * nume)
+{
+        char* continut_fisier=citeste_fisier(fisier_variabile); // iau continut tabela 
+        int lungime=strlen(continut_fisier);
+        char delimitator[]="\n";
+        int gasit=0;
+        int numar_return;
+        char linie_cautata[100];
+
+        char text_cautat[100];
+        
+        snprintf(text_cautat,100,"Integer %s ",nume); // Integer x 
+        printf("continut cautat: %s\n",text_cautat);
+        char* linie_curenta=strtok(continut_fisier,delimitator); // caut linie cu linie variabila 
+
+          while (linie_curenta)
+    {
+        printf("linie curenta: %s\n", linie_curenta);
+        if (strstr(linie_curenta, text_cautat))
+        {
+                printf("intru aici\n");
+            strcpy(linie_cautata, linie_curenta);
+            gasit++;
+            break;
+        }
+        linie_curenta = strtok(NULL, delimitator);
+    }
+    printf("gasit: %d\n", gasit);
+    if (gasit == 1) // am linia dorita in linie_cautata
+    {
+        char *numar_string = strtok(linie_cautata, "  ");
+        printf("Element 1: %s\n", numar_string);
+
+        numar_string = strtok(NULL, "  ");
+        printf("Element 2: %s\n", numar_string);
+        numar_string = strtok(NULL, "  ");
+        printf("Element 3: %s\n", numar_string);
+
+        numar_return = atoi(numar_string);
+        return numar_return;
+    }
+    else
+        return 0;
+}
+
+char *citeste_fisier(char *file)
+{
+    FILE *file_fd;
+    if ((file_fd = fopen(file, "r")) == NULL)
+        printf("eroare deschidere fisier\n"); 
+
+    fseek(file_fd, 0, SEEK_END);     
+    long file_size = ftell(file_fd);
+    fseek(file_fd, 0, SEEK_SET);     
+
+    char *fileContent = (char *)malloc(file_size + 1);
+    fread(fileContent, 1, file_size, file_fd); 
+    fclose(file_fd);
+
+    fileContent[file_size] = 0;
+
+    return fileContent;
+}
 void scrieVariabileFisier()
 {
       FILE* var_fisier_ptr;
@@ -284,7 +348,9 @@ void scrieVariabileFisier()
       for(int i=0;i<count_v;i++){
     
        fprintf(var_fisier_ptr,"%s  %s  %f  %s  %d  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
+       //modificari nr spatii => modifica si in get valoare dupa nume
      
       }
       fclose(var_fisier_ptr);
 }
+
