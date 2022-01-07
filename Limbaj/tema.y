@@ -86,11 +86,11 @@ char *citeste_fisier(char *file);
 
 
 %%
-s: declaratii_globale functii_clase  main_prog {printf("1   program corect sintactic\n"); scrieVariabileFisier();}
+s: declaratii_globale functii_clase  main_prog {printf("1   program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
  | declaratii_globale main_prog {printf("2   program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
- | functii_clase main_prog {printf("3   program corect sintactic\n"); scrieVariabileFisier();}
- | main_prog {printf("4   program corect sintactic\n"); scrieVariabileFisier();}
- | declaratii_globale {printf("5   program corect sintactic\n"); scrieVariabileFisier();}
+ | functii_clase main_prog {printf("3   program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
+ | main_prog {printf("4   program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
+ | declaratii_globale {printf("5   program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
  ;
      
 /*sectiunea 1*/
@@ -160,17 +160,17 @@ functii_clase : functii_clase clase_declaratie
 clase_declaratie : CLASS ID  '{' cod_bloc '}' ';'
       ;
 
-functii_declaratie : TIP ID '(' lista_param ')' '{' cod_functii '}' {printf("intru declaatii\n"); if(functie_deja_declarata($1,$2,aux)==0){creaza_functie($1,$2,aux);} else {count_aux=0; } }
+functii_declaratie : TIP ID '(' lista_param ')' '{' cod_functii '}' { if(functie_deja_declarata($1,$2,aux)==0){ creaza_functie($1,$2,aux);} else {printf("else creez functie\n");count_aux=0; } }
                    | TIP ID '(' ')' '{' cod_functii '}' { }
                    ;
 cod_functii : declaratie_locala ';' {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); var[count_v-1].vizibilitate=strdup(count_str);}
             | interogari
             ;
 
-lista_param : param {printf("PARAM\n");}
-            | lista_param ','  param {printf("PARAM recursiv\n");}
+lista_param : param
+            | lista_param ','  param 
             ;
-param: TIP ID { printf("final param\n"); set_parametrii_functie($1,$2,aux);}
+param: TIP ID { set_parametrii_functie($1,$2,aux);}
      ;
 
 /*sectiunea 3 */
@@ -330,12 +330,14 @@ int get_valoare_dupa_nume(char * nume)
 void creaza_functie(char* tip, char* id,struct parametru *aux)
 {
         functii[count_f].nr_parametrii=count_aux;
+        functii[count_f].tip_return=(char*)malloc(strlen(tip));
         strcpy(functii[count_f].tip_return,tip);
+        functii[count_f].id=(char*)malloc(strlen(id));
         strcpy(functii[count_f].id,id);
         for(int i =0;i<count_aux;i++)
         {
-                strcpy(functii[count_f].parametrii_functie[i].id,aux[i].id);
-                strcpy(functii[count_f].parametrii_functie[i].tip,aux[i].tip);
+                functii[count_f].parametrii_functie[i].id=strdup(aux[i].id);
+                functii[count_f].parametrii_functie[i].tip=strdup(aux[i].tip);
         }
         count_f++;
         count_aux=0;
@@ -344,10 +346,10 @@ void creaza_functie(char* tip, char* id,struct parametru *aux)
 
 void set_parametrii_functie(char* tip, char* id,struct parametru *aux)
 {
-        printf("set param\n");
-        printf("count_aux %d\n",count_aux);
+       
+        aux[count_aux].id=(char*)malloc(strlen(id));
         strcpy(aux[count_aux].id,id);
-        printf("orice\n");
+        aux[count_aux].tip=(char*)malloc(strlen(tip));
         strcpy(aux[count_aux].tip,tip);
         count_aux++;    
 }
@@ -371,7 +373,8 @@ void scrieVariabileFisier()
 int functie_deja_declarata(char * tip,char* id,struct parametru *param)
 {       
         int size_param=count_aux;
-        printf("%d\n",size_param);
+        int gasit=0;
+       
 
         for(int i=0;i<count_f;i++)
         {
@@ -383,11 +386,13 @@ int functie_deja_declarata(char * tip,char* id,struct parametru *param)
 
                         //verific parametrii
                         for(int j=0;j<functii[i].nr_parametrii;j++) //pentru fiecare parametru 
-                           if(strcmp(param[j].id,functii[i].parametrii_functie[j].id)!=0) return 0;
+                           if(strcmp(param[j].id,functii[i].parametrii_functie[j].id)==0) gasit++;
+                           
                       
                 }
         }
-        return 1;
+        if(gasit==count_aux) return 1;
+        return 0;
 
 }
 
@@ -401,8 +406,7 @@ void scrieFunctiiInFisier()
         fprintf(functii_fisier_ptr,"tip  id parametrii \n");
         fprintf(functii_fisier_ptr,"---------------------------------------------------------\n");
         for(int i=0;i<count_f;i++)
-        
-                fprintf(functii_fisier_ptr,"%s %s %d\n",functii[i].tip_return,functii[i].id,functii[i].nr_parametrii);
+          fprintf(functii_fisier_ptr,"%s %s %d\n",functii[i].tip_return,functii[i].id,functii[i].nr_parametrii);
 
 
 

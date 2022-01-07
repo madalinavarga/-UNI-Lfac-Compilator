@@ -3,8 +3,8 @@ Integer y=7;
 Const Integer a=3;
 Float z;
 Print("inainte de functie"); 
-#momentan nu merge cu parametru => segmentation
-Integer suma () { 
+#salveaza doar un parametru si nu e facut pt empty funct 
+Integer suma ( Integer a , Integer b) { 
     Integer a;
 }
 

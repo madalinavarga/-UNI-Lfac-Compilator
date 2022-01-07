@@ -1584,7 +1584,7 @@ yyreduce:
     {
   case 2:
 #line 89 "tema.y"
-                                               {printf("1   program corect sintactic\n"); scrieVariabileFisier();}
+                                               {printf("1   program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
 #line 1589 "y.tab.c"
     break;
 
@@ -1596,19 +1596,19 @@ yyreduce:
 
   case 4:
 #line 91 "tema.y"
-                           {printf("3   program corect sintactic\n"); scrieVariabileFisier();}
+                           {printf("3   program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
 #line 1601 "y.tab.c"
     break;
 
   case 5:
 #line 92 "tema.y"
-             {printf("4   program corect sintactic\n"); scrieVariabileFisier();}
+             {printf("4   program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
 #line 1607 "y.tab.c"
     break;
 
   case 6:
 #line 93 "tema.y"
-                      {printf("5   program corect sintactic\n"); scrieVariabileFisier();}
+                      {printf("5   program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
 #line 1613 "y.tab.c"
     break;
 
@@ -1716,7 +1716,7 @@ yyreduce:
 
   case 47:
 #line 163 "tema.y"
-                                                                    {printf("intru declaatii\n"); if(functie_deja_declarata((yyvsp[-7].str),(yyvsp[-6].str),aux)==0){creaza_functie((yyvsp[-7].str),(yyvsp[-6].str),aux);} else {count_aux=0; } }
+                                                                    { if(functie_deja_declarata((yyvsp[-7].str),(yyvsp[-6].str),aux)==0){ creaza_functie((yyvsp[-7].str),(yyvsp[-6].str),aux);} else {printf("else creez functie\n");count_aux=0; } }
 #line 1721 "y.tab.c"
     break;
 
@@ -1732,32 +1732,20 @@ yyreduce:
 #line 1733 "y.tab.c"
     break;
 
-  case 51:
-#line 170 "tema.y"
-                    {printf("PARAM\n");}
-#line 1739 "y.tab.c"
-    break;
-
-  case 52:
-#line 171 "tema.y"
-                                     {printf("PARAM recursiv\n");}
-#line 1745 "y.tab.c"
-    break;
-
   case 53:
 #line 173 "tema.y"
-              { printf("final param\n"); set_parametrii_functie((yyvsp[-1].str),(yyvsp[0].str),aux);}
-#line 1751 "y.tab.c"
+              { set_parametrii_functie((yyvsp[-1].str),(yyvsp[0].str),aux);}
+#line 1739 "y.tab.c"
     break;
 
   case 62:
 #line 189 "tema.y"
                            {var[count_v-1].vizibilitate=strdup("local");}
-#line 1757 "y.tab.c"
+#line 1745 "y.tab.c"
     break;
 
 
-#line 1761 "y.tab.c"
+#line 1749 "y.tab.c"
 
       default: break;
     }
@@ -2080,12 +2068,14 @@ int get_valoare_dupa_nume(char * nume)
 void creaza_functie(char* tip, char* id,struct parametru *aux)
 {
         functii[count_f].nr_parametrii=count_aux;
+        functii[count_f].tip_return=(char*)malloc(strlen(tip));
         strcpy(functii[count_f].tip_return,tip);
+        functii[count_f].id=(char*)malloc(strlen(id));
         strcpy(functii[count_f].id,id);
         for(int i =0;i<count_aux;i++)
         {
-                strcpy(functii[count_f].parametrii_functie[i].id,aux[i].id);
-                strcpy(functii[count_f].parametrii_functie[i].tip,aux[i].tip);
+                functii[count_f].parametrii_functie[i].id=strdup(aux[i].id);
+                functii[count_f].parametrii_functie[i].tip=strdup(aux[i].tip);
         }
         count_f++;
         count_aux=0;
@@ -2094,10 +2084,10 @@ void creaza_functie(char* tip, char* id,struct parametru *aux)
 
 void set_parametrii_functie(char* tip, char* id,struct parametru *aux)
 {
-        printf("set param\n");
-        printf("count_aux %d\n",count_aux);
+       
+        aux[count_aux].id=(char*)malloc(strlen(id));
         strcpy(aux[count_aux].id,id);
-        printf("orice\n");
+        aux[count_aux].tip=(char*)malloc(strlen(tip));
         strcpy(aux[count_aux].tip,tip);
         count_aux++;    
 }
@@ -2121,7 +2111,8 @@ void scrieVariabileFisier()
 int functie_deja_declarata(char * tip,char* id,struct parametru *param)
 {       
         int size_param=count_aux;
-        printf("%d\n",size_param);
+        int gasit=0;
+       
 
         for(int i=0;i<count_f;i++)
         {
@@ -2133,11 +2124,13 @@ int functie_deja_declarata(char * tip,char* id,struct parametru *param)
 
                         //verific parametrii
                         for(int j=0;j<functii[i].nr_parametrii;j++) //pentru fiecare parametru 
-                           if(strcmp(param[j].id,functii[i].parametrii_functie[j].id)!=0) return 0;
+                           if(strcmp(param[j].id,functii[i].parametrii_functie[j].id)==0) gasit++;
+                           
                       
                 }
         }
-        return 1;
+        if(gasit==count_aux) return 1;
+        return 0;
 
 }
 
@@ -2151,8 +2144,7 @@ void scrieFunctiiInFisier()
         fprintf(functii_fisier_ptr,"tip  id parametrii \n");
         fprintf(functii_fisier_ptr,"---------------------------------------------------------\n");
         for(int i=0;i<count_f;i++)
-        
-                fprintf(functii_fisier_ptr,"%s %s %d\n",functii[i].tip_return,functii[i].id,functii[i].nr_parametrii);
+          fprintf(functii_fisier_ptr,"%s %s %d\n",functii[i].tip_return,functii[i].id,functii[i].nr_parametrii);
 
 
 
