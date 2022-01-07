@@ -1656,7 +1656,7 @@ yyreduce:
 
   case 22:
 #line 119 "tema.y"
-                                   {declarare_fara_initializare((yyvsp[-1].str),(yyvsp[0].str),0,"global");printf("global\n");}
+                                   {declarare_fara_initializare((yyvsp[-1].str),(yyvsp[0].str),0,"global");}
 #line 1661 "y.tab.c"
     break;
 

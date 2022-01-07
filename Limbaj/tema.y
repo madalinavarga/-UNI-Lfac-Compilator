@@ -116,7 +116,7 @@ variabila_declarata_local: TIP ID {declarare_fara_initializare($1,$2,0,"local");
 variabila_initializata_global: CONST TIP ID ASSIGN expresie {declarare_cu_initializare($2,$3,$5,1,"global");}
                       | TIP ID ASSIGN expresie {declarare_cu_initializare($1,$2,$4,0,"global");}
                       ;
-variabila_declarata_global: TIP ID {declarare_fara_initializare($1,$2,0,"global");printf("global\n");}
+variabila_declarata_global: TIP ID {declarare_fara_initializare($1,$2,0,"global");}
                    ;
 /*
 lista_declaratii : ID
