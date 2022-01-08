@@ -8,7 +8,7 @@ Print("inainte de functie");
 
 #overloading functii
 Integer suma ( Integer a , Integer b) { 
-    #momentan doar id assign int 
+    #momentan doar id assign expresie
     Integer suma_var=9;
     Print("value of expression suma_var is:",suma_var);
     suma_var=100+9;
