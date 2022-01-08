@@ -235,7 +235,8 @@ cod: interogari
    | bucle
    | declaratie_locala ';' {var[count_v-1].vizibilitate=strdup("main");}
    | statement ';'
-   | asignare ';'
+   | asignare_main ';'
+
    | functii_declaratie 
    //| clasa_noua ';'
    ;
@@ -247,9 +248,12 @@ clasa_noua : ID ID { if(clasa_definita($1,"class")!=-1){
                 }
            ;
 */
-asignare : ID ASSIGN expr
-         | ID '['NR_INT ']' ASSIGN expr
-         ;
+asignare_main :  ID ASSIGN expresie    {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%d",$3); asignare_exista_variabila($1,count_str,str_valoare,0);}
+                | ID ASSIGN NR_REAL   {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
+                | ID ASSIGN STRING    {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,2);}
+                | ID ASSIGN CHAR      {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,3);}
+                ;
+
 expr: expr PLUS expr
     | expr MINUS expr
     | expr PROD expr
@@ -293,7 +297,7 @@ functie_while : CAT_TIMP '(' conditie')' '{' cod_bloc '}'
               ;
 functie_for: PENTRU '('for_list')' '{' cod_bloc '}'
            ;
-for_list: asignare ';' conditie ';' statement
+for_list: asignare_main ';' conditie ';' statement
         ;
 
 %%
