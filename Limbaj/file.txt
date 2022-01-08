@@ -8,13 +8,17 @@ Print("inainte de functie");
 
 #overloading functii
 Integer suma ( Integer a , Integer b) { 
-    Integer suma_var;
+    Integer suma_var=9;
+    Print("value of expression suma_var is:",suma_var);
+    suma_var=100;
+    Print("value of expression suma_var is:",suma_var);
 }
 Integer suma ( Integer a , Integer b,Integer c) { 
     Integer suma_var;
 }
 Integer minus ( ) { 
     Integer minus_var=9;
+    
 }
 
 

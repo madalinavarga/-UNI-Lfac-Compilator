@@ -54,7 +54,7 @@ void set_parametrii_functie(char* tip, char* id,struct parametru *aux);
 int functie_deja_declarata(char * tip,char* id,struct parametru *param);
 void mesaj_functie_existenta(char msg[]);
 void creaza_functie(char* tip, char* id,struct parametru *aux);
-int asignare_exista_variabila(char* id , char* viziblitate);
+void asignare_exista_variabila(char* id , char* viziblitate, int valoare);
 void creeaza_clasa(char* tip);
 void error_decl(char* nume);
 int variabila_class_deja_declarata(char* nume, char* vizibilitate);
@@ -200,9 +200,13 @@ class_declaratie: TIP ID ';' { if(variabila_class_deja_declarata($2,"class")==-1
 functii_declaratie : TIP ID '(' lista_param ')' '{' cod_functii '}' { if(functie_deja_declarata($1,$2,aux)==0){ creaza_functie($1,$2,aux);} else {count_aux=0;mesaj_functie_existenta($2); } }
                    | TIP ID '(' ')' '{' cod_functii '}' {if(functie_deja_declarata($1,$2,empty_struct)==0){ creaza_functie($1,$2,empty_struct);} else {count_aux=0;mesaj_functie_existenta($2); } }
                    ;
-cod_functii : declaratie_locala ';' {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); var[count_v-1].vizibilitate=strdup(count_str);}
+cod_functii: cod_functii cod_f
+           | cod_f
+           ;
+cod_f : declaratie_locala ';' {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); var[count_v-1].vizibilitate=strdup(count_str);}
             | asignare_functie 
             | bucle // de completat
+            | print
             ;
 
 lista_param : param
@@ -210,7 +214,7 @@ lista_param : param
             ;
 param: TIP ID { set_parametrii_functie($1,$2,aux);}
      ;
-asignare_functie: //ID ASSIGN NR_INT {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); if(asignare_exista_variabila($1,count_str)==1) asignare_variabila() else {printf(asignare error\n); exit(0);}}
+asignare_functie: ID ASSIGN NR_INT ';' {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); asignare_exista_variabila($1,count_str,$3); }
                 | expresie
                 ;
 
@@ -391,16 +395,18 @@ void creaza_functie(char* tip, char* id,struct parametru *aux)
         count_aux=0;
 
 }
-int asignare_exista_variabila(char* id , char* viziblitate)
+void asignare_exista_variabila(char* id , char* viziblitate ,int valoare)
 {
+        char str_valoare[50];
+        snprintf(str_valoare,50,"%d",valoare);
         for (int i = 0; i < count_v; i++){
                 if(strcmp(var[i].id,id)==0) // acelasi nume
-                  if(strcmp(var[i].vizibilitate,"global")==0) return 1;
+                  if(strcmp(var[i].vizibilitate,"global")==0) strcpy(var[i].valoare,str_valoare);
                   else
-                   if(strcmp(var[i].vizibilitate,viziblitate)==0) return 1;
-                else{ printf("variabila trebuie declarata\n"); exit(0);}
+                   if(strcmp(var[i].vizibilitate,viziblitate)==0)  strcpy(var[i].valoare,str_valoare);
+                else{ printf("variabila trebuie declarata inainte\n"); exit(0);}
         }
-        return 0;
+       
 }
 
 void set_parametrii_functie(char* tip, char* id,struct parametru *aux)
