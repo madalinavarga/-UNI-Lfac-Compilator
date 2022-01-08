@@ -2,7 +2,7 @@
 Float x;
 Integer y=7;
 Const Integer a=3;
-Float z;
+
 
 Print("inainte de functie"); 
 
@@ -16,6 +16,10 @@ Integer suma ( Integer a , Integer b) {
 }
 Integer suma ( Integer a , Integer b,Integer c) { 
     Integer suma_var;
+    x=9.8; #global initializat aici
+    Float z;
+    z=10.10;
+    z=10+10;
 }
 Integer minus ( ) { 
     Integer minus_var=9;

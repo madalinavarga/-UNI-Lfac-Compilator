@@ -54,7 +54,7 @@ void set_parametrii_functie(char* tip, char* id,struct parametru *aux);
 int functie_deja_declarata(char * tip,char* id,struct parametru *param);
 void mesaj_functie_existenta(char msg[]);
 void creaza_functie(char* tip, char* id,struct parametru *aux);
-void asignare_exista_variabila(char* id , char* viziblitate, int valoare);
+void asignare_exista_variabila(char* id , char* viziblitate, char* valoare ,int nr_tip);
 void creeaza_clasa(char* tip);
 void error_decl(char* nume);
 int variabila_class_deja_declarata(char* nume, char* vizibilitate);
@@ -214,13 +214,12 @@ lista_param : param
             ;
 param: TIP ID { set_parametrii_functie($1,$2,aux);}
      ;
-asignare_functie: ID ASSIGN expresie ';' {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); asignare_exista_variabila($1,count_str,$3); }
-                | ID ASSIGN id_tip ';'  
+asignare_functie: ID ASSIGN expresie ';' {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); char str_valoare[50]; snprintf(str_valoare,50,"%d",$3); asignare_exista_variabila($1,count_str,str_valoare,0);}
+                | ID ASSIGN NR_REAL ';'  {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
+                | ID ASSIGN STRING ';'   {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); asignare_exista_variabila($1,count_str,$3,2);}
+                | ID ASSIGN CHAR ';'     {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); asignare_exista_variabila($1,count_str,$3,3);}
                 ;
-id_tip : NR_REAL
-       | STRING
-       | CHAR
-       ;
+
 
 /*sectiunea 3 */
 main_prog :
@@ -326,7 +325,7 @@ void declarare_fara_initializare(char* tip,char* nume, int este_const,char* vizi
                 char error_msg[250];
                 sprintf(error_msg, "Variabila %s este deja declarata", nume);
                 yyerror(error_msg);
-                //exit(0);
+                exit(0);
         }
         if(este_const==1){
                 char error_msg[250];
@@ -399,16 +398,36 @@ void creaza_functie(char* tip, char* id,struct parametru *aux)
         count_aux=0;
 
 }
-void asignare_exista_variabila(char* id , char* viziblitate ,int valoare)
+void asignare_exista_variabila(char* id , char* viziblitate ,char* valoare, int nr_tip)
 {
-        char str_valoare[50];
-        snprintf(str_valoare,50,"%d",valoare);
+        
         for (int i = 0; i < count_v; i++){
                 if(strcmp(var[i].id,id)==0) // acelasi nume
-                  if(strcmp(var[i].vizibilitate,"global")==0) strcpy(var[i].valoare,str_valoare);
+                  if(strcmp(var[i].vizibilitate,"global")==0) var[i].valoare=strdup(valoare);
                   else
-                   if(strcmp(var[i].vizibilitate,viziblitate)==0)  strcpy(var[i].valoare,str_valoare);
-                else{ printf("variabila trebuie declarata inainte\n"); exit(0);}
+                   if(strcmp(var[i].vizibilitate,viziblitate)==0) 
+                   {
+                           if(nr_tip==0) { // int , expresie deja verificat
+                            var[i].valoare=strdup(valoare);
+                           }else
+                           if(nr_tip==1 && strcmp(var[i].tip,"Float")==0)
+                           {
+                                   var[i].valoare=strdup(valoare);
+                                   
+
+                           }else
+                           if(nr_tip==2 && strcmp(var[i].tip,"String")==0){
+                                   var[i].valoare=strdup(valoare);
+                           }else
+                           if(nr_tip==3 && strcmp(var[i].tip,"Char")==0)
+                           {
+                                   var[i].valoare=strdup(valoare);
+                           }else
+                           {
+                                   printf("variabila trebuie declarata inainte\n"); exit(0);
+                           }
+                   }
+                   
         }
        
 }
@@ -509,6 +528,8 @@ void error_decl(char* nume){
         char error_msg[250];
         sprintf(error_msg, "Variabila %s este deja declarata", nume);
         yyerror(error_msg); 
+       
+        
 }
 
 void error_decl_clasa(char* nume){
