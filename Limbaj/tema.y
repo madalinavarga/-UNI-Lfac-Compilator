@@ -36,6 +36,13 @@ struct clase{
         struct variabile class_var[10];
 }clase[100];
 
+struct obiecte{
+        char* tip_clasa;
+        char* id;
+        char* vizibilitate;
+}obiecte[100];
+
+int nr_obiecte=0;
 int nr_clase=0;
 char empty[]=" ";
 struct parametru aux[100],empty_struct[1]={" "," "};
@@ -61,6 +68,10 @@ int variabila_class_deja_declarata(char* nume, char* vizibilitate);
 void declarare_variabila_class(char* tip, char* nume,char* vizibilitate);
 int clasa_deja_definita(char* nume);
 void error_decl_clasa(char* nume);
+int obiect_deja_definit(char* nume);
+int obiect_deja_definit(char* nume);
+void error_ne_decl_clasa(char* nume);
+void obiect_nou(char* clasa,char* nume, char* vizibilitate);
 
 
 char *citeste_fisier(char *file);
@@ -238,16 +249,33 @@ cod: interogari
    | asignare_main ';'
 
    | functii_declaratie 
-   //| clasa_noua ';'
+   | clasa_noua ';'
    ;
 /*
 clasa_noua : ID ID { if(clasa_definita($1,"class")!=-1){
+
                                 obiect_nou($1,$2,"main");
                         }
 
                 }
            ;
 */
+clasa_noua : ID ID { if(clasa_deja_definita($1)!=-1){
+                                if(obiect_deja_definit($2)==-1){
+                                        obiect_nou($1,$2,"main");
+                                }
+                                else{
+                                        error_decl($2);
+                                }
+                                
+                        }
+                        else{
+                               error_ne_decl_clasa($1); 
+                        }
+
+                }
+           ;
+
 asignare_main :  ID ASSIGN expresie    {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%d",$3); asignare_exista_variabila($1,count_str,str_valoare,0);}
                 | ID ASSIGN NR_REAL   {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
                 | ID ASSIGN STRING    {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,2);}
@@ -542,6 +570,12 @@ void error_decl_clasa(char* nume){
         yyerror(error_msg); 
 }
 
+void error_ne_decl_clasa(char* nume){
+        char error_msg[250];
+        sprintf(error_msg, "Clasa %s nu a fost definita", nume);
+        yyerror(error_msg);
+}
+
 int variabila_class_deja_declarata(char* nume,char* vizibilitate){
         for(int i=0;i<clase[nr_clase-1].nr_variabile;i++){
                 if(strcmp(nume, clase[nr_clase-1].class_var[i].id)==0)
@@ -567,4 +601,22 @@ int clasa_deja_definita(char* nume){
                 }
         }
         return -1;
+}
+
+int obiect_deja_definit(char* nume){
+        for(int i=0;i<nr_obiecte;i++){
+                if(strcmp(obiecte[i].id,nume)==0){
+                        printf("gasit\n");
+                        return i;
+                }
+        }
+        return -1;
+}
+
+void obiect_nou(char* clasa,char* nume, char* vizibilitate){
+        obiecte[nr_obiecte].id=strdup(nume);
+        obiecte[nr_obiecte].tip_clasa=strdup(clasa);
+        obiecte[nr_obiecte].vizibilitate=strdup(vizibilitate);
+        declarare_fara_initializare(clasa,nume,0,vizibilitate);
+        nr_obiecte++;
 }

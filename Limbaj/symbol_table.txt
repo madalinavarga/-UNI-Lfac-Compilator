@@ -12,3 +12,4 @@ Float  girafa  (null)  class-0  0  0
 Integer  urs  (null)  class-1  0  0
 Integer  m  9  main  0  0
 Float  z  (null)  main  0  0
+zoo  z2  (null)  main  0  0

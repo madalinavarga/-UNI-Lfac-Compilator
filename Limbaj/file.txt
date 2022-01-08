@@ -46,4 +46,5 @@ Main ()
     a=9;
     Print("value of expression a is:",a); 
 
+    zoo z2;
 }
