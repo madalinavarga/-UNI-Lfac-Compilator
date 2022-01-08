@@ -1,10 +1,10 @@
 tip  id  valoare  vizibilitate  este_const  dimensiune
 ---------------------------------------------------------
 Float  x  (null)  global  0  0
-Integer  y  10  global  0  0
+Integer  y  7  global  0  0
 Integer  a  3  global  1  0
 Float  z  (null)  global  0  0
-Integer  suma_var  100  functie-0  0  0
+Integer  suma_var  109  functie-0  0  0
 Integer  suma_var  (null)  functie-1  0  0
 Integer  minus_var  9  functie-2  0  0
 Integer  urs  (null)  class-0  0  0

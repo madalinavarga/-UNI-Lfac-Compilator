@@ -214,9 +214,13 @@ lista_param : param
             ;
 param: TIP ID { set_parametrii_functie($1,$2,aux);}
      ;
-asignare_functie: ID ASSIGN NR_INT ';' {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); asignare_exista_variabila($1,count_str,$3); }
-                | expresie
+asignare_functie: ID ASSIGN expresie ';' {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); asignare_exista_variabila($1,count_str,$3); }
+                | ID ASSIGN id_tip ';'
                 ;
+id_tip : NR_REAL
+       | STRING
+       | CHAR
+       ;
 
 /*sectiunea 3 */
 main_prog :
