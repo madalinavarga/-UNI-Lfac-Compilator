@@ -1,21 +1,40 @@
+#declarari globale
 Float x;
 Integer y=7;
 Const Integer a=3;
 Float z;
+
 Print("inainte de functie"); 
-#salveaza doar un parametru si nu e facut pt empty funct 
+
+#overloading functii
 Integer suma ( Integer a , Integer b) { 
-    Integer a;
+    Integer suma_var;
 }
+Integer suma ( Integer a , Integer b,Integer c) { 
+    Integer suma_var;
+}
+Integer minus ( ) { 
+    Integer minus_var=9;
+}
+
+
+#clase
+Class zoo{
+    Integer urs;
+    Float girafa;
+    
+};
+Class mamifer{
+    Integer urs;
+};
 
 Main ()
 {
     Integer m=9;
     Float z;
     #comentariu
-    Print("value of expression y is:",y); 
-   
-    
-
+    Print("value of expression a is:",a); 
+    a=9;
+    Print("value of expression a is:",a); 
 
 }

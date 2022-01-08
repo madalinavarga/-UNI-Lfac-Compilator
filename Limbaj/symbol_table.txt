@@ -4,6 +4,11 @@ Float  x  (null)  global  0  0
 Integer  y  7  global  0  0
 Integer  a  3  global  1  0
 Float  z  (null)  global  0  0
-Integer  a  (null)  functie-0  0  0
-Integer  m  9  local  0  0
-Float  z  (null)  local  0  0
+Integer  suma_var  (null)  functie-0  0  0
+Integer  suma_var  (null)  functie-1  0  0
+Integer  minus_var  9  functie-2  0  0
+Integer  urs  (null)  class-0  0  0
+Float  girafa  (null)  class-0  0  0
+Integer  urs  (null)  class-1  0  0
+Integer  m  9  main  0  0
+Float  z  (null)  main  0  0
