@@ -297,7 +297,7 @@ functie_while : CAT_TIMP '(' conditie')' '{' cod_bloc '}'
               ;
 functie_for: PENTRU '('for_list')' '{' cod_bloc '}'
            ;
-for_list: asignare_main ';' conditie ';' statement
+for_list: ID ASSIGN NR_INT ';' conditie ';' statement
         ;
 
 %%
