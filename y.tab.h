@@ -74,12 +74,13 @@ extern int yydebug;
     GREATER = 280,
     INCR = 281,
     DECR = 282,
-    CHAR = 283,
-    STRING = 284,
-    NR_REAL = 285,
-    NR_INT = 286,
-    ID = 287,
-    TIP = 288
+    BOOLEAN = 283,
+    CHAR = 284,
+    STRING = 285,
+    NR_REAL = 286,
+    NR_INT = 287,
+    ID = 288,
+    TIP = 289
   };
 #endif
 /* Tokens.  */
@@ -108,26 +109,27 @@ extern int yydebug;
 #define GREATER 280
 #define INCR 281
 #define DECR 282
-#define CHAR 283
-#define STRING 284
-#define NR_REAL 285
-#define NR_INT 286
-#define ID 287
-#define TIP 288
+#define BOOLEAN 283
+#define CHAR 284
+#define STRING 285
+#define NR_REAL 286
+#define NR_INT 287
+#define ID 288
+#define TIP 289
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 86 "tema.y"
+#line 87 "tema.y"
 
     double num;
     char* str;
     int integer;
     float real;
-    int boolean;
+    char* boolean;
 
-#line 131 "y.tab.h"
+#line 133 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

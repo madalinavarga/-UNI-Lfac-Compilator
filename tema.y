@@ -77,6 +77,7 @@ void error_ne_decl_membru(char* nume);
 void asignare_pt_data_membru(char* clasa,char* membru,char* valoare,char* tip_valoare);
 void print_variabile(char* mesaj ,char* nume);
 void verifica_conditia(int nr1, int nr_conditie, int nr2);
+void declarare_cu_initializare_diferit_int(char* tip, char* nume, char* valoare, int este_const, char* vizibilitate);
 
 
 char *citeste_fisier(char *file);
@@ -88,13 +89,13 @@ char *citeste_fisier(char *file);
     char* str;
     int integer;
     float real;
-    int boolean;
+    char* boolean;
 }
 
 %token PRINT CONST DACA ALTFEL PENTRU CAT_TIMP MAIN RETURN EXIT CLASS 
 %token GEQ EQ LEQ NEQ ASSIGN OR AND 
 %token PLUS MINUS PROD DIV LESS GREATER INCR DECR 
-//%token<boolean> BOOLEAN
+%token<boolean> BOOLEAN
 %token<str> CHAR STRING  
 %token<real>NR_REAL
 %token<integer>NR_INT
@@ -293,8 +294,10 @@ asignare_main :  ID ASSIGN expresie    {char count_str[]="main"; char str_valoar
                 | ID ASSIGN NR_REAL   {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
                 | ID ASSIGN STRING    {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,2);}
                 | ID ASSIGN CHAR      {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,3);}
-                | ID '.' ID ASSIGN NR_REAL {char valoare[50];  snprintf(valoare,50,"%f",$5);  asignare_pt_data_membru($1,$3,valoare,"Float");}
+                | ID '.' ID ASSIGN NR_REAL {char valoare[50];  snprintf(valoare,50,"%7.2f",$5);  asignare_pt_data_membru($1,$3,valoare,"Float");}
                 | ID '.' ID ASSIGN expresie {char valoare[50]; sprintf(valoare,"%d",$5);  asignare_pt_data_membru($1,$3,valoare,"Integer");}
+                | ID '.' ID ASSIGN STRING { asignare_pt_data_membru($1,$3,$5,"String");}
+                | ID '.' ID ASSIGN BOOLEAN {asignare_pt_data_membru($1,$3,$5,"Bool");}
                 ;
 /*
 expr: expr PLUS expr
@@ -748,7 +751,7 @@ void asignare_pt_data_membru(char* clasa,char* membru,char* valoare,char* tip_va
         if(index_clasa==-1){
                 error_ne_decl_clasa(clasa); 
         }
-        else{
+        else{   
                 int index_membru=membru_clasa(index_clasa,membru);
                 if(index_membru==-1){
                         error_ne_decl_membru(membru);
@@ -772,18 +775,57 @@ void asignare_pt_data_membru(char* clasa,char* membru,char* valoare,char* tip_va
                                         }
                                 }
                                 else if(strcmp(tip_valoare,"Float")==0){
-                                        float val=atof(valoare);
+                                        //float val=atof(valoare);
                                         int index=variabila_deja_declarata(id_variabila,"main");
                                         if(index==-1){
-                                                declarare_cu_initializare(clasa,id_variabila,val,0,"main");
+                                                declarare_cu_initializare_diferit_int(clasa,id_variabila,valoare,0,"main");
+                                        }
+                                        else{
+                                               var[index].valoare=strdup(valoare);  
+                                        }
+                                }
+                                else if(strcmp(tip_valoare,"String")==0){
+                                        int index=variabila_deja_declarata(id_variabila,"main");
+                                        if(index==-1){
+                                                declarare_cu_initializare_diferit_int(clasa,id_variabila,valoare,0,"main");
+                                        }
+                                        else{
+                                               var[index].valoare=strdup(valoare);  
+                                        }
+                                }
+                                else if(strcmp(tip_valoare,"Bool")==0){
+                                        printf("am gasit bool\n");
+                                        int index=variabila_deja_declarata(id_variabila,"main");
+                                        if(index==-1){
+                                                declarare_cu_initializare_diferit_int(clasa,id_variabila,valoare,0,"main");
                                         }
                                         else{
                                                var[index].valoare=strdup(valoare);  
                                         }
                                 }
                         }
+                        else{
+                                char error_msg[250];
+                                sprintf(error_msg, "Nepotrivire tipuri");
+                                yyerror(error_msg);
+                                exit(0);
+                        }
                 }
         }
 }
 
-
+void declarare_cu_initializare_diferit_int(char* tip, char* nume, char* valoare, int este_const, char* vizibilitate){
+        if(variabila_deja_declarata(nume,vizibilitate)!=-1){
+                char error_msg[250];
+                sprintf(error_msg, "Variabila %s este deja declarata", nume);
+                yyerror(error_msg);
+                exit(0);
+        }
+        //seteaza valorile si incrementeaza
+        var[count_v].tip=strdup(tip);
+        var[count_v].id=strdup(nume);
+        var[count_v].valoare=strdup(valoare);
+        var[count_v].constante=este_const;
+        var[count_v].vizibilitate=strdup(vizibilitate);
+        count_v++;
+}

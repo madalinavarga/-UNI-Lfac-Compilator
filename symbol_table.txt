@@ -3,7 +3,7 @@ tip  id  valoare  vizibilitate  este_const  dimensiune
 
 
 GLOBAL:
-Float  x  9.000000  global  0  0
+Float  x  9.800000  global  0  0
 Integer  y  7  global  0  0
 Integer  a  9  global  1  0
 String  s  "Madalina"  global  0  0
@@ -11,14 +11,15 @@ Integer  var_globala  0  global  0  0
 
 
 MAIN:
-Integer  m  11  main  0  0
+Integer  m  9  main  0  0
 Float  z  (null)  main  0  0
 zoo  z2  (null)  main  0  0
 mamifer  m1  (null)  main  0  0
-z2  z2.girafa  3  main  0  0
 m1  m1.lup  8  main  0  0
 z2  z2.hipopotam  16  main  0  0
 m1  m1.urs  20  main  0  0
+z2  z2.adevar  fals  main  0  0
+z2  z2.s  "lenuta"  main  0  0
 
 
 FUNCTII:
@@ -29,10 +30,12 @@ Integer  minus_var  9  functie-2  0  0
 
 
 CLASE:
+String  s  (null)  class-0  0  0
 Integer  urs  (null)  class-0  0  0
 Float  girafa  (null)  class-0  0  0
 Integer  hipopotam  (null)  class-0  0  0
 Integer  lup  (null)  class-0  0  0
+Bool  adevar  (null)  class-0  0  0
 Integer  lup  (null)  class-1  0  0
 Integer  zebra  (null)  class-1  0  0
 Integer  urs  (null)  class-1  0  0

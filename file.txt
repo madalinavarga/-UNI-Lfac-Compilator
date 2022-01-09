@@ -33,10 +33,12 @@ Integer minus ( ) {
 #clase
 
 Class zoo{
+    String s;
     Integer urs;
     Float girafa;
     Integer hipopotam;
-     Integer lup;
+    Integer lup;
+    Bool adevar; 
     
     
 };
@@ -60,12 +62,13 @@ Main ()
     zoo z2;
     mamifer m1;
     
-    z2.girafa=17;
-    z2.girafa=3.8;
-    m1.lup=8;
+   m1.lup=8;
     z2.hipopotam=16;
     m1.urs=20;
+   z2.adevar=fals;
+   z2.s="lenuta";
 
-    daca(1){m=10;}
-    cat_timp(1<99){m=11;}
+   
+
+    
 }
