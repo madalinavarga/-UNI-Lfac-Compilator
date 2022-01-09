@@ -80,6 +80,7 @@ void verifica_conditia(int nr1, int nr_conditie, int nr2);
 void declarare_cu_initializare_diferit_int(char* tip, char* nume, char* valoare, int este_const, char* vizibilitate);
 void declarare_cu_initializare_data_membru(char* tip, char* nume ,char* clasa, char* membru,int este_const, char* vizibilitate);
 int verificare_exista_variabila(char* nume);
+void asignare_cu_data_membru(char* nume, char* clasa, char* membru);
 
 
 char *citeste_fisier(char *file);
@@ -301,6 +302,7 @@ asignare_main :  ID ASSIGN expresie    {char count_str[]="main"; char str_valoar
                 | ID '.' ID ASSIGN expresie {char valoare[50]; sprintf(valoare,"%d",$5);  asignare_pt_data_membru($1,$3,valoare,"Integer");}
                 | ID '.' ID ASSIGN STRING { asignare_pt_data_membru($1,$3,$5,"String");}
                 | ID '.' ID ASSIGN BOOLEAN {asignare_pt_data_membru($1,$3,$5,"Bool");}
+                | ID ASSIGN ID '.' ID {asignare_cu_data_membru($1,$3,$5);}
                 ;
 /*
 expr: expr PLUS expr
@@ -868,4 +870,40 @@ int verificare_exista_variabila(char* nume){
                } 
         }
         return -1;
+}
+
+void asignare_cu_data_membru(char* nume, char* clasa, char* membru){
+        char id_data_membru[20];
+        bzero(id_data_membru,20);
+        strcat(id_data_membru,clasa);
+        strcat(id_data_membru,".");
+        strcat(id_data_membru,membru);
+
+        int index_variabila=verificare_exista_variabila(nume);
+        if(index_variabila==-1){ 
+                char error_msg[250];
+                sprintf(error_msg, "Variabila %s nu este declarata", nume);
+                yyerror(error_msg);
+                exit(0);
+        }
+        else{
+                int index_membru=verificare_exista_variabila(id_data_membru);
+                if(index_membru==-1){
+                       char error_msg[250];
+                        sprintf(error_msg, "Variabila %s nu este declarata", nume);
+                        yyerror(error_msg);
+                        exit(0); 
+                }
+                else{
+                        if(strcmp(var[index_membru].tip,var[index_variabila].tip)==0){
+                               var[index_variabila].valoare=strdup(var[index_membru].valoare); 
+                        }
+                        else{
+                               char error_msg[250];
+                        strcat(error_msg, "Nepotrivire tipuri");
+                        yyerror(error_msg);
+                        exit(0);  
+                        }
+                }
+        }
 }

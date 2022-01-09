@@ -21,7 +21,7 @@ Integer  z2.hipopotam  16  main  0  0
 Integer  m1.urs  20  main  0  0
 Bool  z2.adevar  fals  main  0  0
 String  z2.s  "lenuta"  main  0  0
-Integer  data  8  main  1  0
+Integer  data  20  main  1  0
 String  nume  "lenuta"  main  1  0
 
 

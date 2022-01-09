@@ -71,6 +71,7 @@ Main ()
 
    Integer data=m1.lup; 
    String nume=z2.s;
+   data=m1.urs;
 
    
 
