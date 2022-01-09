@@ -161,8 +161,12 @@ variabila_initializata_local: CONST TIP ID ASSIGN expresie {if(strcmp($2,"Intege
 variabila_declarata_local: TIP ID {declarare_fara_initializare($1,$2,0,"main");}
                          | array
                    ;
-variabila_initializata_global: CONST TIP ID ASSIGN expresie {declarare_cu_initializare($2,$3,$5,1,"global");}
-                      | TIP ID ASSIGN expresie {declarare_cu_initializare($1,$2,$4,0,"global");}
+variabila_initializata_global: CONST TIP ID ASSIGN expresie {if(strcmp($2,"Integer")==0){declarare_cu_initializare($2,$3,$5,1,"global");}else{error_nepotrivire();}}
+                      | CONST TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $5); if(strcmp($2,"Float")==0) { declarare_cu_initializare_diferit_int($2,$3,valoare,1,"global");}else{error_nepotrivire();}}
+                      | CONST TIP ID ASSIGN STRING {if(strcmp($2,"String")==0) { declarare_cu_initializare_diferit_int($2,$3,$5,1,"global");}else{error_nepotrivire();}}
+                      | TIP ID ASSIGN expresie {if(strcmp($1,"Integer")==0){declarare_cu_initializare($1,$2,$4,0,"global");} else{error_nepotrivire();}}
+                      | TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $4); if(strcmp($1,"Float")==0) { declarare_cu_initializare_diferit_int($1,$2,valoare,0,"global");}else{error_nepotrivire();}}
+                      | TIP ID ASSIGN STRING {printf("aici\n"); if(strcmp($1,"String")==0) { declarare_cu_initializare_diferit_int($1,$2,$4,0,"global");}else{error_nepotrivire();}}
                       ;
 variabila_declarata_global: TIP ID {declarare_fara_initializare($1,$2,0,"global");}
                           | array
