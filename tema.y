@@ -78,6 +78,8 @@ void asignare_pt_data_membru(char* clasa,char* membru,char* valoare,char* tip_va
 void print_variabile(char* mesaj ,char* nume);
 void verifica_conditia(int nr1, int nr_conditie, int nr2);
 void declarare_cu_initializare_diferit_int(char* tip, char* nume, char* valoare, int este_const, char* vizibilitate);
+void declarare_cu_initializare_data_membru(char* tip, char* nume ,char* clasa, char* membru,int este_const, char* vizibilitate);
+int verificare_exista_variabila(char* nume);
 
 
 char *citeste_fisier(char *file);
@@ -146,6 +148,7 @@ declaratie_locala  : variabila_initializata_local
             ;
 variabila_initializata_local: CONST TIP ID ASSIGN expresie {declarare_cu_initializare($2,$3,$5,1,"main");}
                       | TIP ID ASSIGN expresie {declarare_cu_initializare($1,$2,$4,0,"main");}
+                      | TIP ID ASSIGN ID '.' ID {declarare_cu_initializare_data_membru($1,$2, $4,$6,1,"main");}
                       ;
 variabila_declarata_local: TIP ID {declarare_fara_initializare($1,$2,0,"main");}
                          | array
@@ -828,4 +831,41 @@ void declarare_cu_initializare_diferit_int(char* tip, char* nume, char* valoare,
         var[count_v].constante=este_const;
         var[count_v].vizibilitate=strdup(vizibilitate);
         count_v++;
+}
+
+void declarare_cu_initializare_data_membru(char* tip, char* nume ,char* clasa, char* membru,int este_const, char* vizibilitate){
+        char id_data_membru[20];
+        bzero(id_data_membru,20);
+        strcat(id_data_membru,clasa);
+        strcat(id_data_membru,".");
+        strcat(id_data_membru,membru);
+        int index=verificare_exista_variabila(id_data_membru);
+        if(index==-1){
+                char error_msg[250];
+                sprintf(error_msg, "Variabila %s nu este declarata", id_data_membru);
+                yyerror(error_msg);
+                exit(0);  
+        }
+        else{
+                if(strcmp(tip,var[index].tip)==0){
+                        declarare_cu_initializare_diferit_int(tip,nume,var[index].valoare,este_const,vizibilitate);
+                }
+                else{
+                       char error_msg[250];
+                        strcat(error_msg, "Nepotrivire tipuri");
+                        yyerror(error_msg);
+                        exit(0); 
+                }
+        }
+}
+
+int verificare_exista_variabila(char* nume){
+        for (int i = 0; i < count_v; i++){
+               if(strcmp(var[i].id,nume)==0)
+               {
+                       printf("exista variabila %s\n",var[i].id);
+                       return i;
+               } 
+        }
+        return -1;
 }

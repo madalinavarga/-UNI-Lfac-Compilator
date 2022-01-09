@@ -15,11 +15,14 @@ Integer  m  9  main  0  0
 Float  z  (null)  main  0  0
 zoo  z2  (null)  main  0  0
 mamifer  m1  (null)  main  0  0
+Integer  c  13  main  0  0
 Integer  m1.lup  8  main  0  0
 Integer  z2.hipopotam  16  main  0  0
 Integer  m1.urs  20  main  0  0
 Bool  z2.adevar  fals  main  0  0
 String  z2.s  "lenuta"  main  0  0
+Integer  data  8  main  1  0
+String  nume  "lenuta"  main  1  0
 
 
 FUNCTII:

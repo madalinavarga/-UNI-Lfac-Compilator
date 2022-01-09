@@ -61,12 +61,16 @@ Main ()
 
     zoo z2;
     mamifer m1;
+    Integer c=(m*3)/2;
     
    m1.lup=8;
     z2.hipopotam=16;
     m1.urs=20;
    z2.adevar=fals;
    z2.s="lenuta";
+
+   Integer data=m1.lup; 
+   String nume=z2.s;
 
    
 
