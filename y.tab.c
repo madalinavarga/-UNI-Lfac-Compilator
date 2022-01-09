@@ -2635,7 +2635,7 @@ void asignare_pt_data_membru(char* clasa,char* membru,char* valoare,char* tip_va
                                         int val=atoi(valoare);
                                         int index=variabila_deja_declarata(id_variabila,"main");
                                         if(index==-1){
-                                                declarare_cu_initializare(clasa,id_variabila,val,0,"main");
+                                                declarare_cu_initializare(tip_valoare,id_variabila,val,0,"main");
                                         }
                                         else{
                                                 var[index].valoare=strdup(valoare);
@@ -2646,7 +2646,7 @@ void asignare_pt_data_membru(char* clasa,char* membru,char* valoare,char* tip_va
                                         //float val=atof(valoare);
                                         int index=variabila_deja_declarata(id_variabila,"main");
                                         if(index==-1){
-                                                declarare_cu_initializare_diferit_int(clasa,id_variabila,valoare,0,"main");
+                                                declarare_cu_initializare_diferit_int(tip_valoare,id_variabila,valoare,0,"main");
                                         }
                                         else{
                                                var[index].valoare=strdup(valoare);  
@@ -2655,7 +2655,7 @@ void asignare_pt_data_membru(char* clasa,char* membru,char* valoare,char* tip_va
                                 else if(strcmp(tip_valoare,"String")==0){
                                         int index=variabila_deja_declarata(id_variabila,"main");
                                         if(index==-1){
-                                                declarare_cu_initializare_diferit_int(clasa,id_variabila,valoare,0,"main");
+                                                declarare_cu_initializare_diferit_int(tip_valoare,id_variabila,valoare,0,"main");
                                         }
                                         else{
                                                var[index].valoare=strdup(valoare);  
@@ -2665,7 +2665,7 @@ void asignare_pt_data_membru(char* clasa,char* membru,char* valoare,char* tip_va
                                         printf("am gasit bool\n");
                                         int index=variabila_deja_declarata(id_variabila,"main");
                                         if(index==-1){
-                                                declarare_cu_initializare_diferit_int(clasa,id_variabila,valoare,0,"main");
+                                                declarare_cu_initializare_diferit_int(tip_valoare,id_variabila,valoare,0,"main");
                                         }
                                         else{
                                                var[index].valoare=strdup(valoare);  
