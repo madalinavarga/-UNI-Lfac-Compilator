@@ -75,6 +75,7 @@ void obiect_nou(char* clasa,char* nume, char* vizibilitate);
 int membru_clasa(int index_clasa,char* nume);
 void error_ne_decl_membru(char* nume);
 void asignare_pt_data_membru(char* clasa,char* membru,char* valoare,char* tip_valoare);
+void print_variabile(char* mesaj ,char* nume);
 
 
 char *citeste_fisier(char *file);
@@ -133,13 +134,11 @@ declaratii_globale :
 	   ;
  declaratie_globala:variabila_initializata_global
             | variabila_declarata_global
-            | array 
             | print 
             | asignare_globala
             ;          
 declaratie_locala  : variabila_initializata_local
-            | variabila_declarata_local
-            | array 
+            | variabila_declarata_local 
             | print
            
             ;
@@ -147,11 +146,13 @@ variabila_initializata_local: CONST TIP ID ASSIGN expresie {declarare_cu_initial
                       | TIP ID ASSIGN expresie {declarare_cu_initializare($1,$2,$4,0,"main");}
                       ;
 variabila_declarata_local: TIP ID {declarare_fara_initializare($1,$2,0,"main");}
+                         | array
                    ;
 variabila_initializata_global: CONST TIP ID ASSIGN expresie {declarare_cu_initializare($2,$3,$5,1,"global");}
                       | TIP ID ASSIGN expresie {declarare_cu_initializare($1,$2,$4,0,"global");}
                       ;
 variabila_declarata_global: TIP ID {declarare_fara_initializare($1,$2,0,"global");}
+                          | array
                    ;
 /*
 lista_declaratii : ID
@@ -165,7 +166,6 @@ expresie : expresie PLUS expresie  {$$ = $1 + $3;}
          |'(' expresie ')' {$$ = $2;}
          | ID {$$=get_valoare_dupa_nume($1);} 
          | NR_INT {$$ = $1;} 
-         //| ID '[' NR_INT ']'
          ;
 array : TIP ID dimensiune
       | TIP ID '[' ']' ASSIGN '{' lista_valori '}'
@@ -183,6 +183,7 @@ valoare :  NR_INT
         ;
 print:  PRINT '(' STRING ',' expresie ')'   {printf("%s %d\n",$3,$5);}
      |  PRINT '(' STRING ')'  {printf("%s\n",$3);}
+     |  PRINT '(' STRING ',' STRING ')'  {print_variabile($3,$5);}
      ;
 asignare_globala : ID ASSIGN expresie   {char count_str[]="global"; char str_valoare[50]; snprintf(str_valoare,50,"%d",$3); asignare_exista_variabila($1,count_str,str_valoare,0);}
                  | ID ASSIGN NR_REAL  {char count_str[]="global"; char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
@@ -429,6 +430,37 @@ int get_valoare_dupa_nume(char * nume)
          }
 
 }
+void print_variabile(char* mesaj ,char* nume) // momentan in lucru ...
+{
+        printf("Mesaj: <%s>\n",mesaj);
+        printf("NUME: <%s>\n",nume);
+        char delim[]="\"\"";
+        char* ptr=strtok(nume,delim);
+        //ptr=strtok(NULL,"\"\n");
+         printf("NUME:<%s>\n",nume);
+
+        int gasit=0;
+        
+        for (int i = 0; i < count_v; i++)
+         {
+                 //printf("variabile: %s %s\n",var[i].id,var[i].tip);
+                 if(strcmp(var[i].id,nume)==0){
+                         gasit++;
+                         printf("%s: %s\n",mesaj,var[i].valoare);
+                 }
+         }
+
+
+           if(gasit==0) 
+         {
+                char error_msg[250];
+                sprintf(error_msg, "Variabila nu exista");
+                yyerror(error_msg);
+                exit(0);
+         }
+
+}
+
 void creaza_functie(char* tip, char* id,struct parametru *aux)
 {
         functii[count_f].nr_parametrii=count_aux;
@@ -494,12 +526,34 @@ void scrieVariabileFisier()
       var_fisier_ptr=fopen(fisier_variabile,"w+"); // dechidere fisier 
       fprintf(var_fisier_ptr,"tip  id  valoare  vizibilitate  este_const  dimensiune\n");
       fprintf(var_fisier_ptr,"---------------------------------------------------------\n");
+      fprintf(var_fisier_ptr,"\n\nGLOBAL:\n");
       for(int i=0;i<count_v;i++){
-    
-       fprintf(var_fisier_ptr,"%s  %s  %s  %s  %d  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
-       //modificari nr spatii => modifica si in get valoare dupa nume
-     
+              if(strcmp(var[i].vizibilitate,"global")==0)
+                fprintf(var_fisier_ptr,"%s  %s  %s  %s  %d  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
+              
       }
+      fprintf(var_fisier_ptr,"\n\nMAIN:\n");
+       for(int i=0;i<count_v;i++){
+              if(strcmp(var[i].vizibilitate,"main")==0)
+                fprintf(var_fisier_ptr,"%s  %s  %s  %s  %d  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
+              
+      }
+
+       fprintf(var_fisier_ptr,"\n\nFUNCTII:\n");
+       for(int i=0;i<count_v;i++){
+              if(strstr(var[i].vizibilitate,"functie"))
+                fprintf(var_fisier_ptr,"%s  %s  %s  %s  %d  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
+              
+      }
+
+       fprintf(var_fisier_ptr,"\n\nCLASE:\n");
+       for(int i=0;i<count_v;i++){
+              if(strstr(var[i].vizibilitate,"clas"))
+                fprintf(var_fisier_ptr,"%s  %s  %s  %s  %d  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
+              
+      }
+
+
       fclose(var_fisier_ptr);
 }
 

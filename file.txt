@@ -3,7 +3,7 @@ Float x;
 Integer y=7;
 Const Integer a=3;
 String s;
-
+s="Madalina";
 Integer var_globala=8;
 Print("GLOBAL: value of expression var_global is:", var_globala);
 var_globala=(7-2)-5;
