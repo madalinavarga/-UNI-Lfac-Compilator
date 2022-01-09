@@ -12,6 +12,7 @@ struct variabile{
       char* tip;
       char* id;
       char* valoare;
+      char** val2;
       char* vizibilitate;
       int constante;
       int dimensiune;
@@ -83,6 +84,9 @@ int verificare_exista_variabila(char* nume);
 void asignare_cu_data_membru(char* nume, char* clasa, char* membru);
 void error_ne_decl_variabila(char* nume);
 void error_nepotrivire();
+void declara_vector(char* tip, char* nume, int dimensiune,char* vizibilitate);
+void asignare_pt_element_vector(char* nume,int pozitie, char* valoare, char* tip_val);
+void asignare_cu_element_vector(char* nume_var,char* nume_vector,int index_elem);
 
 
 char *citeste_fisier(char *file);
@@ -155,21 +159,21 @@ variabila_initializata_local: CONST TIP ID ASSIGN expresie {if(strcmp($2,"Intege
                       | CONST TIP ID ASSIGN ID '.' ID {declarare_cu_initializare_data_membru($2,$3, $5,$7,1,"main");}
                       | TIP ID ASSIGN expresie {if(strcmp($1,"Integer")==0){declarare_cu_initializare($1,$2,$4,0,"main");} else{error_nepotrivire();}}
                       | TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $4); if(strcmp($1,"Float")==0) { declarare_cu_initializare_diferit_int($1,$2,valoare,0,"main");}else{error_nepotrivire();}}
-                      | TIP ID ASSIGN STRING {printf("aici\n"); if(strcmp($1,"String")==0) { declarare_cu_initializare_diferit_int($1,$2,$4,0,"main");}else{error_nepotrivire();}}
+                      | TIP ID ASSIGN STRING {if(strcmp($1,"String")==0) { declarare_cu_initializare_diferit_int($1,$2,$4,0,"main");}else{error_nepotrivire();}}
                       | TIP ID ASSIGN ID '.' ID {declarare_cu_initializare_data_membru($1,$2, $4,$6,0,"main");}
                       ;
 variabila_declarata_local: TIP ID {declarare_fara_initializare($1,$2,0,"main");}
-                         | array
+                         | array_loc
                    ;
 variabila_initializata_global: CONST TIP ID ASSIGN expresie {if(strcmp($2,"Integer")==0){declarare_cu_initializare($2,$3,$5,1,"global");}else{error_nepotrivire();}}
                       | CONST TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $5); if(strcmp($2,"Float")==0) { declarare_cu_initializare_diferit_int($2,$3,valoare,1,"global");}else{error_nepotrivire();}}
                       | CONST TIP ID ASSIGN STRING {if(strcmp($2,"String")==0) { declarare_cu_initializare_diferit_int($2,$3,$5,1,"global");}else{error_nepotrivire();}}
                       | TIP ID ASSIGN expresie {if(strcmp($1,"Integer")==0){declarare_cu_initializare($1,$2,$4,0,"global");} else{error_nepotrivire();}}
                       | TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $4); if(strcmp($1,"Float")==0) { declarare_cu_initializare_diferit_int($1,$2,valoare,0,"global");}else{error_nepotrivire();}}
-                      | TIP ID ASSIGN STRING {printf("aici\n"); if(strcmp($1,"String")==0) { declarare_cu_initializare_diferit_int($1,$2,$4,0,"global");}else{error_nepotrivire();}}
+                      | TIP ID ASSIGN STRING {if(strcmp($1,"String")==0) { declarare_cu_initializare_diferit_int($1,$2,$4,0,"global");}else{error_nepotrivire();}}
                       ;
 variabila_declarata_global: TIP ID {declarare_fara_initializare($1,$2,0,"global");}
-                          | array
+                          | array_glob
                    ;
 /*
 lista_declaratii : ID
@@ -184,12 +188,13 @@ expresie : expresie PLUS expresie  {$$ = $1 + $3;}
          | ID {$$=get_valoare_dupa_nume($1);} 
          | NR_INT {$$ = $1;} 
          ;
-array : TIP ID dimensiune
-      | TIP ID '[' ']' ASSIGN '{' lista_valori '}'
+array_glob : TIP ID '[' NR_INT ']' {declara_vector($1,$2,$4,"global");}
+      //| TIP ID '[' ']' ASSIGN '{' lista_valori '}'
       ;
-dimensiune : '['NR_INT']'
-          | dimensiune '['NR_INT']'
-          ; 
+array_loc : TIP ID '[' NR_INT ']' {declara_vector($1,$2,$4,"main");}
+//dimensiune : '['NR_INT']'
+          //| dimensiune '['NR_INT']'
+/*        ; 
 lista_valori : lista_valori ',' valoare
              | valoare
              ;
@@ -198,6 +203,7 @@ valoare :  NR_INT
         | STRING
         | CHAR
         ;
+*/
 print:  PRINT '(' STRING ',' expresie ')'   {printf("%s %d\n",$3,$5);}
      |  PRINT '(' STRING ')'  {printf("%s\n",$3);}
      |  PRINT '(' STRING ',' '&'ID ')'  {print_variabile($3,$6);}
@@ -305,7 +311,7 @@ clasa_noua : ID ID { if(clasa_deja_definita($1)!=-1){
                 }
            ;
 
-asignare_main :  ID ASSIGN expresie    {printf("id:%s expresie: %d\n",$1,$3); char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%d",$3); asignare_exista_variabila($1,count_str,str_valoare,0);}
+asignare_main :  ID ASSIGN expresie    {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%d",$3); asignare_exista_variabila($1,count_str,str_valoare,0);}
                 | ID ASSIGN NR_REAL   {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
                 | ID ASSIGN STRING    {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,2);}
                 | ID ASSIGN CHAR      {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,3);}
@@ -314,6 +320,10 @@ asignare_main :  ID ASSIGN expresie    {printf("id:%s expresie: %d\n",$1,$3); ch
                 | ID '.' ID ASSIGN STRING { asignare_pt_data_membru($1,$3,$5,"String");}
                 | ID '.' ID ASSIGN BOOLEAN {asignare_pt_data_membru($1,$3,$5,"Bool");}
                 | ID ASSIGN ID '.' ID {asignare_cu_data_membru($1,$3,$5);}
+                | ID '[' NR_INT ']' ASSIGN expresie { char valoare[50]; sprintf(valoare,"%d",$6); asignare_pt_element_vector($1,$3,valoare, "Integer");}
+                | ID '[' NR_INT ']' ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f",$6); asignare_pt_element_vector($1,$3,valoare, "Float");}
+                | ID '[' NR_INT ']' ASSIGN STRING { asignare_pt_element_vector($1,$3,$6, "String");}
+                | ID ASSIGN ID '['NR_INT']' {asignare_cu_element_vector($1,$3,$5);}
                 ;
 /*
 expr: expr PLUS expr
@@ -516,7 +526,6 @@ void asignare_exista_variabila(char* id , char* viziblitate ,char* valoare, int 
                 }
         for (int i = 0; i < count_v; i++){
                 if(strcmp(var[i].id,id)==0){ // acelasi nume
-                        printf("am gasit variabila cu numele: %s\n", id);
                   if(strcmp(var[i].vizibilitate,"global")==0) var[i].valoare=strdup(valoare);
                   else
                    if(strcmp(var[i].vizibilitate,viziblitate)==0) 
@@ -573,13 +582,31 @@ void scrieVariabileFisier()
       fprintf(var_fisier_ptr,"\n\nGLOBAL:\n");
       for(int i=0;i<count_v;i++){
               if(strcmp(var[i].vizibilitate,"global")==0)
+              if(var[i].dimensiune==0){
                 fprintf(var_fisier_ptr,"%s  %s  %s  %s  %d  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
+              }
+              else{
+                fprintf(var_fisier_ptr,"%s  %s ", var[i].tip, var[i].id); 
+                for(int j=0;j<var[i].dimensiune;j++){
+                        fprintf(var_fisier_ptr,"%s ",var[i].val2[j]);
+                }
+                fprintf(var_fisier_ptr,"%s  %d  %d\n", var[i].vizibilitate,var[i].constante,var[i].dimensiune);   
+              }
               
       }
       fprintf(var_fisier_ptr,"\n\nMAIN:\n");
        for(int i=0;i<count_v;i++){
               if(strcmp(var[i].vizibilitate,"main")==0)
+              if(var[i].dimensiune==0){
                 fprintf(var_fisier_ptr,"%s  %s  %s  %s  %d  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
+              }
+              else{
+                fprintf(var_fisier_ptr,"%s  %s ", var[i].tip, var[i].id); 
+                for(int j=0;j<var[i].dimensiune;j++){
+                        fprintf(var_fisier_ptr,"%s ",var[i].val2[j]);
+                }
+                fprintf(var_fisier_ptr,"%s  %d  %d\n", var[i].vizibilitate,var[i].constante,var[i].dimensiune);
+              }
               
       }
 
@@ -924,7 +951,6 @@ int verificare_exista_variabila(char* nume){
         for (int i = 0; i < count_v; i++){
                if(strcmp(var[i].id,nume)==0)
                {
-                       printf("exista variabila %s\n",var[i].id);
                        return i;
                } 
         }
@@ -958,11 +984,99 @@ void asignare_cu_data_membru(char* nume, char* clasa, char* membru){
                                var[index_variabila].valoare=strdup(var[index_membru].valoare); 
                         }
                         else{
-                               char error_msg[250];
-                        strcat(error_msg, "Nepotrivire tipuri");
-                        yyerror(error_msg);
-                        exit(0);  
+                                char error_msg[250];
+                                strcat(error_msg, "Nepotrivire tipuri");
+                                yyerror(error_msg);
+                                exit(0);  
                         }
                 }
         }
 }
+
+void declara_vector(char* tip, char* nume, int dimensiune,char* vizibilitate){
+        int index=verificare_exista_variabila(nume);
+        if(index!=-1){
+                char error_msg[250];
+                strcat(error_msg, "Vector deja declarat");
+                yyerror(error_msg);
+                exit(0);  
+        }
+        else{   
+                var[count_v].tip=strdup(tip);
+                var[count_v].id=strdup(nume);
+                var[count_v].constante=0;
+                var[count_v].vizibilitate=strdup(vizibilitate);
+                var[count_v].val2=(char**)malloc(dimensiune * sizeof(char*));
+                for(int j=0;j<dimensiune;j++){
+                        var[count_v].val2[j]=strdup("0");
+                }
+                var[count_v].dimensiune=dimensiune;
+                count_v++;  
+        }
+}
+
+void asignare_pt_element_vector(char* nume,int pozitie, char* valoare, char* tip_val){
+        int index=verificare_exista_variabila(nume);
+        if(index==-1){
+                char error_msg[250];
+                strcat(error_msg, "Vector  nedeclarat");
+                yyerror(error_msg);
+                exit(0);  
+        }
+        else{
+                if(strcmp(var[index].tip,tip_val)==0){
+                        if(pozitie>=0 && pozitie<var[index].dimensiune){
+                             var[index].val2[pozitie]=strdup(valoare);   
+                        }
+                        else{
+                              char error_msg[250];
+                                bzero(error_msg,250);
+                                strcat(error_msg, "Index invalid");
+                                yyerror(error_msg);
+                                exit(0);    
+                        }
+                }
+                else{
+                        char error_msg[250];
+                        strcat(error_msg, "Nepotrivire tipuri");
+                        yyerror(error_msg);
+                        exit(0); 
+                }
+        }
+}
+
+void asignare_cu_element_vector(char* nume_var,char* nume_vector,int index_elem){
+        int index_variabila=verificare_exista_variabila(nume_var);
+
+        if(index_variabila==-1){
+                error_ne_decl_variabila(nume_var);
+        }
+        else{
+              int index_vector=verificare_exista_variabila(nume_vector); 
+              if(index_vector==-1){
+                      error_ne_decl_variabila(nume_vector);
+              }
+              else{
+                      if(index_elem>=var[index_vector].dimensiune || index_elem<0){
+                        char error_msg[250];
+                        bzero(error_msg,250);
+                        strcat(error_msg, "Index invalid");
+                        yyerror(error_msg);
+                        exit(0);   
+                      }
+                      else{
+                              if(strcmp(var[index_variabila].tip,var[index_vector].tip)!=0){
+                                char error_msg[250];
+                                bzero(error_msg,250);
+                                strcat(error_msg, "Nepotrivire tipuri");
+                                yyerror(error_msg);
+                                exit(0);  
+                              }
+                              else{
+                                      var[index_variabila].valoare=strdup(var[index_vector].val2[index_elem]);
+                              }
+                      }
+              } 
+        }
+}
+        

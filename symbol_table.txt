@@ -8,6 +8,7 @@ Integer  y  7  global  0  0
 Integer  a  3  global  1  0
 String  s  "Madalina"  global  0  0
 Integer  var_globala  0  global  0  0
+Integer  vector_glob 0 0 0 global  0  3
 
 
 MAIN:
@@ -23,11 +24,13 @@ Bool  z2.adevar  fals  main  0  0
 String  z2.s  "lenuta"  main  0  0
 Integer  data  20  main  0  0
 String  nume  "lenuta"  main  0  0
-Integer  p  (null)  main  0  0
+Integer  p  20  main  0  0
 Float  fl  (null)  main  0  0
 Float  f     8.90  main  0  0
 String  nume2  "banana"  main  0  0
 String  nume_const  "lenuta"  main  1  0
+Integer  vector 0 4 0 0 60 main  0  5
+String  vector2 "asvd" 0 main  0  2
 
 
 FUNCTII:

@@ -7,6 +7,7 @@ s="Madalina";
 Print("GLOBAL: value of expression s is:", &s);
 Integer var_globala=8;
 var_globala=(7-2)-5;
+Integer vector_glob[3];
 
 
 #overloading functii
@@ -89,5 +90,11 @@ String nume2="ana";
 Const String nume_const=z2.s;
 nume2="banana";
 
-    
+Integer vector[5];
+vector[1]=4;
+String vector2[2];
+vector2[0]="asvd";
+
+p=20;
+vector[4]=(m/3)*p;
 }
