@@ -2,6 +2,7 @@
 Float x;
 Integer y=7;
 Const Integer a=3;
+String s;
 
 
 Print("inainte de functie"); 
@@ -28,14 +29,26 @@ Integer minus ( ) {
 
 
 #clase
+
+
+
 Class zoo{
     Integer urs;
     Float girafa;
+    Integer hipopotam;
+     Integer lup;
+    
     
 };
+
 Class mamifer{
+    Integer lup;
+    Integer zebra;
     Integer urs;
 };
+
+
+
 
 Main ()
 {
@@ -47,4 +60,11 @@ Main ()
     Print("value of expression a is:",a); 
 
     zoo z2;
+    mamifer m1;
+    
+    z2.girafa=17;
+    z2.girafa=3.8;
+    m1.lup=8;
+    z2.hipopotam=16;
+    m1.urs=20;
 }

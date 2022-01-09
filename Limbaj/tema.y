@@ -72,6 +72,9 @@ int obiect_deja_definit(char* nume);
 int obiect_deja_definit(char* nume);
 void error_ne_decl_clasa(char* nume);
 void obiect_nou(char* clasa,char* nume, char* vizibilitate);
+int membru_clasa(int index_clasa,char* nume);
+void error_ne_decl_membru(char* nume);
+void asignare_pt_data_membru(char* clasa,char* membru,char* valoare,char* tip_valoare);
 
 
 char *citeste_fisier(char *file);
@@ -280,6 +283,8 @@ asignare_main :  ID ASSIGN expresie    {char count_str[]="main"; char str_valoar
                 | ID ASSIGN NR_REAL   {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
                 | ID ASSIGN STRING    {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,2);}
                 | ID ASSIGN CHAR      {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,3);}
+                | ID '.' ID ASSIGN NR_REAL {char valoare[50];  snprintf(valoare,50,"%f",$5);  asignare_pt_data_membru($1,$3,valoare,"Float");}
+                | ID '.' ID ASSIGN expresie {char valoare[50]; sprintf(valoare,"%d",$5);  asignare_pt_data_membru($1,$3,valoare,"Integer");}
                 ;
 
 expr: expr PLUS expr
@@ -388,6 +393,7 @@ void declarare_cu_initializare(char* tip,char* nume,int val,int este_const,char*
         snprintf(valoare,50,"%d",val);
         var[count_v].valoare=strdup(valoare);
         var[count_v].constante=este_const;
+        var[count_v].vizibilitate=strdup(vizibilitate);
         count_v++;
       
 }
@@ -576,6 +582,12 @@ void error_ne_decl_clasa(char* nume){
         yyerror(error_msg);
 }
 
+void error_ne_decl_membru(char* nume){
+        char error_msg[250];
+        sprintf(error_msg, "Membrul %s nu a fost definit", nume);
+        yyerror(error_msg);
+}
+
 int variabila_class_deja_declarata(char* nume,char* vizibilitate){
         for(int i=0;i<clase[nr_clase-1].nr_variabile;i++){
                 if(strcmp(nume, clase[nr_clase-1].class_var[i].id)==0)
@@ -586,12 +598,13 @@ int variabila_class_deja_declarata(char* nume,char* vizibilitate){
 
 void declarare_variabila_class(char* tip, char* nume,char* vizibilitate){
         //clase[nr_clase].nr_variabile++;
-        clase[nr_clase-1].class_var[clase[nr_clase-1].nr_variabile].tip=strdup(tip);
-        clase[nr_clase-1].class_var[clase[nr_clase-1].nr_variabile].id=strdup(nume);
+        clase[nr_clase].class_var[clase[nr_clase].nr_variabile].tip=strdup(tip);
+        clase[nr_clase].class_var[clase[nr_clase].nr_variabile].id=strdup(nume);
         char buf[20];
         sprintf(buf,"%s-%d",vizibilitate,nr_clase);
         declarare_fara_initializare(tip,nume, 0, buf);
-        clase[nr_clase-1].nr_variabile++;
+        clase[nr_clase].nr_variabile++;
+        //printf("pentru clasa cu indexul: %d am ajuns la nr: %d\n",nr_clase,clase[nr_clase].nr_variabile);
 }
 
 int clasa_deja_definita(char* nume){
@@ -606,7 +619,6 @@ int clasa_deja_definita(char* nume){
 int obiect_deja_definit(char* nume){
         for(int i=0;i<nr_obiecte;i++){
                 if(strcmp(obiecte[i].id,nume)==0){
-                        printf("gasit\n");
                         return i;
                 }
         }
@@ -620,3 +632,59 @@ void obiect_nou(char* clasa,char* nume, char* vizibilitate){
         declarare_fara_initializare(clasa,nume,0,vizibilitate);
         nr_obiecte++;
 }
+
+int membru_clasa(int index_clasa, char* nume){
+        //printf("index clasa in care caut: %d, nr variabile: %d\n",index_clasa,clase[index_clasa].nr_variabile);
+        for(int i=0;i<10;i++){
+                if(strcmp(clase[index_clasa].class_var[i].id,nume)==0){
+                        return i;
+                }
+        }
+        return -1;
+}
+
+void asignare_pt_data_membru(char* clasa,char* membru,char* valoare,char* tip_valoare){
+        int index_clasa=obiect_deja_definit(clasa);
+        
+        if(index_clasa==-1){
+                error_ne_decl_clasa(clasa); 
+        }
+        else{
+                int index_membru=membru_clasa(index_clasa,membru);
+                if(index_membru==-1){
+                        error_ne_decl_membru(membru);
+                }
+                else{
+                        char id_variabila[20];
+                        bzero(id_variabila,20);
+                        strcat(id_variabila,obiecte[index_clasa].id);
+                        strcat(id_variabila,".");
+                        strcat(id_variabila,membru);
+                        if(strcmp(clase[index_clasa].class_var[index_membru].tip,tip_valoare)==0){
+                               if(strcmp(tip_valoare,"Integer")==0){
+                                        int val=atoi(valoare);
+                                        int index=variabila_deja_declarata(id_variabila,"main");
+                                        if(index==-1){
+                                                declarare_cu_initializare(clasa,id_variabila,val,0,"main");
+                                        }
+                                        else{
+                                                var[index].valoare=strdup(valoare);
+                                                //clase[index_clasa].class_var[index_membru].valoare=strdup(valoare);
+                                        }
+                                }
+                                else if(strcmp(tip_valoare,"Float")==0){
+                                        float val=atof(valoare);
+                                        int index=variabila_deja_declarata(id_variabila,"main");
+                                        if(index==-1){
+                                                declarare_cu_initializare(clasa,id_variabila,val,0,"main");
+                                        }
+                                        else{
+                                               var[index].valoare=strdup(valoare);  
+                                        }
+                                }
+                        }
+                }
+        }
+}
+
+
