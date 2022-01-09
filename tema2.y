@@ -995,10 +995,11 @@ struct ast_node *buildAST(char* val_nod,struct ast_node *stanga, struct ast_node
 
 int evalAST(struct ast_node ast)
 {
-        //daca numar=> return nr
+        //daca ast->stanga == NULL si ast-> dreapta == NULL => numar=> return nr
         //id=> get_valoare_dupa_nume returneaza nr 
+       
+        //else 
+        //daca este operatie + evalAST(ast->stanga)+evalAST(ast->dreapta)
+         //daca este operatie - evalAST(ast->stanga)-evalAST(ast->dreapta)
         
-
-        //daca este operatie evalAST(ast->stanga)/ dreapta
-        //+altceva 
 }
