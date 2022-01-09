@@ -432,13 +432,11 @@ int get_valoare_dupa_nume(char * nume)
 }
 void print_variabile(char* mesaj ,char* nume) // momentan in lucru ...
 {
-        printf("Mesaj: <%s>\n",mesaj);
-        printf("NUME: <%s>\n",nume);
-        char delim[]="\"\"";
-        char* ptr=strtok(nume,delim);
-        //ptr=strtok(NULL,"\"\n");
-         printf("NUME:<%s>\n",nume);
-
+        
+        char* ptr=nume;
+        strcpy(ptr,ptr+1);
+        ptr=strtok(nume,"\"");
+       
         int gasit=0;
         
         for (int i = 0; i < count_v; i++)

@@ -4,10 +4,10 @@ Integer y=7;
 Const Integer a=3;
 String s;
 s="Madalina";
+Print("GLOBAL: value of expression s is:", "s");
 Integer var_globala=8;
-Print("GLOBAL: value of expression var_global is:", var_globala);
 var_globala=(7-2)-5;
-Print("GLOBAL: value of expression var_global is:", var_globala);
+
 
 #overloading functii
 Integer suma ( Integer a , Integer b) { 
