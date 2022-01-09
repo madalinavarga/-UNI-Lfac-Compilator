@@ -76,6 +76,7 @@ int membru_clasa(int index_clasa,char* nume);
 void error_ne_decl_membru(char* nume);
 void asignare_pt_data_membru(char* clasa,char* membru,char* valoare,char* tip_valoare);
 void print_variabile(char* mesaj ,char* nume);
+void verifica_conditia(int nr1, int nr_conditie, int nr2);
 
 
 char *citeste_fisier(char *file);
@@ -98,7 +99,7 @@ char *citeste_fisier(char *file);
 %token<real>NR_REAL
 %token<integer>NR_INT
 %token<str> ID TIP
-%type<integer> expresie
+%type<integer> expresie conditie
 
 
 %start s
@@ -229,6 +230,7 @@ cod_f : declaratie_locala ';' {char count_str[100]; snprintf(count_str,100,"func
             | asignare_functie 
             | bucle // de completat
             | print 
+            | interogari
             ;
 
 lista_param : param
@@ -294,7 +296,7 @@ asignare_main :  ID ASSIGN expresie    {char count_str[]="main"; char str_valoar
                 | ID '.' ID ASSIGN NR_REAL {char valoare[50];  snprintf(valoare,50,"%f",$5);  asignare_pt_data_membru($1,$3,valoare,"Float");}
                 | ID '.' ID ASSIGN expresie {char valoare[50]; sprintf(valoare,"%d",$5);  asignare_pt_data_membru($1,$3,valoare,"Integer");}
                 ;
-
+/*
 expr: expr PLUS expr
     | expr MINUS expr
     | expr PROD expr
@@ -310,8 +312,9 @@ apel_functie :  ID '(' ')'
 lista_apel: expr
           | lista_apel',' expr
           ;
+*/
 statement: ID INCR
-         | apel_functie
+         //| apel_functie
          | ID DECR
          | INCR ID
          | DECR ID 
@@ -321,15 +324,13 @@ interogari: DACA '(' conditie ')' '{' cod_bloc '}'
           | DACA '(' conditie ')' '{' cod_bloc '}' ALTFEL '{' cod_bloc '}'
           ;
 			  
-conditie : expr LESS expr				
-         | expr GREATER expr			
-	 | expr LEQ expr 				
-	 | expr GEQ expr			
-	 | expr EQ expr 
-         | expr NEQ expr
-         | conditie AND conditie
-         | conditie OR conditie
-         | expr			
+conditie : expresie LESS expresie {verifica_conditia($1,1,$3);}	 			
+         | expresie GREATER expresie {verifica_conditia($1,2,$3);}				
+	 | expresie LEQ expresie {verifica_conditia($1,3,$3);}				
+	 | expresie GEQ expresie {verifica_conditia($1,4,$3);}			
+	 | expresie EQ expresie  {verifica_conditia($1,5,$3);}
+         | expresie NEQ expresie {verifica_conditia($1,6,$3);}
+         | expresie	         {verifica_conditia(1,7,1);}		
 	 ;
 bucle:  functie_for
      | functie_while
@@ -597,7 +598,42 @@ void mesaj_functie_existenta(char msg[]){
      exit(0);
 }
 
-
+void verifica_conditia(int nr1, int nr_conditie, int nr2)
+{
+       int variabila=0;
+        switch (nr_conditie) {
+        case 1:
+            if(nr1<nr2) {printf("Conditie indeplinita\n"); variabila++;}
+            else printf("Conditie neindeplinita\n");
+            break;
+        case 2:
+            if(nr1>nr2) printf("Conditie indeplinita\n");
+            else printf("Conditie neindeplinita\n");
+            break;
+        case 3:
+            if(nr1<=nr2) printf("Conditie indeplinita\n");
+            else printf("Conditie neindeplinita\n");
+            break;
+        case 4:
+            if(nr1>=nr2) printf("Conditie indeplinita\n");
+            else printf("Conditie neindeplinita\n");
+            break;
+        case 5:
+            if(nr1==nr2) printf("Conditie indeplinita\n");
+            else printf("Conditie neindeplinita\n");
+            break;
+        case 6:
+            if(nr1!=nr2) printf("Conditie indeplinita\n");
+            else printf("Conditie neindeplinita\n");
+            break;
+        case 7:
+            printf("Bucla Infinita\n");
+            break;
+        default:
+              printf("Nu cunosc conditia\n");
+                exit(0);
+        }
+}
 
 void scrieFunctiiInFisier()
 {

@@ -11,7 +11,7 @@ Integer  var_globala  0  global  0  0
 
 
 MAIN:
-Integer  m  9  main  0  0
+Integer  m  11  main  0  0
 Float  z  (null)  main  0  0
 zoo  z2  (null)  main  0  0
 mamifer  m1  (null)  main  0  0

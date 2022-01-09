@@ -1,4 +1,4 @@
-1 Printf trebuie modificat sa accepte mai multe tipuri 
+1 Printf trebuie modificat sa accepte mai multe tipuri !!! ok varianta provizorie
 2 bucle si if 
 3 la clase in variabile vizibilitatea se repeta la unele 
 4 AST 
