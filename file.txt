@@ -83,8 +83,11 @@ Main ()
     cat_timp(a<9){
         Float fl;
     }
-
-
+x=2.5;
+Float f=8.9;
+String nume2="ana";
+Const String nume_const=z2.s;
+nume2="banana";
 
     
 }

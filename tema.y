@@ -82,6 +82,7 @@ void declarare_cu_initializare_data_membru(char* tip, char* nume ,char* clasa, c
 int verificare_exista_variabila(char* nume);
 void asignare_cu_data_membru(char* nume, char* clasa, char* membru);
 void error_ne_decl_variabila(char* nume);
+void error_nepotrivire();
 
 
 char *citeste_fisier(char *file);
@@ -148,9 +149,14 @@ declaratie_locala  : variabila_initializata_local
             | print
            
             ;
-variabila_initializata_local: CONST TIP ID ASSIGN expresie {declarare_cu_initializare($2,$3,$5,1,"main");}
-                      | TIP ID ASSIGN expresie {declarare_cu_initializare($1,$2,$4,0,"main");}
-                      | TIP ID ASSIGN ID '.' ID {declarare_cu_initializare_data_membru($1,$2, $4,$6,1,"main");}
+variabila_initializata_local: CONST TIP ID ASSIGN expresie {if(strcmp($2,"Integer")==0){declarare_cu_initializare($2,$3,$5,1,"main");}else{error_nepotrivire();}}
+                      | CONST TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $5); if(strcmp($2,"Float")==0) { declarare_cu_initializare_diferit_int($2,$3,valoare,1,"main");}else{error_nepotrivire();}}
+                      | CONST TIP ID ASSIGN STRING {if(strcmp($2,"String")==0) { declarare_cu_initializare_diferit_int($2,$3,$5,1,"main");}else{error_nepotrivire();}}
+                      | CONST TIP ID ASSIGN ID '.' ID {declarare_cu_initializare_data_membru($2,$3, $5,$7,1,"main");}
+                      | TIP ID ASSIGN expresie {if(strcmp($1,"Integer")==0){declarare_cu_initializare($1,$2,$4,0,"main");} else{error_nepotrivire();}}
+                      | TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $4); if(strcmp($1,"Float")==0) { declarare_cu_initializare_diferit_int($1,$2,valoare,0,"main");}else{error_nepotrivire();}}
+                      | TIP ID ASSIGN STRING {printf("aici\n"); if(strcmp($1,"String")==0) { declarare_cu_initializare_diferit_int($1,$2,$4,0,"main");}else{error_nepotrivire();}}
+                      | TIP ID ASSIGN ID '.' ID {declarare_cu_initializare_data_membru($1,$2, $4,$6,0,"main");}
                       ;
 variabila_declarata_local: TIP ID {declarare_fara_initializare($1,$2,0,"main");}
                          | array
@@ -721,9 +727,17 @@ void error_ne_decl_membru(char* nume){
         yyerror(error_msg);
         exit(0);
 }
+
 void error_ne_decl_variabila(char* nume){
         char error_msg[250];
         sprintf(error_msg, "Variabila %s nu a fost declarata", nume);
+        yyerror(error_msg);
+        exit(0);
+}
+
+void error_nepotrivire(){
+        char error_msg[250];
+        sprintf(error_msg, "Nepotrivire tipuri");
         yyerror(error_msg);
         exit(0);
 }
