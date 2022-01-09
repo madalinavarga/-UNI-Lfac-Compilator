@@ -1,19 +1,21 @@
-#declarari globale
+#declarari globale 
 Float x;
 Integer y=7;
 Const Integer a=3;
 String s;
 
-
-Print("inainte de functie"); 
+Integer var_globala=8;
+Print("GLOBAL: value of expression var_global is:", var_globala);
+var_globala=(7-2)-5;
+Print("GLOBAL: value of expression var_global is:", var_globala);
 
 #overloading functii
 Integer suma ( Integer a , Integer b) { 
    
     Integer suma_var=9;
-    Print("value of expression suma_var is:",suma_var);
+    Print("FUNCTIE: value of expression suma_var is:", suma_var);
     suma_var=100+9;
-    Print("value of expression suma_var is:",suma_var);
+    Print("FUNCTIE: value of expression suma_var is:",suma_var);
 }
 Integer suma ( Integer a , Integer b,Integer c) { 
     Integer suma_var;
@@ -29,8 +31,6 @@ Integer minus ( ) {
 
 
 #clase
-
-
 
 Class zoo{
     Integer urs;
@@ -55,9 +55,9 @@ Main ()
     Integer m=9;
     Float z;
     #comentariu
-    Print("value of expression a is:",a); 
+    Print("MAIN: value of expression a is:",a) ;
     a=9;
-    Print("value of expression a is:",a); 
+    Print("MAIN: value of expression a is:",a) ;
 
     zoo z2;
     mamifer m1;

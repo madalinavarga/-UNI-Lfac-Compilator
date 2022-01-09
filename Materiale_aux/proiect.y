@@ -16,10 +16,11 @@ int count_var;
 char fisier_variabile[]="symbol_table.txt";
 char fisier_functii[]="symbol_table_functions.txt ";
 
+
 struct variabile{
       char* tip;
       char* id;
-      char* valoare;
+      double valoare;
       char* vizibilitate;
       int constante;
       int dimensiune;
@@ -44,8 +45,9 @@ FILE *functii_fisier_ptr, *var_fisier_ptr;
 
 void openFileWrite(FILE* fd,char * fileName);
 void scrieVariabileFisier();
-bool cautaVariabila(char* nume, char* tip, char* vizibilitate);
-void seteazaAtributeStruct(char* tip, char* id, char* valoare, int constante, int dimensiune);
+bool cautaNume(char* nume, char* vizibilitate);
+void declarare_cu_initializare(char* tip,char* nume,double val,int este_const);
+void declarare_fara_initializare(char* tip,char* nume, int este_const);
 
 %}
 
@@ -77,6 +79,7 @@ char* tip;
 %token<bool_val> BOOLEAN
 %token<char_val> CHAR 
 %token<string_val> STRING
+%type<real_val> expresie variabila
 
 //prioritati 
 %right ASSIGN
@@ -103,11 +106,11 @@ s : program
 program: declaratii_globale functii_clase main_prog 
  | declaratii_globale main_prog 
  | functii_clase main_prog 
- | main_prog 
+ | main_prog  
  ;
 
  // declaratii globale sectiune 1 
-declaratii_globale : declaratie ';'              {var[count_var].vizibilitate=strdup("global");}
+declaratii_globale : declaratie ';'              {var[count_var].vizibilitate=strdup("global");printf("Apel aici ");if(cautaNume(var[count_var].id,"global")==true){printf("global bloc eroare\n");}else count_var++;}
              | declaratii_globale declaratie ';' {var[count_var].vizibilitate=strdup("global");}
              ;
 
@@ -119,22 +122,25 @@ declaratie  : variabila_initializata
 variabila_declarata:  CONST TIP ID 
                     | TIP lista_declaratii
                     ;
-variabila_initializata: CONST TIP ID ASSIGN variabila {if(cautaNume($3,var[count_var].vizibilitate)==true){seteazaAtributeStruct($2,$3,$5,1,NaN),count_var++;} else{ exit(0);}}
-                      | TIP ID ASSIGN expresie
+variabila_initializata: CONST TIP ID ASSIGN variabila { declarare_cu_initializare($2,$3,$5,1);}
+                      | TIP ID ASSIGN expresie //{if(cautaNume($3,var[count_var].vizibilitate)==true){declarare_cu_initializare($2,$3,$5,1);} else{ exit(0);}}
                       | TIP ID ASSIGN apel_functie
                       ;
 expresie : variabila
-         | variabila PLUS expresie              
-         | variabila MINUS expresie            
-         | variabila PROD expresie              
-         | variabila DIV expresie
+         | variabila PLUS expresie  {$$ = $1 + $3;}            
+         | variabila MINUS expresie {$$ = $1 - $3;}          
+         | variabila PROD expresie  {$$ = $1 * $3;}           
+         | variabila DIV expresie   {$$ = $1 / $3;}
          ;
-variabila   :  NR_REAL
-            | ID
+variabila   : NR_REAL 
+            | ID 
             | NR_INT 
-            | CHAR 
-            | STRING 
-            | BOOLEAN
+            | BOOLEAN 
+            
+            ;
+
+variabila_string :  CHAR 
+                 |  STRING 
             ;
 lista_declaratii : ID
                  | lista_declaratii ',' ID
@@ -173,7 +179,7 @@ lista_param : TIP ID
 main_prog : MAIN'('')' acolade  
            ;
 acolade : '{' '}'              {var[count_var].vizibilitate=strdup("local");}
-        | '{' bloc_cod '}'      {var[count_var].vizibilitate=strdup("local");}
+        | '{' bloc_cod '}'     
         ;
 
 bloc_cod : cod               
@@ -188,7 +194,7 @@ cod : interogari
     | ID ASSIGN apel_functie ';'    
     | ID ASSIGN expresie ';' 
     | ID '[' NR_INT ']' ASSIGN expresie ';'       
-    | declaratie ';' 
+    | declaratie ';'  {var[count_var].vizibilitate=strdup("local");if(cautaNume(var[count_var].id,"local")==true){printf("main bloc eroare\n");}else count_var++;}
     | functii_declaratie               
     | print
     ;
@@ -267,40 +273,60 @@ void scrieVariabileFisier()
       var_fisier_ptr=fopen(fisier_variabile,"a"); // dechidere fisier 
       for(int i=0;i<count_var;i++){
     
-     fprintf(var_fisier_ptr,"%s %s %s %s %d %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
+     fprintf(var_fisier_ptr,"%s %s %f %s %d %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
      
       }
       fclose(var_fisier_ptr);
 }
 
-bool cautaVariabila(char* nume, char* vizibilitate)
+bool cautaNume(char* nume, char* vizibilitate)
 {
+      printf("%s %s",nume,vizibilitate);
       for(int i=0;i<count_var;i++)
       {
             if ((strcmp(var[i].vizibilitate,vizibilitate)==0) && (strcmp(var[i].id,nume)==0 ))
             {
                   check_compile=0;
                   printf("EROARE: Variabila deja declarata\n");
-                  return false;
+                  return true;
                   
             }
             
       }
-      return true;
+      return false;
 }
 
-void seteazaAtributeStruct(char* tip, char* id, char* valoare, int constante, int dimensiune)
-{
-      var[count_var].tip=(char*) malloc(strlen(tip));
-      strcpy(var[count_var].tip,tip);
+void declarare_fara_initializare(char* tip,char* nume, int este_const){
+        
+        if(este_const==1){
+                char error_msg[250];
+                sprintf(error_msg, "Variabila constanta %s nu poate fi declarata fara initializare", nume);
+                yyerror(error_msg);
+                exit(0);
+        }
+        var[count_var].tip=strdup(tip);
+        var[count_var].id=strdup(nume);
+        var[count_var].constante=0;
+        count_var++;
+}
 
-      var[count_var].id=(char*) malloc(strlen(id));
-      strcpy(var[count_var].id,id);
+void declarare_cu_initializare(char* tip,char* nume,double val,int este_const){
 
-      var[count_var].valoare=(char*) malloc(strlen(valoare));
-      strcpy(var[count_var].valoare,valoare);
+     
+        var[count_var].tip=strdup(tip);
+        var[count_var].id=strdup(nume);
+        var[count_var].valoare=val;
+        var[count_var].constante=este_const;
+        // count_var++;
+       
+}
 
-      var[count_var].constante=constante;
-      var[count_var].dimensiune=dimensiune;
-      
+
+int variabila_deja_declarata(char* nume){
+        for (int i = 0; i < count_var; i++)
+        {
+                if (strcmp(var[i].id, nume) == 0) return i;
+                printf("%lf\n",var[i].valoare);
+        }
+        return -1;
 }

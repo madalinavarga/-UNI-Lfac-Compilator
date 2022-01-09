@@ -38,7 +38,7 @@ functie(6,8);
 Integer rezultat;
 rezultat=suma(a,b);
 
-#!!!! rezultat=suma(7,9); nu merge , nu merge orice incercare de a pune numere nu variabile ( x=a-1)
+
 
 #if
 daca ((a!=b) && (6<9)){

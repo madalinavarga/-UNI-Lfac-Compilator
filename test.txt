@@ -1,0 +1,9 @@
+Const Float x=5.7;
+Const Float x=5.7;
+Main()
+{
+Const Float x=5.7;
+
+
+
+}

@@ -50,96 +50,84 @@ extern int yydebug;
   enum yytokentype
   {
     PRINT = 258,
-    MAIN = 259,
-    RETURN = 260,
-    ASSIGN = 261,
-    CONST = 262,
-    EXIT = 263,
-    CLASS = 264,
-    TIP = 265,
-    DACA = 266,
-    ALTFEL = 267,
-    PENTRU = 268,
-    CATtIMP = 269,
-    GEQ = 270,
-    EQ = 271,
-    LEQ = 272,
-    NEQ = 273,
-    OR = 274,
-    AND = 275,
-    LESS = 276,
-    GREATER = 277,
-    PLUS = 278,
-    PROD = 279,
-    DIV = 280,
+    CONST = 259,
+    DACA = 260,
+    ALTFEL = 261,
+    PENTRU = 262,
+    CAT_TIMP = 263,
+    MAIN = 264,
+    RETURN = 265,
+    EXIT = 266,
+    CLASS = 267,
+    GEQ = 268,
+    EQ = 269,
+    LEQ = 270,
+    NEQ = 271,
+    ASSIGN = 272,
+    OR = 273,
+    AND = 274,
+    PLUS = 275,
+    MINUS = 276,
+    PROD = 277,
+    DIV = 278,
+    LESS = 279,
+    GREATER = 280,
     INCR = 281,
     DECR = 282,
-    PLSEQ = 283,
-    MINEQ = 284,
-    MULEQ = 285,
-    DIVEQ = 286,
+    CHAR = 283,
+    STRING = 284,
+    NR_REAL = 285,
+    NR_INT = 286,
     ID = 287,
-    NR_INT = 288,
-    NR_REAL = 289,
-    BOOLEAN = 290,
-    CHAR = 291,
-    STRING = 292,
-    MINUS = 293
+    TIP = 288
   };
 #endif
 /* Tokens.  */
 #define PRINT 258
-#define MAIN 259
-#define RETURN 260
-#define ASSIGN 261
-#define CONST 262
-#define EXIT 263
-#define CLASS 264
-#define TIP 265
-#define DACA 266
-#define ALTFEL 267
-#define PENTRU 268
-#define CATtIMP 269
-#define GEQ 270
-#define EQ 271
-#define LEQ 272
-#define NEQ 273
-#define OR 274
-#define AND 275
-#define LESS 276
-#define GREATER 277
-#define PLUS 278
-#define PROD 279
-#define DIV 280
+#define CONST 259
+#define DACA 260
+#define ALTFEL 261
+#define PENTRU 262
+#define CAT_TIMP 263
+#define MAIN 264
+#define RETURN 265
+#define EXIT 266
+#define CLASS 267
+#define GEQ 268
+#define EQ 269
+#define LEQ 270
+#define NEQ 271
+#define ASSIGN 272
+#define OR 273
+#define AND 274
+#define PLUS 275
+#define MINUS 276
+#define PROD 277
+#define DIV 278
+#define LESS 279
+#define GREATER 280
 #define INCR 281
 #define DECR 282
-#define PLSEQ 283
-#define MINEQ 284
-#define MULEQ 285
-#define DIVEQ 286
+#define CHAR 283
+#define STRING 284
+#define NR_REAL 285
+#define NR_INT 286
 #define ID 287
-#define NR_INT 288
-#define NR_REAL 289
-#define BOOLEAN 290
-#define CHAR 291
-#define STRING 292
-#define MINUS 293
+#define TIP 288
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 51 "proiect.y"
+#line 84 "tema.y"
 
-int int_val;
-float real_val;
-char* bool_val;
-char char_val;
-char* string_val;
-char* nume_var;
-char* tip;
+    double num;
+    char* str;
+    int integer;
+    float real;
+    int boolean;
 
-#line 143 "y.tab.h"
+#line 131 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

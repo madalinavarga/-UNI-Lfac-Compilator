@@ -4,6 +4,7 @@ Float  x  9.000000  global  0  0
 Integer  y  7  global  0  0
 Integer  a  9  global  1  0
 String  s  (null)  global  0  0
+Integer  var_globala  0  global  0  0
 Integer  suma_var  109  functie-0  0  0
 Integer  suma_var  (null)  functie-1  0  0
 Float  z  20  functie-1  0  0

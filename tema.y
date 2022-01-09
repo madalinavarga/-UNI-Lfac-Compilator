@@ -134,12 +134,14 @@ declaratii_globale :
  declaratie_globala:variabila_initializata_global
             | variabila_declarata_global
             | array 
-            | print
+            | print 
+            | asignare_globala
             ;          
 declaratie_locala  : variabila_initializata_local
             | variabila_declarata_local
             | array 
             | print
+           
             ;
 variabila_initializata_local: CONST TIP ID ASSIGN expresie {declarare_cu_initializare($2,$3,$5,1,"main");}
                       | TIP ID ASSIGN expresie {declarare_cu_initializare($1,$2,$4,0,"main");}
@@ -179,16 +181,21 @@ valoare :  NR_INT
         | STRING
         | CHAR
         ;
-print:  PRINT '(' STRING ',' expresie ')' {printf("%s %d\n",$3,$5);}
-     |  PRINT '(' STRING ')' {printf("%s\n",$3);}
+print:  PRINT '(' STRING ',' expresie ')'   {printf("%s %d\n",$3,$5);}
+     |  PRINT '(' STRING ')'  {printf("%s\n",$3);}
      ;
+asignare_globala : ID ASSIGN expresie   {char count_str[]="global"; char str_valoare[50]; snprintf(str_valoare,50,"%d",$3); asignare_exista_variabila($1,count_str,str_valoare,0);}
+                 | ID ASSIGN NR_REAL  {char count_str[]="global"; char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
+                 | ID ASSIGN STRING    {char count_str[]="global"; asignare_exista_variabila($1,count_str,$3,2);}
+                 | ID ASSIGN CHAR     {char count_str[]="global"; asignare_exista_variabila($1,count_str,$3,3);}
+                 ;
 
 /* sectiunea 2 */
 functii_clase : functii_clase class_definitie
                 | functii_declaratie 
                 | class_definitie
                 | functii_clase functii_declaratie
-              ;
+                ;
 
 class_definitie : CLASS ID  '{' class_declaratii '}' ';' {if(clasa_deja_definita($2)==-1){
                                                                 creeaza_clasa($2);
@@ -220,7 +227,7 @@ cod_functii: cod_functii cod_f
 cod_f : declaratie_locala ';' {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); var[count_v-1].vizibilitate=strdup(count_str);}
             | asignare_functie 
             | bucle // de completat
-            | print
+            | print 
             ;
 
 lista_param : param
@@ -566,6 +573,7 @@ void error_decl(char* nume){
         char error_msg[250];
         sprintf(error_msg, "Variabila %s este deja declarata", nume);
         yyerror(error_msg); 
+        exit(0);
        
         
 }
@@ -574,18 +582,21 @@ void error_decl_clasa(char* nume){
         char error_msg[250];
         sprintf(error_msg, "Clasa %s este deja declarata", nume);
         yyerror(error_msg); 
+        exit(0);
 }
 
 void error_ne_decl_clasa(char* nume){
         char error_msg[250];
         sprintf(error_msg, "Clasa %s nu a fost definita", nume);
         yyerror(error_msg);
+        exit(0);
 }
 
 void error_ne_decl_membru(char* nume){
         char error_msg[250];
         sprintf(error_msg, "Membrul %s nu a fost definit", nume);
         yyerror(error_msg);
+        exit(0);
 }
 
 int variabila_class_deja_declarata(char* nume,char* vizibilitate){

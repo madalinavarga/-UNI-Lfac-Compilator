@@ -1,6 +1,4 @@
-- 2 structuri =tabele cu functii si variabile(sortate pe vizibilitate)
-- functii de scriere in fisiere si de citit din fisiere 
-- verificare existenta variabila + adg in lista 
-- functii , verificare tip id + paramterii 
-
-
+1 Printf trebuie modificat sa accepte mai multe tipuri 
+2 bucle si if 
+3 la clase in variabile vizibilitatea se repeta la unele 
+4 AST 
