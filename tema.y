@@ -272,7 +272,6 @@ cod: interogari
    | declaratie_locala ';' {var[count_v-1].vizibilitate=strdup("main");}
    | statement ';'
    | asignare_main ';'
-
    | functii_declaratie 
    | clasa_noua ';'
    ;
@@ -351,12 +350,15 @@ bucle:  functie_for
      | functie_while
      ;
 functie_while : CAT_TIMP '(' conditie')' '{' cod_bloc '}'
-              ;
-functie_for: PENTRU '('for_list')' '{' cod_bloc '}'
+              ; 
+functie_for: PENTRU '(' for_list ')' '{' cod_bloc '}'{printf("1\n");}
            ;
 for_list: asignare_main ';' conditie ';' statement
         ;
-
+statement: ID INCR
+         | ID DECR 
+         ;
+    
 %%
 int yyerror(char * s){
 printf("eroare: %s la linia:%d\n",s,yylineno);
@@ -403,7 +405,6 @@ void declarare_fara_initializare(char* tip,char* nume, int este_const,char* vizi
 void declarare_cu_initializare(char* tip,char* nume,int val,int este_const,char* vizibilitate){
         //verificare daca exista 
         
-
         if(variabila_deja_declarata(nume,vizibilitate)!=-1){
                 char error_msg[250];
                 sprintf(error_msg, "Variabila %s este deja declarata", nume);
@@ -559,7 +560,37 @@ void set_parametrii_functie(char* tip, char* id,struct parametru *aux)
         count_aux++;    
 }
 
+void verifica_acelasi_id(char* id1,char* id2,int nr_conditie)
+{
+        int valoare=0;
+        char valoare_str[50];
+        if(strcmp(id1,id2)==0)
+        for(int i=0;i<count_v;i++)
+        {
+                if(strcmp(var[i].id,id1)==0 && nr_conditie==1) {
+                                printf("sunt in cond1\n");
+                                valoare=atoi(var[i].valoare);
+                                valoare++;
+                                snprintf(valoare_str,50,"%d",valoare);
+                                strcpy(var[i].valoare,valoare_str);
 
+                }else 
+                if(strcmp(var[i].id,id1)==0 && nr_conditie==2)
+                        {
+                                printf("sunt in cond1\n");
+                                valoare=atoi(var[i].valoare);
+                                valoare--;
+                                snprintf(valoare_str,50,"%d",valoare);
+                                strcpy(var[i].valoare,valoare_str);
+
+                }else 
+                {
+                        printf("Eroare\n"); exit(0);
+                }
+
+        }
+        
+}
 void scrieVariabileFisier()
 {
       FILE* var_fisier_ptr;
