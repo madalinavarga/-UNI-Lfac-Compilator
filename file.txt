@@ -22,7 +22,8 @@ Integer suma ( Integer a , Integer b,Integer c) {
     x=9.8; #global initializat aici
     Float z;
     z=10.10;
-    z=10+10;
+    Integer z1;
+    z1=10+10;
 }
 Integer minus ( ) { 
     Integer minus_var=9;
@@ -56,7 +57,7 @@ Main ()
     Float z;
     #comentariu
     Print("MAIN: value of expression a is:",a) ;
-    a=9;
+   
     Print("MAIN: value of expression a is:",a) ;
 
     zoo z2;
@@ -69,11 +70,21 @@ Main ()
    z2.adevar=fals;
    z2.s="lenuta";
 
+   
+
    Integer data=m1.lup; 
    String nume=z2.s;
    data=m1.urs;
 
-   
+   pentru(m1.urs=1;a<9;a++){
+       Integer p;
+   }
+
+    cat_timp(a<9){
+        Float fl;
+    }
+
+
 
     
 }

@@ -81,6 +81,7 @@ void declarare_cu_initializare_diferit_int(char* tip, char* nume, char* valoare,
 void declarare_cu_initializare_data_membru(char* tip, char* nume ,char* clasa, char* membru,int este_const, char* vizibilitate);
 int verificare_exista_variabila(char* nume);
 void asignare_cu_data_membru(char* nume, char* clasa, char* membru);
+void error_ne_decl_variabila(char* nume);
 
 
 char *citeste_fisier(char *file);
@@ -294,7 +295,7 @@ clasa_noua : ID ID { if(clasa_deja_definita($1)!=-1){
                 }
            ;
 
-asignare_main :  ID ASSIGN expresie    {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%d",$3); asignare_exista_variabila($1,count_str,str_valoare,0);}
+asignare_main :  ID ASSIGN expresie    {printf("id:%s expresie: %d\n",$1,$3); char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%d",$3); asignare_exista_variabila($1,count_str,str_valoare,0);}
                 | ID ASSIGN NR_REAL   {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
                 | ID ASSIGN STRING    {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,2);}
                 | ID ASSIGN CHAR      {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,3);}
@@ -321,11 +322,11 @@ lista_apel: expr
           | lista_apel',' expr
           ;
 */
-statement: ID INCR
+statement: ID INCR {int verificare=verificare_exista_variabila($1); if(verificare==-1){error_ne_decl_variabila($1);}}
          //| apel_functie
-         | ID DECR
-         | INCR ID
-         | DECR ID 
+         | ID DECR {int verificare=verificare_exista_variabila($1); if(verificare==-1){error_ne_decl_variabila($1);}}
+         | INCR ID {int verificare=verificare_exista_variabila($2); if(verificare==-1){error_ne_decl_variabila($2);}}
+         | DECR ID {int verificare=verificare_exista_variabila($2); if(verificare==-1){error_ne_decl_variabila($2);}}
          ;
     
 interogari: DACA '(' conditie ')' '{' cod_bloc '}'
@@ -347,7 +348,7 @@ functie_while : CAT_TIMP '(' conditie')' '{' cod_bloc '}'
               ;
 functie_for: PENTRU '('for_list')' '{' cod_bloc '}'
            ;
-for_list: ID ASSIGN NR_INT ';' conditie ';' statement
+for_list: asignare_main ';' conditie ';' statement
         ;
 
 %%
@@ -428,12 +429,20 @@ int get_valoare_dupa_nume(char * nume)
                  int valoare=atoi(var[i].valoare);
                  return valoare;
                  }
+                 else{
+                         if(strcmp(var[i].id,nume)==0 && strcmp(var[i].tip,"Integer")!=0){
+                                char error_msg[250];
+                                sprintf(error_msg, "Expresie poate fi doar Integer");
+                                yyerror(error_msg);
+                                exit(0);
+                         }
+                 }
          }
 
          if(gasit==0) 
          {
                 char error_msg[250];
-                sprintf(error_msg, "Variabila nu exista");
+                sprintf(error_msg, "Variabila %s nu exista", nume);
                 yyerror(error_msg);
                 exit(0);
          }
@@ -484,14 +493,25 @@ void creaza_functie(char* tip, char* id,struct parametru *aux)
 }
 void asignare_exista_variabila(char* id , char* viziblitate ,char* valoare, int nr_tip)
 {
-        
+        int index=verificare_exista_variabila(id);
+        if(index==-1){
+                error_ne_decl_variabila(id);
+        }
+        else{
+                if(var[index].constante==1){
+                        char error_msg[250];
+                        sprintf(error_msg, "Variabila %s este const", id);
+                        yyerror(error_msg);
+                        exit(0);
+                }
         for (int i = 0; i < count_v; i++){
-                if(strcmp(var[i].id,id)==0) // acelasi nume
+                if(strcmp(var[i].id,id)==0){ // acelasi nume
+                        printf("am gasit variabila cu numele: %s\n", id);
                   if(strcmp(var[i].vizibilitate,"global")==0) var[i].valoare=strdup(valoare);
                   else
                    if(strcmp(var[i].vizibilitate,viziblitate)==0) 
                    {
-                           if(nr_tip==0) { // int , expresie deja verificat
+                           if(nr_tip==0 && strcmp(var[i].tip,"Integer")==0) { // int , expresie deja verificat
                             var[i].valoare=strdup(valoare);
                            }else
                            if(nr_tip==1 && strcmp(var[i].tip,"Float")==0)
@@ -508,11 +528,18 @@ void asignare_exista_variabila(char* id , char* viziblitate ,char* valoare, int 
                                    var[i].valoare=strdup(valoare);
                            }else
                            {
-                                   printf("variabila trebuie declarata inainte\n"); exit(0);
+                                //printf("variabila trebuie declarata inainte\n"); exit(0);
+                                char error_msg[250];
+                                sprintf(error_msg, "Nepotrivire tipuri");
+                                yyerror(error_msg);
+                                exit(0);
                            }
                    }
+                }
                    
         }
+        }
+
        
 }
 
@@ -691,6 +718,12 @@ void error_ne_decl_clasa(char* nume){
 void error_ne_decl_membru(char* nume){
         char error_msg[250];
         sprintf(error_msg, "Membrul %s nu a fost definit", nume);
+        yyerror(error_msg);
+        exit(0);
+}
+void error_ne_decl_variabila(char* nume){
+        char error_msg[250];
+        sprintf(error_msg, "Variabila %s nu a fost declarata", nume);
         yyerror(error_msg);
         exit(0);
 }
