@@ -196,7 +196,7 @@ valoare :  NR_INT
         ;
 print:  PRINT '(' STRING ',' expresie ')'   {printf("%s %d\n",$3,$5);}
      |  PRINT '(' STRING ')'  {printf("%s\n",$3);}
-     |  PRINT '(' STRING ',' STRING ')'  {print_variabile($3,$5);}
+     |  PRINT '(' STRING ',' '&'ID ')'  {print_variabile($3,$6);}
      ;
 asignare_globala : ID ASSIGN expresie   {char count_str[]="global"; char str_valoare[50]; snprintf(str_valoare,50,"%d",$3); asignare_exista_variabila($1,count_str,str_valoare,0);}
                  | ID ASSIGN NR_REAL  {char count_str[]="global"; char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
@@ -458,8 +458,8 @@ void print_variabile(char* mesaj ,char* nume) // momentan in lucru ...
 {
         
         char* ptr=nume;
-        strcpy(ptr,ptr+1);
-        ptr=strtok(nume,"\"");
+        //strcpy(ptr,ptr+1);
+       // ptr=strtok(nume,"\"");
        
         int gasit=0;
         
