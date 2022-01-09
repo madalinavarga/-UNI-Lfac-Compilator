@@ -1059,7 +1059,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 56 "tema.l"
+#line 55 "tema.l"
 ECHO;
 	YY_BREAK
 #line 1066 "lex.yy.c"
@@ -2067,4 +2067,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 56 "tema.l"
+#line 55 "tema.l"

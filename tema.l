@@ -52,4 +52,3 @@ fals                             {yylval.boolean=strdup(yytext); return BOOLEAN;
 [ \t\r] ;
 \n {yylineno++;}
 . {return yytext[0];}
-
