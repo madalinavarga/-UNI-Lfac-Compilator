@@ -8,18 +8,15 @@ extern FILE* yyin;
 extern char* yytext;
 extern int yylineno;
 
-enum enum_tip {OP,IDENTIFIER,NUMBER,OTHER};
+enum enum_tip {OP,IDENTIFIER,NUMBER,OTHER} ;
 struct ast_node{
         
         char* valoare;
         struct ast_node* stanga; 
         struct ast_node* dreapta; 
-        enum_tip tip;
+        enum enum_tip tip;
 };
 
-struct expresie{
-        struct ast_node *AST;
-}
 
 struct variabile{
       char* tip;
@@ -64,8 +61,8 @@ int count_v=0,count_f=0,count_aux=0;
 char fisier_variabile[]="symbol_table.txt";
 char fisier_functii[]="symbol_table_functions.txt ";
 
-struct ast_node *buildAST(char* val_nod,struct ast_node *stanga, struct ast_node *dreapta,enum_tip tip );
-int evalAST(struct ast_node ast);
+struct ast_node *buildAST(char* val_nod,struct ast_node *stanga, struct ast_node *dreapta,int tip );
+int evalAST(struct ast_node *ast);
 
 
 int variabila_deja_declarata(char* nume,char* vizibilitate);
@@ -112,6 +109,10 @@ char *citeste_fisier(char *file);
     int integer;
     float real;
     char* boolean;
+
+    struct expresie{
+        struct ast_node *AST;
+}expresie;
 }
 
 %token PRINT CONST DACA ALTFEL PENTRU CAT_TIMP MAIN RETURN EXIT CLASS 
@@ -168,11 +169,11 @@ declaratie_locala  : variabila_initializata_local
             | print
            
             ;
-variabila_initializata_local: CONST TIP ID ASSIGN expresie {if(strcmp($2,"Integer")==0){declarare_cu_initializare($2,$3,$5,1,"main");}else{error_nepotrivire();}}
+variabila_initializata_local: CONST TIP ID ASSIGN expresie {if(strcmp($2,"Integer")==0){declarare_cu_initializare($2,$3,evalAST($5.AST),1,"main");}else{error_nepotrivire();}}
                       | CONST TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $5); if(strcmp($2,"Float")==0) { declarare_cu_initializare_diferit_int($2,$3,valoare,1,"main");}else{error_nepotrivire();}}
                       | CONST TIP ID ASSIGN STRING {if(strcmp($2,"String")==0) { declarare_cu_initializare_diferit_int($2,$3,$5,1,"main");}else{error_nepotrivire();}}
                       | CONST TIP ID ASSIGN ID '.' ID {declarare_cu_initializare_data_membru($2,$3, $5,$7,1,"main");}
-                      | TIP ID ASSIGN expresie {if(strcmp($1,"Integer")==0){declarare_cu_initializare($1,$2,$4,0,"main");} else{error_nepotrivire();}}
+                      | TIP ID ASSIGN expresie {if(strcmp($1,"Integer")==0){declarare_cu_initializare($1,$2,evalAST($4.AST),0,"main");} else{error_nepotrivire();}}
                       | TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $4); if(strcmp($1,"Float")==0) { declarare_cu_initializare_diferit_int($1,$2,valoare,0,"main");}else{error_nepotrivire();}}
                       | TIP ID ASSIGN STRING {printf("aici\n"); if(strcmp($1,"String")==0) { declarare_cu_initializare_diferit_int($1,$2,$4,0,"main");}else{error_nepotrivire();}}
                       | TIP ID ASSIGN ID '.' ID {declarare_cu_initializare_data_membru($1,$2, $4,$6,0,"main");}
@@ -180,8 +181,8 @@ variabila_initializata_local: CONST TIP ID ASSIGN expresie {if(strcmp($2,"Intege
 variabila_declarata_local: TIP ID {declarare_fara_initializare($1,$2,0,"main");}
                          | array
                    ;
-variabila_initializata_global: CONST TIP ID ASSIGN expresie {declarare_cu_initializare($2,$3,$5,1,"global");}
-                      | TIP ID ASSIGN expresie {declarare_cu_initializare($1,$2,$4,0,"global");}
+variabila_initializata_global: CONST TIP ID ASSIGN expresie {declarare_cu_initializare($2,$3,evalAST($5.AST),1,"global");}
+                      | TIP ID ASSIGN expresie {declarare_cu_initializare($1,$2,evalAST($4.AST),0,"global");}
                       ;
 variabila_declarata_global: TIP ID {declarare_fara_initializare($1,$2,0,"global");}
                           | array
@@ -195,7 +196,7 @@ expresie : expresie PLUS expresie                {$$.AST = buildAST($2, $1.AST, 
          | expresie MINUS expresie               {$$.AST = buildAST($2, $1.AST, $3.AST, OP) ;}
          | expresie PROD expresie                {$$.AST = buildAST($2, $1.AST, $3.AST, OP) ;}
          | expresie DIV expresie                 {$$.AST = buildAST($2, $1.AST, $3.AST, OP) ;}
-         |'(' expresie ')'                       {char str_val[50]; snprintf(str_val,50,"%d",evalAST($2.AST));$$.AST = buildAST(str_val, NULL, NULL, NUMBER);}
+         |'(' expresie ')'                       {char str_val[50]; snprintf(str_val,50,"%d",evalAST($2.AST)); $$.AST = buildAST(str_val, NULL, NULL, NUMBER);}
          | ID                                    {$$.AST = buildAST($1, NULL, NULL, IDENTIFIER);}
          | NR_INT                                {char str_val[50]; snprintf(str_val,50,"%d",$1); $$.AST = buildAST(str_val, NULL, NULL, NUMBER);}
          ;
@@ -213,11 +214,11 @@ valoare :  NR_INT
         | STRING
         | CHAR
         ;
-print:  PRINT '(' STRING ',' expresie ')'   {printf("%s %d\n",$3,$5);}
+print:  PRINT '(' STRING ',' expresie ')'   {printf("%s %d\n",$3,evalAST($5.AST));}
      |  PRINT '(' STRING ')'  {printf("%s\n",$3);}
      |  PRINT '(' STRING ',' '&'ID ')'  {print_variabile($3,$6);}
      ;
-asignare_globala : ID ASSIGN expresie   {char count_str[]="global"; char str_valoare[50]; snprintf(str_valoare,50,"%d",$3); asignare_exista_variabila($1,count_str,str_valoare,0);}
+asignare_globala : ID ASSIGN expresie   {char count_str[]="global"; char str_valoare[50]; snprintf(str_valoare,50,"%d",evalAST($3.AST)); asignare_exista_variabila($1,count_str,str_valoare,0);}
                  | ID ASSIGN NR_REAL  {char count_str[]="global"; char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
                  | ID ASSIGN STRING    {char count_str[]="global"; asignare_exista_variabila($1,count_str,$3,2);}
                  | ID ASSIGN CHAR     {char count_str[]="global"; asignare_exista_variabila($1,count_str,$3,3);}
@@ -269,7 +270,7 @@ lista_param : param
             ;
 param: TIP ID { set_parametrii_functie($1,$2,aux);}
      ;
-asignare_functie: ID ASSIGN expresie ';' {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); char str_valoare[50]; snprintf(str_valoare,50,"%d",$3); asignare_exista_variabila($1,count_str,str_valoare,0);}
+asignare_functie: ID ASSIGN expresie ';' {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); char str_valoare[50]; snprintf(str_valoare,50,"%d",evalAST($3.AST)); asignare_exista_variabila($1,count_str,str_valoare,0);}
                 | ID ASSIGN NR_REAL ';'  {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
                 | ID ASSIGN STRING ';'   {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); asignare_exista_variabila($1,count_str,$3,2);}
                 | ID ASSIGN CHAR ';'     {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); asignare_exista_variabila($1,count_str,$3,3);}
@@ -320,33 +321,17 @@ clasa_noua : ID ID { if(clasa_deja_definita($1)!=-1){
                 }
            ;
 
-asignare_main :  ID ASSIGN expresie    {printf("id:%s expresie: %d\n",$1,$3); char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%d",$3); asignare_exista_variabila($1,count_str,str_valoare,0);}
+asignare_main :  ID ASSIGN expresie    {printf("id:%s expresie: %d\n",$1,evalAST($3.AST)); char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%d",evalAST($3.AST)); asignare_exista_variabila($1,count_str,str_valoare,0);}
                 | ID ASSIGN NR_REAL   {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
                 | ID ASSIGN STRING    {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,2);}
                 | ID ASSIGN CHAR      {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,3);}
                 | ID '.' ID ASSIGN NR_REAL {char valoare[50];  snprintf(valoare,50,"%7.2f",$5);  asignare_pt_data_membru($1,$3,valoare,"Float");}
-                | ID '.' ID ASSIGN expresie {char valoare[50]; sprintf(valoare,"%d",$5);  asignare_pt_data_membru($1,$3,valoare,"Integer");}
+                | ID '.' ID ASSIGN expresie {char valoare[50]; sprintf(valoare,"%d",evalAST($5.AST));  asignare_pt_data_membru($1,$3,valoare,"Integer");}
                 | ID '.' ID ASSIGN STRING { asignare_pt_data_membru($1,$3,$5,"String");}
                 | ID '.' ID ASSIGN BOOLEAN {asignare_pt_data_membru($1,$3,$5,"Bool");}
                 | ID ASSIGN ID '.' ID {asignare_cu_data_membru($1,$3,$5);}
                 ;
-/*
-expr: expr PLUS expr
-    | expr MINUS expr
-    | expr PROD expr
-    | expr DIV expr
-    |'(' expresie ')'
-    | ID
-    | NR_INT
-    | apel_functie
-    ;
-apel_functie :  ID '(' ')'              
-             | ID '(' lista_apel')' 
-             ;
-lista_apel: expr
-          | lista_apel',' expr
-          ;
-*/
+
 statement: ID INCR {int verificare=verificare_exista_variabila($1); if(verificare==-1){error_ne_decl_variabila($1);}}
          //| apel_functie
          | ID DECR {int verificare=verificare_exista_variabila($1); if(verificare==-1){error_ne_decl_variabila($1);}}
@@ -358,13 +343,13 @@ interogari: DACA '(' conditie ')' '{' cod_bloc '}'
           | DACA '(' conditie ')' '{' cod_bloc '}' ALTFEL '{' cod_bloc '}'
           ;
 			  
-conditie : expresie LESS expresie {verifica_conditia($1,1,$3);}	 			
-         | expresie GREATER expresie {verifica_conditia($1,2,$3);}				
-	 | expresie LEQ expresie {verifica_conditia($1,3,$3);}				
-	 | expresie GEQ expresie {verifica_conditia($1,4,$3);}			
-	 | expresie EQ expresie  {verifica_conditia($1,5,$3);}
-         | expresie NEQ expresie {verifica_conditia($1,6,$3);}
-         | expresie	         {verifica_conditia(1,7,1);}		
+conditie : expresie LESS expresie {verifica_conditia(evalAST($1.AST),1,evalAST($3.AST));}	 			
+         | expresie GREATER expresie {verifica_conditia(evalAST($1.AST),2,evalAST($3.AST));}				
+	 | expresie LEQ expresie {verifica_conditia(evalAST($1.AST),3,evalAST($3.AST));}			
+	 | expresie GEQ expresie  {verifica_conditia(evalAST($1.AST),4,evalAST($3.AST));}			
+	 | expresie EQ expresie   {verifica_conditia(evalAST($1.AST),5,evalAST($3.AST));}
+         | expresie NEQ expresie  {verifica_conditia(evalAST($1.AST),6,evalAST($3.AST));}
+         | expresie	          {verifica_conditia(0,7,0);}	
 	 ;
 bucle:  functie_for
      | functie_while
@@ -983,9 +968,9 @@ void asignare_cu_data_membru(char* nume, char* clasa, char* membru){
 }
 
 
-struct ast_node *buildAST(char* val_nod,struct ast_node *stanga, struct ast_node *dreapta,enum_tip tip )
+struct ast_node *buildAST(char* val_nod,struct ast_node *stanga, struct ast_node *dreapta,int tip )
 {
-        struct ast_node *nodNou=(struct *ast_node)malloc(sizeof(struct ast_node));
+        struct ast_node *nodNou=(struct ast_node*)malloc(sizeof(struct ast_node));
         nodNou->stanga=stanga;
         nodNou->dreapta=dreapta;
         nodNou->valoare=strdup(val_nod);
@@ -993,13 +978,33 @@ struct ast_node *buildAST(char* val_nod,struct ast_node *stanga, struct ast_node
         return(nodNou);
 }
 
-int evalAST(struct ast_node ast)
+int evalAST(struct ast_node *ast)
 {
-        //daca ast->stanga == NULL si ast-> dreapta == NULL => numar=> return nr
-        //id=> get_valoare_dupa_nume returneaza nr 
-       
-        //else 
-        //daca este operatie + evalAST(ast->stanga)+evalAST(ast->dreapta)
-         //daca este operatie - evalAST(ast->stanga)-evalAST(ast->dreapta)
+        printf("intru in eval\n");
+
+  if(ast != NULL ){
+       if(ast->tip == NUMBER ) return atoi(ast->valoare);
+       else 
+       if(ast->tip == IDENTIFIER) return get_valoare_dupa_nume(ast->valoare);
+       else{
+                if(ast->tip == OP)
+                {
+                        if(strcmp(ast->valoare,"+")==0) return (evalAST(ast->stanga) + evalAST(ast->dreapta));
+                        else
+                        if(strcmp(ast->valoare,"-")==0) return (evalAST(ast->stanga) - evalAST(ast->dreapta));
+                        else
+                        if(strcmp(ast->valoare,"*")==0) return (evalAST(ast->stanga) * evalAST(ast->dreapta));
+                        else
+                        if(strcmp(ast->valoare,"/")==0) return (evalAST(ast->stanga) / evalAST(ast->dreapta));
+                }
+                else
+                {
+                printf("ramura altceva \n");
+                return 0;
+                }
+        }
+  }
+  printf("Nu intru in cazuri eval \n");
+  return 0;
         
 }
