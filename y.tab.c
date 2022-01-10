@@ -1779,25 +1779,25 @@ yyreduce:
 
   case 30:
 #line 195 "tema2.y"
-                                                 {(yyval.expresie).AST = buildAST((yyvsp[-1].str), (yyvsp[-2].expresie).AST, (yyvsp[0].expresie).AST, OP); }
+                                                 {(yyval.expresie).AST = buildAST("+", (yyvsp[-2].expresie).AST, (yyvsp[0].expresie).AST, OP); }
 #line 1784 "y.tab.c"
     break;
 
   case 31:
 #line 196 "tema2.y"
-                                                 {(yyval.expresie).AST = buildAST((yyvsp[-1].str), (yyvsp[-2].expresie).AST, (yyvsp[0].expresie).AST, OP) ;}
+                                                 {(yyval.expresie).AST = buildAST("-", (yyvsp[-2].expresie).AST, (yyvsp[0].expresie).AST, OP) ;}
 #line 1790 "y.tab.c"
     break;
 
   case 32:
 #line 197 "tema2.y"
-                                                 {(yyval.expresie).AST = buildAST((yyvsp[-1].str), (yyvsp[-2].expresie).AST, (yyvsp[0].expresie).AST, OP) ;}
+                                                 {(yyval.expresie).AST = buildAST("*", (yyvsp[-2].expresie).AST, (yyvsp[0].expresie).AST, OP) ;}
 #line 1796 "y.tab.c"
     break;
 
   case 33:
 #line 198 "tema2.y"
-                                                 {(yyval.expresie).AST = buildAST((yyvsp[-1].str), (yyvsp[-2].expresie).AST, (yyvsp[0].expresie).AST, OP) ;}
+                                                 {(yyval.expresie).AST = buildAST("/", (yyvsp[-2].expresie).AST, (yyvsp[0].expresie).AST, OP) ;}
 #line 1802 "y.tab.c"
     break;
 
@@ -2467,7 +2467,7 @@ void asignare_exista_variabila(char* id , char* viziblitate ,char* valoare, int 
                 }
         for (int i = 0; i < count_v; i++){
                 if(strcmp(var[i].id,id)==0){ // acelasi nume
-                        printf("am gasit variabila cu numele: %s\n", id);
+                       
                   if(strcmp(var[i].vizibilitate,"global")==0) var[i].valoare=strdup(valoare);
                   else
                    if(strcmp(var[i].vizibilitate,viziblitate)==0) 
@@ -2875,7 +2875,7 @@ int verificare_exista_variabila(char* nume){
         for (int i = 0; i < count_v; i++){
                if(strcmp(var[i].id,nume)==0)
                {
-                       printf("exista variabila %s\n",var[i].id);
+                      
                        return i;
                } 
         }
@@ -2931,14 +2931,14 @@ struct ast_node *buildAST(char* val_nod,struct ast_node *stanga, struct ast_node
 
 int evalAST(struct ast_node *ast)
 {
-        printf("intru in eval\n");
+        
 
   if(ast != NULL ){
        if(ast->tip == NUMBER ) return atoi(ast->valoare);
        else 
        if(ast->tip == IDENTIFIER) return get_valoare_dupa_nume(ast->valoare);
        else{
-               printf("Eval:operator\n");
+             
                 if(ast->tip == OP)
                 {
                         if(strcmp(ast->valoare,"+")==0) return (evalAST(ast->stanga) + evalAST(ast->dreapta));
@@ -2956,7 +2956,7 @@ int evalAST(struct ast_node *ast)
                 }
         }
   }
-  printf("Nu intru in cazuri eval \n");
+
   return 0;
         
 }

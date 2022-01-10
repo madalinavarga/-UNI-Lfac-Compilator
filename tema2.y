@@ -192,10 +192,10 @@ lista_declaratii : ID
                  | lista_declaratii ',' ID
                  ;
 */
-expresie : expresie PLUS expresie                {$$.AST = buildAST($2, $1.AST, $3.AST, OP); }
-         | expresie MINUS expresie               {$$.AST = buildAST($2, $1.AST, $3.AST, OP) ;}
-         | expresie PROD expresie                {$$.AST = buildAST($2, $1.AST, $3.AST, OP) ;}
-         | expresie DIV expresie                 {$$.AST = buildAST($2, $1.AST, $3.AST, OP) ;}
+expresie : expresie PLUS expresie                {$$.AST = buildAST("+", $1.AST, $3.AST, OP); }
+         | expresie MINUS expresie               {$$.AST = buildAST("-", $1.AST, $3.AST, OP) ;}
+         | expresie PROD expresie                {$$.AST = buildAST("*", $1.AST, $3.AST, OP) ;}
+         | expresie DIV expresie                 {$$.AST = buildAST("/", $1.AST, $3.AST, OP) ;}
          |'(' expresie ')'                       {char str_val[50]; snprintf(str_val,50,"%d",evalAST($2.AST)); $$.AST = buildAST(str_val, NULL, NULL, NUMBER);}
          | ID                                    {$$.AST = buildAST($1, NULL, NULL, IDENTIFIER);}
          | NR_INT                                {char str_val[50]; snprintf(str_val,50,"%d",$1); $$.AST = buildAST(str_val, NULL, NULL, NUMBER);}
@@ -516,7 +516,7 @@ void asignare_exista_variabila(char* id , char* viziblitate ,char* valoare, int 
                 }
         for (int i = 0; i < count_v; i++){
                 if(strcmp(var[i].id,id)==0){ // acelasi nume
-                        printf("am gasit variabila cu numele: %s\n", id);
+                       
                   if(strcmp(var[i].vizibilitate,"global")==0) var[i].valoare=strdup(valoare);
                   else
                    if(strcmp(var[i].vizibilitate,viziblitate)==0) 
@@ -924,7 +924,7 @@ int verificare_exista_variabila(char* nume){
         for (int i = 0; i < count_v; i++){
                if(strcmp(var[i].id,nume)==0)
                {
-                       printf("exista variabila %s\n",var[i].id);
+                      
                        return i;
                } 
         }
@@ -980,14 +980,14 @@ struct ast_node *buildAST(char* val_nod,struct ast_node *stanga, struct ast_node
 
 int evalAST(struct ast_node *ast)
 {
-        printf("intru in eval\n");
+        
 
   if(ast != NULL ){
        if(ast->tip == NUMBER ) return atoi(ast->valoare);
        else 
        if(ast->tip == IDENTIFIER) return get_valoare_dupa_nume(ast->valoare);
        else{
-               printf("Eval:operator\n");
+             
                 if(ast->tip == OP)
                 {
                         if(strcmp(ast->valoare,"+")==0) return (evalAST(ast->stanga) + evalAST(ast->dreapta));
@@ -1005,7 +1005,7 @@ int evalAST(struct ast_node *ast)
                 }
         }
   }
-  printf("Nu intru in cazuri eval \n");
+
   return 0;
         
 }
