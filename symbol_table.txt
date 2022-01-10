@@ -3,11 +3,12 @@ tip  id  valoare  vizibilitate  este_const  dimensiune
 
 
 GLOBAL:
-Float  x  9.800000  global  0  0
+Float  x  2.500000  global  0  0
 Integer  y  7  global  0  0
 Integer  a  3  global  1  0
-String  s  "Sunt aici"  global  0  0
-Integer  var_globala  13  global  0  0
+String  s  "Madalina"  global  0  0
+Integer  var_globala  0  global  0  0
+Integer  vector_glob 0 0 0 global  0  3
 
 
 MAIN:
@@ -23,8 +24,13 @@ Bool  z2.adevar  fals  main  0  0
 String  z2.s  "lenuta"  main  0  0
 Integer  data  20  main  0  0
 String  nume  "lenuta"  main  0  0
-Integer  p  (null)  main  0  0
+Integer  p  20  main  0  0
 Float  fl  (null)  main  0  0
+Float  f     8.90  main  0  0
+String  nume2  "banana"  main  0  0
+String  nume_const  "lenuta"  main  1  0
+Integer  vector 0 4 0 0 60 main  0  5
+String  vector2 "asvd" 0 main  0  2
 
 
 FUNCTII:
@@ -32,7 +38,12 @@ Integer  suma_var  109  functie-0  0  0
 Integer  suma_var  (null)  functie-1  0  0
 Float  z  10.100000  functie-1  0  0
 Integer  z1  20  functie-1  0  0
-Integer  minus_var  9  functie-2  0  0
+Integer  suma_var  (null)  functie-2  0  0
+Float  z  10.100000  functie-2  0  0
+Integer  z1  20  functie-2  0  0
+Integer  minus_var  9  functie-3  0  0
+Integer  suma_var  109  functie-4  0  0
+Float  var  (null)  functie-5  0  0
 
 
 CLASE:

@@ -47,8 +47,9 @@ int nr_obiecte=0;
 int nr_clase=0;
 char empty[]=" ";
 struct parametru aux[100],empty_struct[1]={" "," "};
+struct parametru aux_apel[100];
 
-int count_v=0,count_f=0,count_aux=0;
+int count_v=0,count_f=0,count_aux=0, count_aux_apel=0;
 char fisier_variabile[]="symbol_table.txt";
 char fisier_functii[]="symbol_table_functions.txt ";
 
@@ -59,7 +60,7 @@ void scrieVariabileFisier();
 void scrieFunctiiInFisier();
 int get_valoare_dupa_nume(char * nume);
 void set_parametrii_functie(char* tip, char* id,struct parametru *aux);
-int functie_deja_declarata(char * tip,char* id,struct parametru *param);
+int functie_deja_declarata(char* id,struct parametru *param);
 void mesaj_functie_existenta(char msg[]);
 void creaza_functie(char* tip, char* id,struct parametru *aux);
 void asignare_exista_variabila(char* id , char* viziblitate, char* valoare ,int nr_tip);
@@ -87,6 +88,10 @@ void error_nepotrivire();
 void declara_vector(char* tip, char* nume, int dimensiune,char* vizibilitate);
 void asignare_pt_element_vector(char* nume,int pozitie, char* valoare, char* tip_val);
 void asignare_cu_element_vector(char* nume_var,char* nume_vector,int index_elem);
+void set_parametrii_apel(char* tip, struct parametru* aux);
+void error_ne_decl_functie(char* nume);
+char* get_tip_dupa_nume(char* nume);
+int functie_deja_declarata_pt_apel(char* id,struct parametru *param);
 
 
 char *citeste_fisier(char *file);
@@ -242,8 +247,8 @@ class_declaratie: TIP ID ';' { if(variabila_class_deja_declarata($2,"class")==-1
                         }
                 ;
 
-functii_declaratie : TIP ID '(' lista_param ')' '{' cod_functii '}' { if(functie_deja_declarata($1,$2,aux)==0){ creaza_functie($1,$2,aux);} else {count_aux=0;mesaj_functie_existenta($2); } }
-                   | TIP ID '(' ')' '{' cod_functii '}' {if(functie_deja_declarata($1,$2,empty_struct)==0){ creaza_functie($1,$2,empty_struct);} else {count_aux=0;mesaj_functie_existenta($2); } }
+functii_declaratie : TIP ID '(' lista_param ')' '{' cod_functii '}' { if(functie_deja_declarata($2,aux)==0){ creaza_functie($1,$2,aux);} else {count_aux=0;mesaj_functie_existenta($2); } }
+                   | TIP ID '(' ')' '{' cod_functii '}' {if(functie_deja_declarata($2,empty_struct)==0){ creaza_functie($1,$2,empty_struct);} else {count_aux=0;mesaj_functie_existenta($2); } }
                    ;
 cod_functii: cod_functii cod_f
            | cod_f
@@ -282,7 +287,7 @@ cod: interogari
    | declaratie_locala ';' {var[count_v-1].vizibilitate=strdup("main");}
    | statement ';'
    | asignare_main ';'
-
+   | apel_functie ';'
    | functii_declaratie 
    | clasa_noua ';'
    ;
@@ -335,13 +340,19 @@ expr: expr PLUS expr
     | NR_INT
     | apel_functie
     ;
-apel_functie :  ID '(' ')'              
-             | ID '(' lista_apel')' 
-             ;
-lista_apel: expr
-          | lista_apel',' expr
-          ;
 */
+apel_functie :  ID '(' ')'    {if(functie_deja_declarata_pt_apel($1,empty_struct)==0){count_aux_apel=0; error_ne_decl_functie($1);}else{count_aux_apel=0; }}          
+             | ID '(' lista_apel')' {int verific=functie_deja_declarata_pt_apel($1,aux_apel); if(verific==0){count_aux_apel=0; error_ne_decl_functie($1);}else{count_aux_apel=0; }}
+             ;
+lista_apel: param_apel
+          | lista_apel',' param_apel
+          ;
+param_apel : expresie { set_parametrii_apel("Integer",aux_apel);}
+           | NR_REAL {set_parametrii_apel("Float",aux_apel);}
+           | ID  '(' ')' {if(functie_deja_declarata($1,empty_struct)==0){count_aux_apel=0; error_ne_decl_functie($1);} else{count_aux_apel=0; char* tip_apel; tip_apel=strdup(get_tip_dupa_nume($1));  set_parametrii_apel(tip_apel,aux_apel);}} 
+           | ID '(' lista_apel')' {int verific=functie_deja_declarata_pt_apel($1,aux_apel); if(verific==0){count_aux_apel=0; error_ne_decl_functie($1);} else{count_aux_apel=0; char* tip_apel; tip_apel=strdup(get_tip_dupa_nume($1));  set_parametrii_apel(tip_apel,aux_apel);}}
+           ;
+
 statement: ID INCR {int verificare=verificare_exista_variabila($1); if(verificare==-1){error_ne_decl_variabila($1);}}
          //| apel_functie
          | ID DECR {int verificare=verificare_exista_variabila($1); if(verificare==-1){error_ne_decl_variabila($1);}}
@@ -572,6 +583,23 @@ void set_parametrii_functie(char* tip, char* id,struct parametru *aux)
         count_aux++;    
 }
 
+void set_parametrii_apel(char* tip, struct parametru *aux){
+        
+        aux[count_aux_apel].tip=(char*)malloc(strlen(tip));
+        strcpy(aux[count_aux_apel].tip,tip);
+        count_aux_apel++; 
+}
+
+char* get_tip_dupa_nume(char* nume){
+        for(int i=0; i<count_f;i++){
+              if(strcmp(functii[i].id,nume)==0){
+                      printf("returnez: %s\n",functii[i].tip_return);
+                      return functii[i].tip_return;
+              }  
+        }
+}
+
+
 
 void scrieVariabileFisier()
 {
@@ -628,13 +656,30 @@ void scrieVariabileFisier()
       fclose(var_fisier_ptr);
 }
 
-int functie_deja_declarata(char * tip,char* id,struct parametru *param)
+int functie_deja_declarata(char* id,struct parametru *param)
 {       
         
         int size_param=count_aux;
-        int gasit=-1;
-       
+        for(int i=0; i<count_f;i++){
+                if(strcmp(functii[i].id,id)==0){//daca gasesc o functie cu acelasi nume
+                        if(functii[i].nr_parametrii==size_param){//acelasi numar de parametri
+                                int gasit=0;
+                                for(int j=0;j<functii[i].nr_parametrii; j++){ //verific tipul fiecarui parametru
+                                        if(strcmp(functii[i].parametrii_functie[j].tip,param[j].tip)==0){
+                                                gasit++;
+                                        }
+                                }
+                                if(gasit==functii[i].nr_parametrii){
+                                        return -1;
+                                }
+                        }
+                }
+        }
 
+        return 0;
+
+       
+        /*
         for(int i=0;i<count_f;i++)
         {
                //overloading 
@@ -660,8 +705,31 @@ int functie_deja_declarata(char * tip,char* id,struct parametru *param)
      
         if(gasit==count_aux) return 1;
         return 0;
+        */
 
 }
+
+int functie_deja_declarata_pt_apel(char* id,struct parametru *param){
+        int size_param=count_aux_apel;
+        for(int i=0; i<count_f;i++){
+                if(strcmp(functii[i].id,id)==0){//daca gasesc o functie cu acelasi nume
+                        if(functii[i].nr_parametrii==size_param){//acelasi numar de parametri
+                                int gasit=0;
+                                for(int j=0;j<functii[i].nr_parametrii; j++){ //verific tipul fiecarui parametru
+                                        if(strcmp(functii[i].parametrii_functie[j].tip,param[j].tip)==0){
+                                                gasit++;
+                                        }
+                                }
+                                if(gasit==functii[i].nr_parametrii){
+                                        return -1;
+                                }
+                        }
+                }
+        }
+
+        return 0;
+}
+
 
 void mesaj_functie_existenta(char msg[]){
      char error_msg[250];
@@ -735,6 +803,13 @@ void creeaza_clasa(char* tip){
         strcpy(clase[nr_clase].tip,tip);
         clase[nr_clase].nr_variabile=0;
         nr_clase++;
+}
+
+void error_ne_decl_functie(char* nume){
+        char error_msg[250];
+        sprintf(error_msg, "Functia %s nu este declarata", nume);
+        yyerror(error_msg); 
+        exit(0);
 }
 
 void error_decl(char* nume){
