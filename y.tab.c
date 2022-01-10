@@ -2938,6 +2938,7 @@ int evalAST(struct ast_node *ast)
        else 
        if(ast->tip == IDENTIFIER) return get_valoare_dupa_nume(ast->valoare);
        else{
+               printf("Eval:operator\n");
                 if(ast->tip == OP)
                 {
                         if(strcmp(ast->valoare,"+")==0) return (evalAST(ast->stanga) + evalAST(ast->dreapta));

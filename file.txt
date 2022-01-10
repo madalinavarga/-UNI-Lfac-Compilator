@@ -3,28 +3,32 @@ Float x;
 Integer y=7;
 Const Integer a=3;
 String s;
-s="Madalina";
-Print("GLOBAL: value of expression s is:", &s);
+s="Sunt aici";
+Print("Test 1: value of expression s is:", &s);
 Integer var_globala=8;
-var_globala=(7-2)-5;
-Integer vector_glob[3];
-
+Print("Test 1: value of expression s is:", &s);
+#var_globala=(7-2)-5;
+#Integer vector_glob[3];
+Print("Test 3: value of expression s is:", &s);
 
 #overloading functii
 Integer suma ( Integer a , Integer b) { 
     
     Integer suma_var=9;
     Print("FUNCTIE: value of expression suma_var is:", suma_var);
-    suma_var=100+9;
+    #suma_var=100+9;
     Print("FUNCTIE: value of expression suma_var is:",suma_var);
 }
 Integer suma ( Integer a , Integer b,Integer c) { 
     Integer suma_var;
+    Print("Test4: value of expression s is:", &s);
     x=9.8; #global initializat aici
     Float z;
     z=10.10;
+    Print("Test5: value of expression s is:", &s);
     Integer z1;
-    z1=10+10;
+    #z1=10+10;
+    Print("Test6: value of expression s is:", &s);
 }
 Integer minus ( ) { 
     Integer minus_var=9;
@@ -54,17 +58,16 @@ Class mamifer{
 
 Main ()
 {
+    Print("MAIN ", &s);
     Integer m=9;
     Float z;
     #comentariu
     Print("MAIN: value of expression a is:",a) ;
-   
-    Print("MAIN: value of expression a is:",a) ;
 
     zoo z2;
     mamifer m1;
-    Integer c=(m*3)/2;
-    
+    #Integer c=(m*3)/2;
+     Print("MAIN ", &s);
    m1.lup=8;
     z2.hipopotam=16;
     m1.urs=20;
@@ -84,17 +87,5 @@ Main ()
     cat_timp(a<9){
         Float fl;
     }
-x=2.5;
-Float f=8.9;
-String nume2="ana";
-Const String nume_const=z2.s;
-nume2="banana";
 
-Integer vector[5];
-vector[1]=4;
-String vector2[2];
-vector2[0]="asvd";
-
-p=20;
-vector[4]=(m/3)*p;
 }
