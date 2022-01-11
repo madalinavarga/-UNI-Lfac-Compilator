@@ -17,6 +17,3 @@ FUNCTII:
 Integer  |  w  |  (null)  |  functie-0  |  0  |  0
 Integer  |  w  |  (null)  |  functie-1  |  0  |  0
 Integer  |  w  |  (null)  |  functie-2  |  0  |  0
-
-
-CLASE:

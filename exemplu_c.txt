@@ -1,14 +1,11 @@
 Integer x ;
-Print("Sunt aici 1 ");
 Integer x1;
 Integer x2;
 Integer y;
-Print("Sunt aici 2");
 Integer vector[10];
 
 Integer testFunction(Integer x, Float z) {
   Integer x1;
-  Print("Sunt aici 3");
 }
 
 Integer testFunction(Integer x, Integer z) {
@@ -17,7 +14,6 @@ Integer testFunction(Integer x, Integer z) {
 
 Integer test(Integer param1, Integer param2) {
   Integer x1;
-  Print("Sunt aici 4");
 }
 
 Main () {

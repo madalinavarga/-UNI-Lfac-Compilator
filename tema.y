@@ -342,7 +342,7 @@ clasa_noua : ID ID { if(clasa_deja_definita($1)!=-1){
                 }
            ;
 
-asignare_main :  ID ASSIGN expresie    {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%d",evalAST($3.AST)); asignare_exista_variabila($1,count_str,str_valoare,0);}
+asignare_main :   ID ASSIGN expresie   {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%d",evalAST($3.AST)); asignare_exista_variabila($1,count_str,str_valoare,0);}
                 | ID ASSIGN NR_REAL   {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
                 | ID ASSIGN STRING    {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,2);}
                 | ID ASSIGN CHAR      {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,3);}
@@ -564,13 +564,15 @@ void asignare_exista_variabila(char* id , char* viziblitate ,char* valoare, int 
                 error_ne_decl_variabila(id);
         }
         else{
+                if(var[index].dimensiune>0){ error_ne_decl_variabila(id);}
+                else{
                 if(var[index].constante==1){
                         char error_msg[250];
                         sprintf(error_msg, "Variabila %s este const", id);
                         yyerror(error_msg);
                         exit(0);
                 }
-        for (int i = 0; i < count_v; i++){
+         for (int i = 0; i < count_v; i++){
                 if(strcmp(var[i].id,id)==0){ // acelasi nume
                   if(strcmp(var[i].vizibilitate,"global")==0) var[i].valoare=strdup(valoare);
                   else
@@ -602,6 +604,7 @@ void asignare_exista_variabila(char* id , char* viziblitate ,char* valoare, int 
                    }
                 }
                    
+         }
         }
         }
 
@@ -628,7 +631,6 @@ void set_parametrii_apel(char* tip, struct parametru *aux){
 char* get_tip_dupa_nume(char* nume){
         for(int i=0; i<count_f;i++){
               if(strcmp(functii[i].id,nume)==0){
-                      printf("returnez: %s\n",functii[i].tip_return);
                       return functii[i].tip_return;
               }  
         }
@@ -828,9 +830,8 @@ void declarare_variabila_class(char* tip, char* nume,char* vizibilitate){
         clase[nr_clase].class_var[clase[nr_clase].nr_variabile].id=strdup(nume);
         char buf[20];
         sprintf(buf,"%s-%d",vizibilitate,nr_clase);
-        declarare_fara_initializare(tip,nume, 0, buf);
+        //declarare_fara_initializare(tip,nume, 0, buf);
         clase[nr_clase].nr_variabile++;
-        //printf("pentru clasa cu indexul: %d am ajuns la nr: %d\n",nr_clase,clase[nr_clase].nr_variabile);
 }
 
 int clasa_deja_definita(char* nume){
@@ -1166,14 +1167,15 @@ void scrieVariabileFisier()
               if(strstr(var[i].vizibilitate,"functie"))
                 fprintf(var_fisier_ptr,"%s  |  %s  |  %s  |  %s  |  %d  |  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
               
-      }
-
+      } 
+      /*
        fprintf(var_fisier_ptr,"\n\nCLASE:\n");
        for(int i=0;i<count_v;i++){
               if(strstr(var[i].vizibilitate,"clas"))
                 fprintf(var_fisier_ptr,"%s  |  %s  |  %s  |  %s  |  %d  |  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
               
       }
+      */
 
 
       fclose(var_fisier_ptr);
