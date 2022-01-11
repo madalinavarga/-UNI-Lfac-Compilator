@@ -1,5 +1,6 @@
 Integer x = 23;
 Integer x1;
+Integer x1;
 Integer x2;
 Float f1 = 50.0;
 String s="ana";

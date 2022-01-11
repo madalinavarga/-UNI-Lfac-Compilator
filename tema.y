@@ -9,12 +9,13 @@ extern char* yytext;
 extern int yylineno;
 
 //STRUCTURA ARBORE
-enum enum_tip {OP,IDENTIFIER,NUMBER,OTHER,FUNCTIE} ;
+enum enum_tip {OP,IDENTIFIER,NUMBER,OTHER,ARRAY_ELEM} ;
 struct ast_node{
         
         char* valoare;
         struct ast_node* stanga; 
         struct ast_node* dreapta; 
+        int index_vector;
         enum enum_tip tip;
 }; 
 
@@ -65,7 +66,7 @@ char fisier_variabile[]="symbol_table.txt";
 char fisier_functii[]="symbol_table_functions.txt ";
 
 
-struct ast_node *buildAST(char* val_nod,struct ast_node *stanga, struct ast_node *dreapta,int tip );
+struct ast_node *buildAST(char* val_nod,struct ast_node *stanga, struct ast_node *dreapta,int tip,int index_vector );
 int evalAST(struct ast_node *ast);
 
 int variabila_deja_declarata(char* nume,char* vizibilitate);
@@ -205,16 +206,16 @@ lista_declaratii : ID
                  | lista_declaratii ',' ID
                  ;
 */
-expresie : expresie PLUS expresie                {$$.AST = buildAST("+", $1.AST, $3.AST, OP); }
-         | expresie MINUS expresie               {$$.AST = buildAST("-", $1.AST, $3.AST, OP) ;}
-         | expresie PROD expresie                {$$.AST = buildAST("*", $1.AST, $3.AST, OP) ;}
-         | expresie DIV expresie                 {$$.AST = buildAST("/", $1.AST, $3.AST, OP) ;}
-         |'(' expresie ')'                       {char str_val[50]; snprintf(str_val,50,"%d",evalAST($2.AST)); $$.AST = buildAST(str_val, NULL, NULL, NUMBER);}
-         | ID                                    {$$.AST = buildAST($1, NULL, NULL, IDENTIFIER);}
-         | NR_INT                                {char str_val[50]; snprintf(str_val,50,"%d",$1); $$.AST = buildAST(str_val, NULL, NULL, NUMBER);}
-         | ID '[' NR_INT ']'  {$$.AST=buildAST($1,NULL,NULL,OTHER);}
-         | ID  '(' ')' {if(functie_deja_declarata($1,empty_struct)==0){count_aux_apel=0; error_ne_decl_functie($1);} else{count_aux_apel=0; char* tip_apel; tip_apel=strdup(get_tip_dupa_nume($1));  if(strcmp(tip_apel,"Integer")==0){$$.AST=buildAST("0",NULL,NULL,OTHER);}else{error_nepotrivire();}}} 
-         | ID '(' lista_apel')' {int verific=functie_deja_declarata_pt_apel($1,aux_apel);  if(verific==0){count_aux_apel=0; error_ne_decl_functie($1);} else{count_aux_apel=0; char* tip_apel; tip_apel=strdup(get_tip_dupa_nume($1)); if(strcmp(tip_apel,"Integer")==0){$$.AST=buildAST("0",NULL,NULL,OTHER);}else{error_nepotrivire();}}}
+expresie : expresie PLUS expresie                {$$.AST = buildAST("+", $1.AST, $3.AST, OP,0); }
+         | expresie MINUS expresie               {$$.AST = buildAST("-", $1.AST, $3.AST, OP,0) ;}
+         | expresie PROD expresie                {$$.AST = buildAST("*", $1.AST, $3.AST, OP,0) ;}
+         | expresie DIV expresie                 {$$.AST = buildAST("/", $1.AST, $3.AST, OP,0) ;}
+         |'(' expresie ')'                       {char str_val[50]; snprintf(str_val,50,"%d",evalAST($2.AST)); $$.AST = buildAST(str_val, NULL, NULL, NUMBER,0);}
+         | ID                                    {$$.AST = buildAST($1, NULL, NULL, IDENTIFIER,0);}
+         | NR_INT                                {char str_val[50]; snprintf(str_val,50,"%d",$1); $$.AST = buildAST(str_val, NULL, NULL, NUMBER,0);}
+         | ID '[' NR_INT ']'  {$$.AST=buildAST($1,NULL,NULL,ARRAY_ELEM,$3);}
+         | ID  '(' ')' {if(functie_deja_declarata($1,empty_struct)==0){count_aux_apel=0; error_ne_decl_functie($1);} else{count_aux_apel=0; char* tip_apel; tip_apel=strdup(get_tip_dupa_nume($1));  if(strcmp(tip_apel,"Integer")==0){$$.AST=buildAST("0",NULL,NULL,OTHER,0);}else{error_nepotrivire();}}} 
+         | ID '(' lista_apel')' {int verific=functie_deja_declarata_pt_apel($1,aux_apel);  if(verific==0){count_aux_apel=0; error_ne_decl_functie($1);} else{count_aux_apel=0; char* tip_apel; tip_apel=strdup(get_tip_dupa_nume($1)); if(strcmp(tip_apel,"Integer")==0){$$.AST=buildAST("0",NULL,NULL,OTHER,0);}else{error_nepotrivire();}}}
          ;
 
 array_glob : TIP ID '[' NR_INT ']' {declara_vector($1,$2,$4,"global");}
@@ -341,12 +342,12 @@ clasa_noua : ID ID { if(clasa_deja_definita($1)!=-1){
                 }
            ;
 
-asignare_main :  ID ASSIGN expresie    {printf("asign_main\n");char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%d",evalAST($3.AST)); asignare_exista_variabila($1,count_str,str_valoare,0);}
+asignare_main :  ID ASSIGN expresie    {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%d",evalAST($3.AST)); asignare_exista_variabila($1,count_str,str_valoare,0);}
                 | ID ASSIGN NR_REAL   {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
                 | ID ASSIGN STRING    {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,2);}
                 | ID ASSIGN CHAR      {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,3);}
                 | ID '.' ID ASSIGN NR_REAL {char valoare[50];  snprintf(valoare,50,"%7.2f",$5);  asignare_pt_data_membru($1,$3,valoare,"Float");}
-                | ID '.' ID ASSIGN expresie {printf("asign_main\n"); char valoare[50]; sprintf(valoare,"%d",evalAST($5.AST));  asignare_pt_data_membru($1,$3,valoare,"Integer");}
+                | ID '.' ID ASSIGN expresie { char valoare[50]; sprintf(valoare,"%d",evalAST($5.AST));  asignare_pt_data_membru($1,$3,valoare,"Integer");}
                 | ID '.' ID ASSIGN STRING { asignare_pt_data_membru($1,$3,$5,"String");}
                 | ID '.' ID ASSIGN BOOLEAN {asignare_pt_data_membru($1,$3,$5,"Bool");}
                 | ID ASSIGN ID '.' ID {asignare_cu_data_membru($1,$3,$5);}
@@ -444,7 +445,7 @@ int variabila_deja_declarata(char* nume,char* vizibilitate){
 void declarare_fara_initializare(char* tip,char* nume, int este_const,char* vizibilitate){
         if(variabila_deja_declarata(nume,vizibilitate)!=-1){
                 char error_msg[250];
-                sprintf(error_msg, "Variabila %s este deja declarata", nume);
+                sprintf(error_msg, "Variabila %s este deja declarata. Eroare ", nume);
                 yyerror(error_msg);
                 exit(0);
         }
@@ -1200,13 +1201,14 @@ void scrieFunctiiInFisier()
         fclose(functii_fisier_ptr);
 }
 
-struct ast_node *buildAST(char* val_nod,struct ast_node *stanga, struct ast_node *dreapta,int tip )
+struct ast_node *buildAST(char* val_nod,struct ast_node *stanga, struct ast_node *dreapta,int tip,int index_vector )
 {       //creez nod nou si il returnez
         struct ast_node *nodNou=(struct ast_node*)malloc(sizeof(struct ast_node));
         nodNou->stanga=stanga;
         nodNou->dreapta=dreapta;
         nodNou->valoare=strdup(val_nod);
         nodNou->tip=tip;
+        nodNou->index_vector=index_vector;
         return(nodNou);
 }
 
@@ -1218,6 +1220,8 @@ int evalAST(struct ast_node *ast)
        if(ast->tip == NUMBER ) return atoi(ast->valoare);
        else 
        if(ast->tip == IDENTIFIER) return get_valoare_dupa_nume(ast->valoare);
+       else
+       if(ast->tip == ARRAY_ELEM) return get_valoare_vector_dupa_nume(ast->valoare,ast->index_vector);
        else{
              
                 if(ast->tip == OP)
