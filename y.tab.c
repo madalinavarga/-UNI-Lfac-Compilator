@@ -693,17 +693,17 @@ static const yytype_int16 yyrline[] =
      172,   173,   174,   176,   177,   178,   181,   182,   183,   184,
      185,   186,   187,   188,   190,   191,   193,   194,   195,   196,
      197,   198,   200,   201,   208,   209,   210,   211,   212,   213,
-     214,   216,   217,   218,   221,   224,   237,   238,   239,   241,
-     242,   243,   244,   248,   249,   250,   251,   254,   263,   264,
-     266,   275,   276,   278,   279,   281,   282,   283,   284,   285,
-     288,   289,   291,   293,   294,   295,   296,   303,   305,   306,
-     308,   309,   311,   312,   313,   314,   315,   316,   317,   318,
-     329,   345,   346,   347,   348,   349,   350,   351,   352,   353,
-     354,   355,   356,   360,   361,   363,   364,   366,   367,   372,
-     374,   375,   376,   379,   380,   383,   384,   385,   386,   387,
-     388,   389,   390,   391,   392,   393,   394,   395,   396,   397,
-     398,   399,   403,   404,   405,   406,   407,   408,   409,   411,
-     412,   414,   416,   418
+     214,   215,   216,   217,   220,   223,   236,   237,   238,   240,
+     241,   242,   243,   247,   248,   249,   250,   253,   262,   263,
+     265,   274,   275,   277,   278,   280,   281,   282,   283,   284,
+     287,   288,   290,   292,   293,   294,   295,   302,   304,   305,
+     307,   308,   310,   311,   312,   313,   314,   315,   316,   317,
+     328,   344,   345,   346,   347,   348,   349,   350,   351,   352,
+     353,   354,   355,   359,   360,   362,   363,   365,   366,   371,
+     373,   374,   375,   378,   379,   382,   383,   384,   385,   386,
+     387,   388,   389,   390,   391,   392,   393,   394,   395,   396,
+     397,   398,   402,   403,   404,   405,   406,   407,   408,   410,
+     411,   413,   415,   417
 };
 #endif
 
@@ -1903,79 +1903,79 @@ yyreduce:
     break;
 
   case 41:
-#line 216 "tema.y"
+#line 215 "tema.y"
                               {(yyval.expresie).AST=buildAST((yyvsp[-3].str),NULL,NULL,OTHER);}
 #line 1909 "y.tab.c"
     break;
 
   case 42:
-#line 217 "tema.y"
-                       {if(functie_deja_declarata((yyvsp[-2].str),empty_struct)==0){count_aux_apel=0; error_ne_decl_functie((yyvsp[-2].str));} else{count_aux_apel=0; char* tip_apel; tip_apel=strdup(get_tip_dupa_nume((yyvsp[-2].str)));  if(strcmp(tip_apel,"Integer")==0){(yyval.expresie).AST=buildAST(0,NULL,NULL,OTHER);}else{error_nepotrivire();}}}
+#line 216 "tema.y"
+                       {if(functie_deja_declarata((yyvsp[-2].str),empty_struct)==0){count_aux_apel=0; error_ne_decl_functie((yyvsp[-2].str));} else{count_aux_apel=0; char* tip_apel; tip_apel=strdup(get_tip_dupa_nume((yyvsp[-2].str)));  if(strcmp(tip_apel,"Integer")==0){(yyval.expresie).AST=buildAST("0",NULL,NULL,OTHER);}else{error_nepotrivire();}}}
 #line 1915 "y.tab.c"
     break;
 
   case 43:
-#line 218 "tema.y"
-                                {int verific=functie_deja_declarata_pt_apel((yyvsp[-3].str),aux_apel); if(verific==0){count_aux_apel=0; error_ne_decl_functie((yyvsp[-3].str));} else{count_aux_apel=0; char* tip_apel; tip_apel=strdup(get_tip_dupa_nume((yyvsp[-3].str)));  if(strcmp(tip_apel,"Integer")==0){(yyval.expresie).AST=buildAST(0,NULL,NULL,OTHER);}else{error_nepotrivire();}}}
+#line 217 "tema.y"
+                                {int verific=functie_deja_declarata_pt_apel((yyvsp[-3].str),aux_apel);  if(verific==0){count_aux_apel=0; error_ne_decl_functie((yyvsp[-3].str));} else{count_aux_apel=0; char* tip_apel; tip_apel=strdup(get_tip_dupa_nume((yyvsp[-3].str))); if(strcmp(tip_apel,"Integer")==0){(yyval.expresie).AST=buildAST("0",NULL,NULL,OTHER);}else{error_nepotrivire();}}}
 #line 1921 "y.tab.c"
     break;
 
   case 44:
-#line 221 "tema.y"
+#line 220 "tema.y"
                                    {declara_vector((yyvsp[-4].str),(yyvsp[-3].str),(yyvsp[-1].integer),"global");}
 #line 1927 "y.tab.c"
     break;
 
   case 45:
-#line 224 "tema.y"
+#line 223 "tema.y"
                                   {declara_vector((yyvsp[-4].str),(yyvsp[-3].str),(yyvsp[-1].integer),"main");}
 #line 1933 "y.tab.c"
     break;
 
   case 46:
-#line 237 "tema.y"
+#line 236 "tema.y"
                                             {printf("%s %d\n",(yyvsp[-3].str),evalAST((yyvsp[-1].expresie).AST));}
 #line 1939 "y.tab.c"
     break;
 
   case 47:
-#line 238 "tema.y"
+#line 237 "tema.y"
                               {printf("%s\n",(yyvsp[-1].str));}
 #line 1945 "y.tab.c"
     break;
 
   case 48:
-#line 239 "tema.y"
+#line 238 "tema.y"
                                         {print_variabile((yyvsp[-4].str),(yyvsp[-1].str));}
 #line 1951 "y.tab.c"
     break;
 
   case 49:
-#line 241 "tema.y"
+#line 240 "tema.y"
                                         {char count_str[]="global"; char str_valoare[50]; snprintf(str_valoare,50,"%d",evalAST((yyvsp[0].expresie).AST)); asignare_exista_variabila((yyvsp[-2].str),count_str,str_valoare,0);}
 #line 1957 "y.tab.c"
     break;
 
   case 50:
-#line 242 "tema.y"
+#line 241 "tema.y"
                                       {char count_str[]="global"; char str_valoare[50]; snprintf(str_valoare,50,"%f",(yyvsp[0].real)); asignare_exista_variabila((yyvsp[-2].str),count_str,str_valoare,1);}
 #line 1963 "y.tab.c"
     break;
 
   case 51:
-#line 243 "tema.y"
+#line 242 "tema.y"
                                        {char count_str[]="global"; asignare_exista_variabila((yyvsp[-2].str),count_str,(yyvsp[0].str),2);}
 #line 1969 "y.tab.c"
     break;
 
   case 52:
-#line 244 "tema.y"
+#line 243 "tema.y"
                                       {char count_str[]="global"; asignare_exista_variabila((yyvsp[-2].str),count_str,(yyvsp[0].str),3);}
 #line 1975 "y.tab.c"
     break;
 
   case 57:
-#line 254 "tema.y"
+#line 253 "tema.y"
                                                          {if(clasa_deja_definita((yyvsp[-4].str))==-1){
                                                                 creeaza_clasa((yyvsp[-4].str));
                                                                 }
@@ -1987,7 +1987,7 @@ yyreduce:
     break;
 
   case 60:
-#line 266 "tema.y"
+#line 265 "tema.y"
                              { if(variabila_class_deja_declarata((yyvsp[-1].str),"class")==-1){
                                    declarare_variabila_class((yyvsp[-2].str),(yyvsp[-1].str),"class");   
                                 }
@@ -1999,61 +1999,61 @@ yyreduce:
     break;
 
   case 61:
-#line 275 "tema.y"
+#line 274 "tema.y"
                                                                     { if(functie_deja_declarata((yyvsp[-6].str),aux)==0){ creaza_functie((yyvsp[-7].str),(yyvsp[-6].str),aux);} else {count_aux=0;mesaj_functie_existenta((yyvsp[-6].str)); } }
 #line 2005 "y.tab.c"
     break;
 
   case 62:
-#line 276 "tema.y"
+#line 275 "tema.y"
                                                         {if(functie_deja_declarata((yyvsp[-5].str),empty_struct)==0){ creaza_functie((yyvsp[-6].str),(yyvsp[-5].str),empty_struct);} else {count_aux=0;mesaj_functie_existenta((yyvsp[-5].str)); } }
 #line 2011 "y.tab.c"
     break;
 
   case 65:
-#line 281 "tema.y"
+#line 280 "tema.y"
                               {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); var[count_v-1].vizibilitate=strdup(count_str);}
 #line 2017 "y.tab.c"
     break;
 
   case 72:
-#line 291 "tema.y"
+#line 290 "tema.y"
               { set_parametrii_functie((yyvsp[-1].str),(yyvsp[0].str),aux);}
 #line 2023 "y.tab.c"
     break;
 
   case 73:
-#line 293 "tema.y"
+#line 292 "tema.y"
                                          {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); char str_valoare[50]; snprintf(str_valoare,50,"%d",evalAST((yyvsp[-1].expresie).AST)); asignare_exista_variabila((yyvsp[-3].str),count_str,str_valoare,0);}
 #line 2029 "y.tab.c"
     break;
 
   case 74:
-#line 294 "tema.y"
+#line 293 "tema.y"
                                          {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); char str_valoare[50]; snprintf(str_valoare,50,"%f",(yyvsp[-1].real)); asignare_exista_variabila((yyvsp[-3].str),count_str,str_valoare,1);}
 #line 2035 "y.tab.c"
     break;
 
   case 75:
-#line 295 "tema.y"
+#line 294 "tema.y"
                                          {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); asignare_exista_variabila((yyvsp[-3].str),count_str,(yyvsp[-1].str),2);}
 #line 2041 "y.tab.c"
     break;
 
   case 76:
-#line 296 "tema.y"
+#line 295 "tema.y"
                                          {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); asignare_exista_variabila((yyvsp[-3].str),count_str,(yyvsp[-1].str),3);}
 #line 2047 "y.tab.c"
     break;
 
   case 84:
-#line 313 "tema.y"
+#line 312 "tema.y"
                            {var[count_v-1].vizibilitate=strdup("main");}
 #line 2053 "y.tab.c"
     break;
 
   case 90:
-#line 329 "tema.y"
+#line 328 "tema.y"
                    { if(clasa_deja_definita((yyvsp[-1].str))!=-1){
                                 if(obiect_deja_definit((yyvsp[0].str))==-1){
                                         obiect_nou((yyvsp[-1].str),(yyvsp[0].str),"main");
@@ -2072,181 +2072,181 @@ yyreduce:
     break;
 
   case 91:
-#line 345 "tema.y"
-                                       {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%d",evalAST((yyvsp[0].expresie).AST)); asignare_exista_variabila((yyvsp[-2].str),count_str,str_valoare,0);}
+#line 344 "tema.y"
+                                       {printf("asign_main\n");char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%d",evalAST((yyvsp[0].expresie).AST)); asignare_exista_variabila((yyvsp[-2].str),count_str,str_valoare,0);}
 #line 2078 "y.tab.c"
     break;
 
   case 92:
-#line 346 "tema.y"
+#line 345 "tema.y"
                                       {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%f",(yyvsp[0].real)); asignare_exista_variabila((yyvsp[-2].str),count_str,str_valoare,1);}
 #line 2084 "y.tab.c"
     break;
 
   case 93:
-#line 347 "tema.y"
+#line 346 "tema.y"
                                       {char count_str[]="main"; asignare_exista_variabila((yyvsp[-2].str),count_str,(yyvsp[0].str),2);}
 #line 2090 "y.tab.c"
     break;
 
   case 94:
-#line 348 "tema.y"
+#line 347 "tema.y"
                                       {char count_str[]="main"; asignare_exista_variabila((yyvsp[-2].str),count_str,(yyvsp[0].str),3);}
 #line 2096 "y.tab.c"
     break;
 
   case 95:
-#line 349 "tema.y"
+#line 348 "tema.y"
                                            {char valoare[50];  snprintf(valoare,50,"%7.2f",(yyvsp[0].real));  asignare_pt_data_membru((yyvsp[-4].str),(yyvsp[-2].str),valoare,"Float");}
 #line 2102 "y.tab.c"
     break;
 
   case 96:
-#line 350 "tema.y"
-                                            {char valoare[50]; sprintf(valoare,"%d",evalAST((yyvsp[0].expresie).AST));  asignare_pt_data_membru((yyvsp[-4].str),(yyvsp[-2].str),valoare,"Integer");}
+#line 349 "tema.y"
+                                            {printf("asign_main\n"); char valoare[50]; sprintf(valoare,"%d",evalAST((yyvsp[0].expresie).AST));  asignare_pt_data_membru((yyvsp[-4].str),(yyvsp[-2].str),valoare,"Integer");}
 #line 2108 "y.tab.c"
     break;
 
   case 97:
-#line 351 "tema.y"
+#line 350 "tema.y"
                                           { asignare_pt_data_membru((yyvsp[-4].str),(yyvsp[-2].str),(yyvsp[0].str),"String");}
 #line 2114 "y.tab.c"
     break;
 
   case 98:
-#line 352 "tema.y"
+#line 351 "tema.y"
                                            {asignare_pt_data_membru((yyvsp[-4].str),(yyvsp[-2].str),(yyvsp[0].boolean),"Bool");}
 #line 2120 "y.tab.c"
     break;
 
   case 99:
-#line 353 "tema.y"
+#line 352 "tema.y"
                                       {asignare_cu_data_membru((yyvsp[-4].str),(yyvsp[-2].str),(yyvsp[0].str));}
 #line 2126 "y.tab.c"
     break;
 
   case 100:
-#line 354 "tema.y"
+#line 353 "tema.y"
                                                     { char valoare[50]; sprintf(valoare,"%d",evalAST((yyvsp[0].expresie).AST)); asignare_pt_element_vector((yyvsp[-5].str),(yyvsp[-3].integer),valoare, "Integer");}
 #line 2132 "y.tab.c"
     break;
 
   case 101:
-#line 355 "tema.y"
+#line 354 "tema.y"
                                                    {char valoare[50]; sprintf(valoare,"%7.2f",(yyvsp[0].real)); asignare_pt_element_vector((yyvsp[-5].str),(yyvsp[-3].integer),valoare, "Float");}
 #line 2138 "y.tab.c"
     break;
 
   case 102:
-#line 356 "tema.y"
+#line 355 "tema.y"
                                                   { asignare_pt_element_vector((yyvsp[-5].str),(yyvsp[-3].integer),(yyvsp[0].str), "String");}
 #line 2144 "y.tab.c"
     break;
 
   case 103:
-#line 360 "tema.y"
+#line 359 "tema.y"
                               {if(functie_deja_declarata_pt_apel((yyvsp[-2].str),empty_struct)==0){count_aux_apel=0; error_ne_decl_functie((yyvsp[-2].str));}else{count_aux_apel=0; }}
 #line 2150 "y.tab.c"
     break;
 
   case 104:
-#line 361 "tema.y"
+#line 360 "tema.y"
                                     {int verific=functie_deja_declarata_pt_apel((yyvsp[-3].str),aux_apel); if(verific==0){count_aux_apel=0; error_ne_decl_functie((yyvsp[-3].str));}else{count_aux_apel=0; }}
 #line 2156 "y.tab.c"
     break;
 
   case 107:
-#line 366 "tema.y"
+#line 365 "tema.y"
                       { set_parametrii_apel("Integer",aux_apel);}
 #line 2162 "y.tab.c"
     break;
 
   case 108:
-#line 367 "tema.y"
+#line 366 "tema.y"
                      {set_parametrii_apel("Float",aux_apel);}
 #line 2168 "y.tab.c"
     break;
 
   case 109:
-#line 372 "tema.y"
+#line 371 "tema.y"
                    {int verificare=verificare_exista_variabila((yyvsp[-1].str)); if(verificare==-1){error_ne_decl_variabila((yyvsp[-1].str));}}
 #line 2174 "y.tab.c"
     break;
 
   case 110:
-#line 374 "tema.y"
+#line 373 "tema.y"
                    {int verificare=verificare_exista_variabila((yyvsp[-1].str)); if(verificare==-1){error_ne_decl_variabila((yyvsp[-1].str));}}
 #line 2180 "y.tab.c"
     break;
 
   case 111:
-#line 375 "tema.y"
+#line 374 "tema.y"
                    {int verificare=verificare_exista_variabila((yyvsp[0].str)); if(verificare==-1){error_ne_decl_variabila((yyvsp[0].str));}}
 #line 2186 "y.tab.c"
     break;
 
   case 112:
-#line 376 "tema.y"
+#line 375 "tema.y"
                    {int verificare=verificare_exista_variabila((yyvsp[0].str)); if(verificare==-1){error_ne_decl_variabila((yyvsp[0].str));}}
 #line 2192 "y.tab.c"
     break;
 
   case 127:
-#line 395 "tema.y"
+#line 394 "tema.y"
                  {if(verificare_exista_variabila((yyvsp[0].str))==-1) error_ne_decl_variabila((yyvsp[0].str)); }
 #line 2198 "y.tab.c"
     break;
 
   case 128:
-#line 396 "tema.y"
+#line 395 "tema.y"
                             {if(functie_deja_declarata_pt_apel((yyvsp[-2].str),empty_struct)==0){count_aux_apel=0; error_ne_decl_functie((yyvsp[-2].str));}else{count_aux_apel=0; }}
 #line 2204 "y.tab.c"
     break;
 
   case 129:
-#line 397 "tema.y"
+#line 396 "tema.y"
                                    {int verific=functie_deja_declarata_pt_apel((yyvsp[-3].str),aux_apel); if(verific==0){count_aux_apel=0; error_ne_decl_functie((yyvsp[-3].str));}else{count_aux_apel=0; }}
 #line 2210 "y.tab.c"
     break;
 
   case 132:
-#line 403 "tema.y"
+#line 402 "tema.y"
                                      {verifica_conditia(evalAST((yyvsp[-2].expresie).AST),1,evalAST((yyvsp[0].expresie).AST));}
 #line 2216 "y.tab.c"
     break;
 
   case 133:
-#line 404 "tema.y"
+#line 403 "tema.y"
                                      {verifica_conditia(evalAST((yyvsp[-2].expresie).AST),2,evalAST((yyvsp[0].expresie).AST));}
 #line 2222 "y.tab.c"
     break;
 
   case 134:
-#line 405 "tema.y"
+#line 404 "tema.y"
                                      {verifica_conditia(evalAST((yyvsp[-2].expresie).AST),3,evalAST((yyvsp[0].expresie).AST));}
 #line 2228 "y.tab.c"
     break;
 
   case 135:
-#line 406 "tema.y"
+#line 405 "tema.y"
                                      {verifica_conditia(evalAST((yyvsp[-2].expresie).AST),4,evalAST((yyvsp[0].expresie).AST));}
 #line 2234 "y.tab.c"
     break;
 
   case 136:
-#line 407 "tema.y"
+#line 406 "tema.y"
                                      {verifica_conditia(evalAST((yyvsp[-2].expresie).AST),5,evalAST((yyvsp[0].expresie).AST));}
 #line 2240 "y.tab.c"
     break;
 
   case 137:
-#line 408 "tema.y"
+#line 407 "tema.y"
                                      {verifica_conditia(evalAST((yyvsp[-2].expresie).AST),6,evalAST((yyvsp[0].expresie).AST));}
 #line 2246 "y.tab.c"
     break;
 
   case 138:
-#line 409 "tema.y"
+#line 408 "tema.y"
                                      {verifica_conditia(0,7,0);}
 #line 2252 "y.tab.c"
     break;
@@ -2484,7 +2484,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 421 "tema.y"
+#line 420 "tema.y"
 
 int yyerror(char * s){
 printf("eroare: %s la linia:%d\n",s,yylineno);

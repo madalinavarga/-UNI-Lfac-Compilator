@@ -33,7 +33,7 @@ Main () {
   }
   y=0;
   Print("Sunt aici 8 ");
-  #x = test(test(x1,3)+2, y+4) + 34 - y * vector[2];
+  x = test(test(x1,3)+2, y+4) + 34 - y * vector[2];
   Print("Sunt aici 8 ");
   x1 = x + 5 * 10 + vector[2];
 

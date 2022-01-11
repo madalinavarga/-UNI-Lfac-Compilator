@@ -3,15 +3,15 @@ tip | id  |  valoare | vizibilitate | este_const | dimensiune
 
 
 GLOBAL:
-Integer  |  x  |  2  |  global  |  0  |  0
-Integer  |  x1  |  52  |  global  |  0  |  0
+Integer  |  x  |  34  |  global  |  0  |  0
+Integer  |  x1  |  84  |  global  |  0  |  0
 Integer  |  x2  |  30  |  global  |  0  |  0
 Integer  |  y  |  0  |  global  |  0  |  0
 Integer  |  vector  |  (null)  |  global  |  0  |  10
 
 
 MAIN:
-Integer  |  x1  |  52  |  main  |  0  |  0
+Integer  |  x1  |  84  |  main  |  0  |  0
 
 
 FUNCTII:
