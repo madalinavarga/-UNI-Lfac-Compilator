@@ -164,42 +164,40 @@ s: declaratii_globale functii_clase  main_prog {printf("Program corect sintactic
  ;
      
 //SECTIUNEA 1 - DECLARATII
-declaratii_globale : 
-             declaratie_globala ';' { var[count_v-1].vizibilitate=strdup("global");}
-	   | declaratii_globale declaratie_globala ';' { var[count_v-1].vizibilitate=strdup("global");}
-	   ;
+declaratii_globale :   declaratie_globala ';' { var[count_v-1].vizibilitate=strdup("global");}
+	           | declaratii_globale declaratie_globala ';' { var[count_v-1].vizibilitate=strdup("global");}
+	           ;
  declaratie_globala:variabila_initializata_global
-            | variabila_declarata_global
-            | print 
-            | asignare_globala
-            ;          
+                   | variabila_declarata_global
+                   | print 
+                   | asignare_globala
+                   ;          
 declaratie_locala  : variabila_initializata_local
-            | variabila_declarata_local 
-            | print
-           
-            ;
+                   | variabila_declarata_local 
+                   | print
+                   ;
 variabila_initializata_local: CONST TIP ID ASSIGN expresie {if(strcmp($2,"Integer")==0){declarare_cu_initializare($2,$3,evalAST($5.AST),1,"main");}else{error_nepotrivire();}}
-                      | CONST TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $5); if(strcmp($2,"Float")==0) { declarare_cu_initializare_diferit_int($2,$3,valoare,1,"main");}else{error_nepotrivire();}}
-                      | CONST TIP ID ASSIGN STRING {if(strcmp($2,"String")==0) { declarare_cu_initializare_diferit_int($2,$3,$5,1,"main");}else{error_nepotrivire();}}
-                      | CONST TIP ID ASSIGN ID '.' ID {declarare_cu_initializare_data_membru($2,$3, $5,$7,1,"main");}
-                      | TIP ID ASSIGN expresie {if(strcmp($1,"Integer")==0){declarare_cu_initializare($1,$2,evalAST($4.AST),0,"main");} else{error_nepotrivire();}}
-                      | TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $4); if(strcmp($1,"Float")==0) { declarare_cu_initializare_diferit_int($1,$2,valoare,0,"main");}else{error_nepotrivire();}}
-                      | TIP ID ASSIGN STRING {if(strcmp($1,"String")==0) { declarare_cu_initializare_diferit_int($1,$2,$4,0,"main");}else{error_nepotrivire();}}
-                      | TIP ID ASSIGN ID '.' ID {declarare_cu_initializare_data_membru($1,$2, $4,$6,0,"main");}
-                      ;
+                            | CONST TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $5); if(strcmp($2,"Float")==0) { declarare_cu_initializare_diferit_int($2,$3,valoare,1,"main");}else{error_nepotrivire();}}
+                            | CONST TIP ID ASSIGN STRING {if(strcmp($2,"String")==0) { declarare_cu_initializare_diferit_int($2,$3,$5,1,"main");}else{error_nepotrivire();}}
+                            | CONST TIP ID ASSIGN ID '.' ID {declarare_cu_initializare_data_membru($2,$3, $5,$7,1,"main");}
+                            | TIP ID ASSIGN expresie {if(strcmp($1,"Integer")==0){declarare_cu_initializare($1,$2,evalAST($4.AST),0,"main");} else{error_nepotrivire();}}
+                            | TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $4); if(strcmp($1,"Float")==0) { declarare_cu_initializare_diferit_int($1,$2,valoare,0,"main");}else{error_nepotrivire();}}
+                            | TIP ID ASSIGN STRING {if(strcmp($1,"String")==0) { declarare_cu_initializare_diferit_int($1,$2,$4,0,"main");}else{error_nepotrivire();}}
+                            | TIP ID ASSIGN ID '.' ID {declarare_cu_initializare_data_membru($1,$2, $4,$6,0,"main");}
+                            ;
 variabila_declarata_local: TIP ID {declarare_fara_initializare($1,$2,0,"main");}
                          | array_loc
                          ;
 variabila_initializata_global: CONST TIP ID ASSIGN expresie {if(strcmp($2,"Integer")==0){declarare_cu_initializare($2,$3,evalAST($5.AST),1,"global");}else{error_nepotrivire();}}
-                      | CONST TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $5); if(strcmp($2,"Float")==0) { declarare_cu_initializare_diferit_int($2,$3,valoare,1,"global");}else{error_nepotrivire();}}
-                      | CONST TIP ID ASSIGN STRING {if(strcmp($2,"String")==0) { declarare_cu_initializare_diferit_int($2,$3,$5,1,"global");}else{error_nepotrivire();}}
-                      | TIP ID ASSIGN expresie {if(strcmp($1,"Integer")==0){declarare_cu_initializare($1,$2,evalAST($4.AST),0,"global");} else{error_nepotrivire();}}
-                      | TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $4); if(strcmp($1,"Float")==0) { declarare_cu_initializare_diferit_int($1,$2,valoare,0,"global");}else{error_nepotrivire();}}
-                      | TIP ID ASSIGN STRING {if(strcmp($1,"String")==0) { declarare_cu_initializare_diferit_int($1,$2,$4,0,"global");}else{error_nepotrivire();}}
-                      ;
+                             | CONST TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $5); if(strcmp($2,"Float")==0) { declarare_cu_initializare_diferit_int($2,$3,valoare,1,"global");}else{error_nepotrivire();}}
+                             | CONST TIP ID ASSIGN STRING {if(strcmp($2,"String")==0) { declarare_cu_initializare_diferit_int($2,$3,$5,1,"global");}else{error_nepotrivire();}}
+                             | TIP ID ASSIGN expresie {if(strcmp($1,"Integer")==0){declarare_cu_initializare($1,$2,evalAST($4.AST),0,"global");} else{error_nepotrivire();}}
+                             | TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $4); if(strcmp($1,"Float")==0) { declarare_cu_initializare_diferit_int($1,$2,valoare,0,"global");}else{error_nepotrivire();}}
+                             | TIP ID ASSIGN STRING {if(strcmp($1,"String")==0) { declarare_cu_initializare_diferit_int($1,$2,$4,0,"global");}else{error_nepotrivire();}}
+                             ;
 variabila_declarata_global: TIP ID {declarare_fara_initializare($1,$2,0,"global");}
                           | array_glob
-                   ;
+                          ;
 /*
 lista_declaratii : ID
                  | lista_declaratii ',' ID
@@ -258,7 +256,7 @@ class_definitie : CLASS ID  '{' class_declaratii '}' ';' {if(clasa_deja_definita
                                                         }
                                                 }
                 ;
-      ;
+                ;
 class_declaratii: class_declaratie
                 | class_declaratii class_declaratie
                 ;
@@ -464,8 +462,6 @@ void declarare_fara_initializare(char* tip,char* nume, int este_const,char* vizi
 }
 void declarare_cu_initializare(char* tip,char* nume,int val,int este_const,char* vizibilitate){
         //verificare daca exista 
-        
-
         if(variabila_deja_declarata(nume,vizibilitate)!=-1){
                 char error_msg[250];
                 sprintf(error_msg, "Variabila %s este deja declarata", nume);
@@ -486,14 +482,13 @@ void declarare_cu_initializare(char* tip,char* nume,int val,int este_const,char*
 
 int get_valoare_dupa_nume(char * nume)
 { 
-       // printf("Nume cautat: %s\n",nume);
+       
         int gasit=0;
          for (int i = 0; i < count_v; i++)
          {
-                 //printf("variabile: %s %s\n",var[i].id,var[i].tip);
+                
                  if(strcmp(var[i].id,nume)==0 && strcmp(var[i].tip,"Integer")==0){
                  gasit++;
-                // printf("return:%s\n",var[i].valoare);
                  int valoare=atoi(var[i].valoare);
                  return valoare;
                  }
@@ -516,12 +511,11 @@ int get_valoare_dupa_nume(char * nume)
          }
 
 }
-void print_variabile(char* mesaj ,char* nume) // momentan in lucru ...
+void print_variabile(char* mesaj ,char* nume)
 {
         
         char* ptr=nume;
         int gasit=0;
-        
         for (int i = 0; i < count_v; i++)
          {
                  //printf("variabile: %s %s\n",var[i].id,var[i].tip);
@@ -530,8 +524,6 @@ void print_variabile(char* mesaj ,char* nume) // momentan in lucru ...
                          printf("%s: %s\n",mesaj,var[i].valoare);
                  }
          }
-
-
            if(gasit==0) 
          {
                 char error_msg[250];
