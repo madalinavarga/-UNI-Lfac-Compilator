@@ -1,5 +1,5 @@
 tip | id | nr_parametrii   |  parametrii 
 ---------------------------------------------------------
 Integer | testFunction | 2: Integer x Float z 
-Integer | testFunction | 2: Integer x Integer z 
-Integer | test | 2: Integer param1 Integer param2 
+Integer | testFunction | 2: Float x Float z 
+Integer | test | 1: Integer param 

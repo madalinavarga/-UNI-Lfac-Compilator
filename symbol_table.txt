@@ -3,20 +3,20 @@ tip | id  |  valoare | vizibilitate | este_const | dimensiune
 
 
 GLOBAL:
-Integer  |  x  |  34  |  global  |  0  |  0
-Integer  |  x1  |  85  |  global  |  0  |  0
-Integer  |  x2  |  30  |  global  |  0  |  0
-Integer  |  y  |  0  |  global  |  0  |  0
-Integer  |  vector  |  (null)  |  global  |  0  |  10
+Integer  |  x  |  23  |  global  |  0  |  0
+Integer  |  x1  |  (null)  |  global  |  0  |  0
+Integer  |  x2  |  0  |  global  |  0  |  0
+Float  |  f1  |  23  |  global  |  0  |  0
+String  |  s  |  "ana"  |  global  |  0  |  0
 
 
 MAIN:
-Integer  |  x1  |  85  |  main  |  0  |  0
 
 
 FUNCTII:
-Integer  |  x1  |  (null)  |  functie-0  |  0  |  0
-Integer  |  x1  |  (null)  |  functie-1  |  0  |  0
+Integer  |  w  |  (null)  |  functie-0  |  0  |  0
+Integer  |  w  |  (null)  |  functie-1  |  0  |  0
+Integer  |  w  |  (null)  |  functie-2  |  0  |  0
 
 
 CLASE:

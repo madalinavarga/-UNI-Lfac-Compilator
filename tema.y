@@ -211,7 +211,7 @@ expresie : expresie PLUS expresie                {$$.AST = buildAST("+", $1.AST,
          | expresie PROD expresie                {$$.AST = buildAST("*", $1.AST, $3.AST, OP,0) ;}
          | expresie DIV expresie                 {$$.AST = buildAST("/", $1.AST, $3.AST, OP,0) ;}
          |'(' expresie ')'                       {char str_val[50]; snprintf(str_val,50,"%d",evalAST($2.AST)); $$.AST = buildAST(str_val, NULL, NULL, NUMBER,0);}
-         | ID                                    {$$.AST = buildAST($1, NULL, NULL, IDENTIFIER,0);}
+         | ID                                    {int verificare=get_valoare_dupa_nume($1); if(verificare!=-1) {$$.AST = buildAST($1, NULL, NULL, IDENTIFIER,0);} else{error_nepotrivire($1);}}
          | NR_INT                                {char str_val[50]; snprintf(str_val,50,"%d",$1); $$.AST = buildAST(str_val, NULL, NULL, NUMBER,0);}
          | ID '[' NR_INT ']'  {$$.AST=buildAST($1,NULL,NULL,ARRAY_ELEM,$3);}
          | ID  '(' ')' {if(functie_deja_declarata($1,empty_struct)==0){count_aux_apel=0; error_ne_decl_functie($1);} else{count_aux_apel=0; char* tip_apel; tip_apel=strdup(get_tip_dupa_nume($1));  if(strcmp(tip_apel,"Integer")==0){$$.AST=buildAST("0",NULL,NULL,OTHER,0);}else{error_nepotrivire();}}} 

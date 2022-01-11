@@ -1893,7 +1893,7 @@ yyreduce:
 
   case 39:
 #line 214 "tema.y"
-                                                 {(yyval.expresie).AST = buildAST((yyvsp[0].str), NULL, NULL, IDENTIFIER,0);}
+                                                 {int verificare=get_valoare_dupa_nume((yyvsp[0].str)); if(verificare!=-1) {(yyval.expresie).AST = buildAST((yyvsp[0].str), NULL, NULL, IDENTIFIER,0);} else{error_nepotrivire((yyvsp[0].str));}}
 #line 1898 "y.tab.c"
     break;
 
