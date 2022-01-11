@@ -1,8 +1,5 @@
-tip  id nr_parametrii     parametrii 
+tip | id nr_parametrii   |  parametrii 
 ---------------------------------------------------------
-Integer suma 2 Integer a Integer b 
-Integer suma 3 Integer a Integer b Integer c 
-Integer suma 3 Float a Integer b Integer c 
-Integer minus 0 
-Integer suma 2 Integer a Float b 
-Float fct 1 Float fl 
+Integer | suma | 2: Integer a Integer b 
+Integer | suma | 3: Integer a Integer b Integer c 
+Integer | minus | 0: 

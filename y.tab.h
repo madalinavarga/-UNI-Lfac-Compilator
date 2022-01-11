@@ -121,7 +121,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 101 "tema.y"
+#line 106 "tema2.y"
 
     double num;
     char* str;
@@ -129,7 +129,11 @@ union YYSTYPE
     float real;
     char* boolean;
 
-#line 133 "y.tab.h"
+    struct expresie{
+        struct ast_node *AST;
+}expresie;
+
+#line 137 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
