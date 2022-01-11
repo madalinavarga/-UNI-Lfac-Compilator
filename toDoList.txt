@@ -1,9 +1,0 @@
-1 Printf trebuie modificat sa accepte mai multe tipuri !!! ok varianta provizorie
-2 PENTRU 
-3 la clase in variabile vizibilitatea se repeta la unele 
-4 AST 
-5 de adg tip bool 
-6 de modificat afisarea in fisier a functiilor (mai detaliata)
-
-
-https://www.youtube.com/watch?v=FaGeBd3kDXk
