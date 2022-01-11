@@ -1,5 +1,5 @@
-tip | id nr_parametrii   |  parametrii 
+tip  id nr_parametrii     parametrii 
 ---------------------------------------------------------
-Integer | suma | 2: Integer a Integer b 
-Integer | suma | 3: Integer a Integer b Integer c 
-Integer | minus | 0: 
+Integer suma 2 Integer a Float b 
+Integer suma 3 Integer a Integer b Integer c 
+Integer minus 0 

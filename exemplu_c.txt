@@ -1,28 +1,26 @@
-int x ;
-int x1;
-int x2;
-int y;
-int arr[10];
+Integer x ;
+Integer x2;
+Integer y;
+#Integer vector[10];
 
-int testFunction(int x, float z) {
-  // puteti pune orice aici 
+Integer testFunction(Integer x, Float z) {
+  Integer x1;
 }
 
-int testFunction(int x, int z) {
-  //puteti pune orice aici
+Integer testFunction(Integer x, Integer z) {
+   Integer x1;
 }
 
-int test(int param1, int param2) {
- // puteti pune orice aici
+Integer test(Integer param1, Integer param2) {
+  Integer x1;
 }
-
-int main () {
-          arr[2] = 1; x = 10; x1 = 20; x2 = 30;
+Main () {
+          vector[2] = 1; x = 10; x1 = 20; x2 = 30;
           if (x1 + test(x1,x2) < 5 + x1 && (x > 2 || x1 < 4+x2) || x == 2) {
 	   x = 2;
            }
-            x = test(test(x1,3)+2, y+4) + 34 - y * arr[2];
-x1 = x + 5 * 10 + arr[2];
+            x = test(test(x1,3)+2, y+4) + 34 - y * vector[2];
+x1 = x + 5 * 10 + vector[2];
 print(“valoarea lui x1 este:”, x1) ;	
 print(“valoarea expresiei este:”, x2* 10) ;	
 }

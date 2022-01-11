@@ -594,8 +594,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "tema2.l"
-#line 2 "tema2.l"
+#line 1 "tema.l"
+#line 2 "tema.l"
 #include <stdio.h>
 #include "y.tab.h"
 #line 602 "lex.yy.c"
@@ -816,7 +816,7 @@ YY_DECL
 		}
 
 	{
-#line 6 "tema2.l"
+#line 6 "tema.l"
 
 #line 822 "lex.yy.c"
 
@@ -877,189 +877,189 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 7 "tema2.l"
+#line 7 "tema.l"
 {yylval.str = strdup(yytext);return PRINT;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 8 "tema2.l"
+#line 8 "tema.l"
 {yylval.str = strdup(yytext);return TIP;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 9 "tema2.l"
+#line 9 "tema.l"
 {yylval.str = strdup(yytext);return CONST;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 12 "tema2.l"
+#line 12 "tema.l"
 {return DACA;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 13 "tema2.l"
+#line 13 "tema.l"
 {return ALTFEL;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 14 "tema2.l"
+#line 14 "tema.l"
 {return PENTRU;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 15 "tema2.l"
+#line 15 "tema.l"
 {return CAT_TIMP;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 17 "tema2.l"
+#line 17 "tema.l"
 {return MAIN;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 18 "tema2.l"
+#line 18 "tema.l"
 {return RETURN;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 19 "tema2.l"
+#line 19 "tema.l"
 {return EXIT;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 20 "tema2.l"
+#line 20 "tema.l"
 {return CLASS;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 22 "tema2.l"
+#line 22 "tema.l"
 { return GEQ; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 23 "tema2.l"
+#line 23 "tema.l"
 { return EQ; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 24 "tema2.l"
+#line 24 "tema.l"
 { return LEQ; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 25 "tema2.l"
+#line 25 "tema.l"
 { return NEQ; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 26 "tema2.l"
+#line 26 "tema.l"
 {return ASSIGN;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 27 "tema2.l"
+#line 27 "tema.l"
 {return OR;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 28 "tema2.l"
+#line 28 "tema.l"
 {return AND;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 33 "tema2.l"
+#line 33 "tema.l"
 {return PLUS;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 34 "tema2.l"
+#line 34 "tema.l"
 {return MINUS;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 35 "tema2.l"
+#line 35 "tema.l"
 {return PROD;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 36 "tema2.l"
+#line 36 "tema.l"
 {return DIV;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 37 "tema2.l"
+#line 37 "tema.l"
 {return LESS;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 38 "tema2.l"
+#line 38 "tema.l"
 {return GREATER;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 39 "tema2.l"
+#line 39 "tema.l"
 {return INCR;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 40 "tema2.l"
+#line 40 "tema.l"
 {return DECR;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 42 "tema2.l"
+#line 42 "tema.l"
 {yylval.boolean=strdup(yytext);return BOOLEAN;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 43 "tema2.l"
+#line 43 "tema.l"
 {yylval.boolean=strdup(yytext); return BOOLEAN;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 44 "tema2.l"
+#line 44 "tema.l"
 {yylval.str=strdup(yytext); return ID;}
 	YY_BREAK
 case 30:
 /* rule 30 can match eol */
 YY_RULE_SETUP
-#line 45 "tema2.l"
+#line 45 "tema.l"
 {yylval.str=strdup(yytext); return STRING;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 47 "tema2.l"
+#line 47 "tema.l"
 {yylval.integer=atoi(yytext); return NR_INT;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 48 "tema2.l"
+#line 48 "tema.l"
 {yylval.real=atof(yytext); return NR_REAL;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 51 "tema2.l"
+#line 51 "tema.l"
 ;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 52 "tema2.l"
+#line 52 "tema.l"
 ;
 	YY_BREAK
 case 35:
 /* rule 35 can match eol */
 YY_RULE_SETUP
-#line 53 "tema2.l"
+#line 53 "tema.l"
 {yylineno++;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 54 "tema2.l"
+#line 54 "tema.l"
 {return yytext[0];}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 55 "tema2.l"
+#line 55 "tema.l"
 ECHO;
 	YY_BREAK
 #line 1066 "lex.yy.c"
@@ -2067,4 +2067,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 55 "tema2.l"
+#line 55 "tema.l"

@@ -10,7 +10,7 @@ var_globala=7+6;
 #Integer vector_glob[3];
 
 #overloading functii
-Integer suma ( Integer a , Integer b) { 
+Integer suma ( Integer a , Float b) { 
     
     Integer suma_var=9;
     Print("FUNCTIE: value of expression suma_var is:", suma_var);
