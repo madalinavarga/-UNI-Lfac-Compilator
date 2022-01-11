@@ -1,28 +1,46 @@
 Integer x ;
+Print("Sunt aici 1 ");
 Integer x1;
 Integer x2;
 Integer y;
+Print("Sunt aici 2");
 Integer vector[10];
 
 Integer testFunction(Integer x, Float z) {
   Integer x1;
+  Print("Sunt aici 3");
 }
 
 Integer testFunction(Integer x, Integer z) {
-   Integer x1;
+  Integer x1;
 }
 
 Integer test(Integer param1, Integer param2) {
   Integer x1;
+  Print("Sunt aici 4");
 }
-Main () {
-      vector[2] = 1;
-      x = 10; 
-      x1 = 20; 
-      x2 = 30;
-      x1 = x + 5 * 10 + vector[2];
-      Print("valoarea lui x1 este:", x1) ;
-      Print("valoarea expresiei este:", x2* 10) ;
 
+Main () {
+  Print("Sunt aici 5 ");
+  vector[2] = 1; 
+  x = 10; 
+  x1 = 20; 
+  x2 = 30;
+  Print("Sunt aici 6 ");
+  daca (x1 + test(x1,x2) < 5 + x1 && (x > 2 || x1 < 4+x2) || x == 2) {
+	   x = 2;
+      Print("Sunt aici 7 ");
+  }
+  y=0;
+  Print("Sunt aici 8 ");
+  #x = test(test(x1,3)+2, y+4) + 34 - y * vector[2];
+  Print("Sunt aici 8 ");
+  x1 = x + 5 * 10 + vector[2];
+
+  Print("valoarea lui x1 este:", x1) ;	
+  Print("valoarea expresiei este:", x2* 10) ;	
 }
+
+
+
 

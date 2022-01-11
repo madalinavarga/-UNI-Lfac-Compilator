@@ -1,22 +1,22 @@
-tip  id  valoare  vizibilitate  este_const  dimensiune
+tip | id  |  valoare | vizibilitate | este_const | dimensiune
 ---------------------------------------------------------
 
 
 GLOBAL:
-Integer  x  10  global  0  0
-Integer  x1  61  global  0  0
-Integer  x2  30  global  0  0
-Integer  y  (null)  global  0  0
-Integer  vector 0 0 1 0 0 0 0 0 0 0 global  0  10
+Integer  |  x  |  2  |  global  |  0  |  0
+Integer  |  x1  |  52  |  global  |  0  |  0
+Integer  |  x2  |  30  |  global  |  0  |  0
+Integer  |  y  |  0  |  global  |  0  |  0
+Integer  |  vector  |  (null)  |  global  |  0  |  10
 
 
 MAIN:
-Integer  x1  (null)  main  0  0
+Integer  |  x1  |  52  |  main  |  0  |  0
 
 
 FUNCTII:
-Integer  x1  (null)  functie-0  0  0
-Integer  x1  (null)  functie-1  0  0
+Integer  |  x1  |  (null)  |  functie-0  |  0  |  0
+Integer  |  x1  |  (null)  |  functie-1  |  0  |  0
 
 
 CLASE:

@@ -1,26 +1,30 @@
 Integer x = 23;
 Integer x1;
-Integer x1;
 Integer x2;
 Float f1 = 50.0;
-string s = “ana”’;
+String s="ana";
 Integer testFunction(Integer x, Float z) {
   # puteti pune orice aici 
+  String s="ana";
 }
 
-Integer testFunction(Integer x, Float z) {
+Integer testFunction(Integer x, Integer z) {
   #puteti pune orice aici
+  String s="ana";
 }
 
 Integer testFunction(Float x, Float z) {
   #puteti pune orice aici
+  String s="ana";
 }
 
 Integer test(Integer param) {
  # puteti pune orice aici
+ String s="ana";
 }
 
 Main () {
+  
   x3 = x + 2;
 	f1 = x + x2;
 	f1 = test (5) + x;

@@ -8,6 +8,17 @@ extern FILE* yyin;
 extern char* yytext;
 extern int yylineno;
 
+//STRUCTURA ARBORE
+enum enum_tip {OP,IDENTIFIER,NUMBER,OTHER,FUNCTIE} ;
+struct ast_node{
+        
+        char* valoare;
+        struct ast_node* stanga; 
+        struct ast_node* dreapta; 
+        enum enum_tip tip;
+}; 
+
+//STRUCTURA VARIABILE + FUNCTII + OBIECTE
 struct variabile{
       char* tip;
       char* id;
@@ -43,15 +54,19 @@ struct obiecte{
         char* vizibilitate;
 }obiecte[100];
 
+//DECLARATII FUNCTII + VARIABILE GLOBALE  UTILIZATE
 int nr_obiecte=0;
 int nr_clase=0;
 char empty[]=" ";
 struct parametru aux[100],empty_struct[1]={" "," "};
 struct parametru aux_apel[100];
-
 int count_v=0,count_f=0,count_aux=0, count_aux_apel=0;
 char fisier_variabile[]="symbol_table.txt";
 char fisier_functii[]="symbol_table_functions.txt ";
+
+
+struct ast_node *buildAST(char* val_nod,struct ast_node *stanga, struct ast_node *dreapta,int tip );
+int evalAST(struct ast_node *ast);
 
 int variabila_deja_declarata(char* nume,char* vizibilitate);
 void declarare_fara_initializare(char* tip,char* nume, int este_const,char* vizibilitate);
@@ -93,8 +108,6 @@ void error_ne_decl_functie(char* nume);
 char* get_tip_dupa_nume(char* nume);
 int functie_deja_declarata_pt_apel(char* id,struct parametru *param);
 int get_valoare_vector_dupa_nume(char* nume,int index_elem);
-
-
 char *citeste_fisier(char *file);
 %}
 
@@ -105,8 +118,13 @@ char *citeste_fisier(char *file);
     int integer;
     float real;
     char* boolean;
+
+    struct expresie{
+        struct ast_node *AST;
+}expresie;
 }
 
+//LEGATURA .l 
 %token PRINT CONST DACA ALTFEL PENTRU CAT_TIMP MAIN RETURN EXIT CLASS 
 %token GEQ EQ LEQ NEQ ASSIGN OR AND 
 %token PLUS MINUS PROD DIV LESS GREATER INCR DECR 
@@ -115,12 +133,13 @@ char *citeste_fisier(char *file);
 %token<real>NR_REAL
 %token<integer>NR_INT
 %token<str> ID TIP
-%type<integer> expresie conditie
+%type<integer> conditie
+%type<expresie> expresie
 
-
+//SIMBOL DE START
 %start s
 
-//prioritati 
+//PRIORITATI
 %right ASSIGN
 
 %left EQ
@@ -137,14 +156,14 @@ char *citeste_fisier(char *file);
 
 
 %%
-s: declaratii_globale functii_clase  main_prog {printf("1   program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
- | declaratii_globale main_prog {printf("2   program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
- | functii_clase main_prog {printf("3   program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
- | main_prog {printf("4   program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
- | declaratii_globale {printf("5   program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
+s: declaratii_globale functii_clase  main_prog {printf("Program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
+ | declaratii_globale main_prog {printf("Program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
+ | functii_clase main_prog {printf("Program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
+ | main_prog {printf("Program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
+ | declaratii_globale {printf("Program corect sintactic\n"); scrieVariabileFisier();scrieFunctiiInFisier();}
  ;
      
-/*sectiunea 1*/
+//SECTIUNEA 1 - DECLARATII
 declaratii_globale : 
              declaratie_globala ';' { var[count_v-1].vizibilitate=strdup("global");}
 	   | declaratii_globale declaratie_globala ';' { var[count_v-1].vizibilitate=strdup("global");}
@@ -159,22 +178,22 @@ declaratie_locala  : variabila_initializata_local
             | print
            
             ;
-variabila_initializata_local: CONST TIP ID ASSIGN expresie {if(strcmp($2,"Integer")==0){declarare_cu_initializare($2,$3,$5,1,"main");}else{error_nepotrivire();}}
+variabila_initializata_local: CONST TIP ID ASSIGN expresie {if(strcmp($2,"Integer")==0){declarare_cu_initializare($2,$3,evalAST($5.AST),1,"main");}else{error_nepotrivire();}}
                       | CONST TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $5); if(strcmp($2,"Float")==0) { declarare_cu_initializare_diferit_int($2,$3,valoare,1,"main");}else{error_nepotrivire();}}
                       | CONST TIP ID ASSIGN STRING {if(strcmp($2,"String")==0) { declarare_cu_initializare_diferit_int($2,$3,$5,1,"main");}else{error_nepotrivire();}}
                       | CONST TIP ID ASSIGN ID '.' ID {declarare_cu_initializare_data_membru($2,$3, $5,$7,1,"main");}
-                      | TIP ID ASSIGN expresie {if(strcmp($1,"Integer")==0){declarare_cu_initializare($1,$2,$4,0,"main");} else{error_nepotrivire();}}
+                      | TIP ID ASSIGN expresie {if(strcmp($1,"Integer")==0){declarare_cu_initializare($1,$2,evalAST($4.AST),0,"main");} else{error_nepotrivire();}}
                       | TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $4); if(strcmp($1,"Float")==0) { declarare_cu_initializare_diferit_int($1,$2,valoare,0,"main");}else{error_nepotrivire();}}
                       | TIP ID ASSIGN STRING {if(strcmp($1,"String")==0) { declarare_cu_initializare_diferit_int($1,$2,$4,0,"main");}else{error_nepotrivire();}}
                       | TIP ID ASSIGN ID '.' ID {declarare_cu_initializare_data_membru($1,$2, $4,$6,0,"main");}
                       ;
 variabila_declarata_local: TIP ID {declarare_fara_initializare($1,$2,0,"main");}
                          | array_loc
-                   ;
-variabila_initializata_global: CONST TIP ID ASSIGN expresie {if(strcmp($2,"Integer")==0){declarare_cu_initializare($2,$3,$5,1,"global");}else{error_nepotrivire();}}
+                         ;
+variabila_initializata_global: CONST TIP ID ASSIGN expresie {if(strcmp($2,"Integer")==0){declarare_cu_initializare($2,$3,evalAST($5.AST),1,"global");}else{error_nepotrivire();}}
                       | CONST TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $5); if(strcmp($2,"Float")==0) { declarare_cu_initializare_diferit_int($2,$3,valoare,1,"global");}else{error_nepotrivire();}}
                       | CONST TIP ID ASSIGN STRING {if(strcmp($2,"String")==0) { declarare_cu_initializare_diferit_int($2,$3,$5,1,"global");}else{error_nepotrivire();}}
-                      | TIP ID ASSIGN expresie {if(strcmp($1,"Integer")==0){declarare_cu_initializare($1,$2,$4,0,"global");} else{error_nepotrivire();}}
+                      | TIP ID ASSIGN expresie {if(strcmp($1,"Integer")==0){declarare_cu_initializare($1,$2,evalAST($4.AST),0,"global");} else{error_nepotrivire();}}
                       | TIP ID ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f", $4); if(strcmp($1,"Float")==0) { declarare_cu_initializare_diferit_int($1,$2,valoare,0,"global");}else{error_nepotrivire();}}
                       | TIP ID ASSIGN STRING {if(strcmp($1,"String")==0) { declarare_cu_initializare_diferit_int($1,$2,$4,0,"global");}else{error_nepotrivire();}}
                       ;
@@ -186,15 +205,19 @@ lista_declaratii : ID
                  | lista_declaratii ',' ID
                  ;
 */
-expresie : expresie PLUS expresie  {$$ = $1 + $3;}
-         | expresie MINUS expresie {$$ = $1 - $3;}
-         | expresie PROD expresie {$$ = $1 * $3;}
-         | expresie DIV expresie {$$ = $1 / $3;}
-         |'(' expresie ')' {$$ = $2;}
-         | ID {$$=get_valoare_dupa_nume($1);} 
-         | NR_INT {$$ = $1;} 
-         | ID '[' NR_INT ']' {$$=get_valoare_vector_dupa_nume($1,$3);}
+expresie : expresie PLUS expresie                {$$.AST = buildAST("+", $1.AST, $3.AST, OP); }
+         | expresie MINUS expresie               {$$.AST = buildAST("-", $1.AST, $3.AST, OP) ;}
+         | expresie PROD expresie                {$$.AST = buildAST("*", $1.AST, $3.AST, OP) ;}
+         | expresie DIV expresie                 {$$.AST = buildAST("/", $1.AST, $3.AST, OP) ;}
+         |'(' expresie ')'                       {char str_val[50]; snprintf(str_val,50,"%d",evalAST($2.AST)); $$.AST = buildAST(str_val, NULL, NULL, NUMBER);}
+         | ID                                    {$$.AST = buildAST($1, NULL, NULL, IDENTIFIER);}
+         | NR_INT                                {char str_val[50]; snprintf(str_val,50,"%d",$1); $$.AST = buildAST(str_val, NULL, NULL, NUMBER);}
+         //demodificat
+         | ID '[' NR_INT ']'  {$$.AST=buildAST($1,NULL,NULL,OTHER);}
+         | ID  '(' ')' {if(functie_deja_declarata($1,empty_struct)==0){count_aux_apel=0; error_ne_decl_functie($1);} else{count_aux_apel=0; char* tip_apel; tip_apel=strdup(get_tip_dupa_nume($1));  if(strcmp(tip_apel,"Integer")==0){$$.AST=buildAST(0,NULL,NULL,OTHER);}else{error_nepotrivire();}}} 
+         | ID '(' lista_apel')' {int verific=functie_deja_declarata_pt_apel($1,aux_apel); if(verific==0){count_aux_apel=0; error_ne_decl_functie($1);} else{count_aux_apel=0; char* tip_apel; tip_apel=strdup(get_tip_dupa_nume($1));  if(strcmp(tip_apel,"Integer")==0){$$.AST=buildAST(0,NULL,NULL,OTHER);}else{error_nepotrivire();}}}
          ;
+
 array_glob : TIP ID '[' NR_INT ']' {declara_vector($1,$2,$4,"global");}
       //| TIP ID '[' ']' ASSIGN '{' lista_valori '}'
       ;
@@ -211,17 +234,17 @@ valoare :  NR_INT
         | CHAR
         ;
 */
-print:  PRINT '(' STRING ',' expresie ')'   {printf("%s %d\n",$3,$5);}
+print:  PRINT '(' STRING ',' expresie ')'   {printf("%s %d\n",$3,evalAST($5.AST));}
      |  PRINT '(' STRING ')'  {printf("%s\n",$3);}
      |  PRINT '(' STRING ',' '&'ID ')'  {print_variabile($3,$6);}
      ;
-asignare_globala : ID ASSIGN expresie   {char count_str[]="global"; char str_valoare[50]; snprintf(str_valoare,50,"%d",$3); asignare_exista_variabila($1,count_str,str_valoare,0);}
+asignare_globala : ID ASSIGN expresie   {char count_str[]="global"; char str_valoare[50]; snprintf(str_valoare,50,"%d",evalAST($3.AST)); asignare_exista_variabila($1,count_str,str_valoare,0);}
                  | ID ASSIGN NR_REAL  {char count_str[]="global"; char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
                  | ID ASSIGN STRING    {char count_str[]="global"; asignare_exista_variabila($1,count_str,$3,2);}
                  | ID ASSIGN CHAR     {char count_str[]="global"; asignare_exista_variabila($1,count_str,$3,3);}
                  ;
 
-/* sectiunea 2 */
+//SECTIUNE 2 FUNCTII SI CLASE 
 functii_clase : functii_clase class_definitie
                 | functii_declaratie 
                 | class_definitie
@@ -257,7 +280,7 @@ cod_functii: cod_functii cod_f
            ;
 cod_f : declaratie_locala ';' {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); var[count_v-1].vizibilitate=strdup(count_str);}
             | asignare_functie 
-            | bucle // de completat
+            | bucle 
             | print 
             | interogari
             ;
@@ -267,14 +290,15 @@ lista_param : param
             ;
 param: TIP ID { set_parametrii_functie($1,$2,aux);}
      ;
-asignare_functie: ID ASSIGN expresie ';' {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); char str_valoare[50]; snprintf(str_valoare,50,"%d",$3); asignare_exista_variabila($1,count_str,str_valoare,0);}
+asignare_functie: ID ASSIGN expresie ';' {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); char str_valoare[50]; snprintf(str_valoare,50,"%d",evalAST($3.AST)); asignare_exista_variabila($1,count_str,str_valoare,0);}
                 | ID ASSIGN NR_REAL ';'  {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
                 | ID ASSIGN STRING ';'   {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); asignare_exista_variabila($1,count_str,$3,2);}
                 | ID ASSIGN CHAR ';'     {char count_str[100]; snprintf(count_str,100,"functie-%d",count_f); asignare_exista_variabila($1,count_str,$3,3);}
                 ;
 
 
-/*sectiunea 3 */
+
+//SECTIUNE 3 MAIN 
 main_prog :
            MAIN '('  ')' acolade
           ;
@@ -318,31 +342,21 @@ clasa_noua : ID ID { if(clasa_deja_definita($1)!=-1){
                 }
            ;
 
-asignare_main :  ID ASSIGN expresie    {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%d",$3); asignare_exista_variabila($1,count_str,str_valoare,0);}
+asignare_main :  ID ASSIGN expresie    {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%d",evalAST($3.AST)); asignare_exista_variabila($1,count_str,str_valoare,0);}
                 | ID ASSIGN NR_REAL   {char count_str[]="main"; char str_valoare[50]; snprintf(str_valoare,50,"%f",$3); asignare_exista_variabila($1,count_str,str_valoare,1);}
                 | ID ASSIGN STRING    {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,2);}
                 | ID ASSIGN CHAR      {char count_str[]="main"; asignare_exista_variabila($1,count_str,$3,3);}
                 | ID '.' ID ASSIGN NR_REAL {char valoare[50];  snprintf(valoare,50,"%7.2f",$5);  asignare_pt_data_membru($1,$3,valoare,"Float");}
-                | ID '.' ID ASSIGN expresie {char valoare[50]; sprintf(valoare,"%d",$5);  asignare_pt_data_membru($1,$3,valoare,"Integer");}
+                | ID '.' ID ASSIGN expresie {char valoare[50]; sprintf(valoare,"%d",evalAST($5.AST));  asignare_pt_data_membru($1,$3,valoare,"Integer");}
                 | ID '.' ID ASSIGN STRING { asignare_pt_data_membru($1,$3,$5,"String");}
                 | ID '.' ID ASSIGN BOOLEAN {asignare_pt_data_membru($1,$3,$5,"Bool");}
                 | ID ASSIGN ID '.' ID {asignare_cu_data_membru($1,$3,$5);}
-                | ID '[' NR_INT ']' ASSIGN expresie { char valoare[50]; sprintf(valoare,"%d",$6); asignare_pt_element_vector($1,$3,valoare, "Integer");}
+                | ID '[' NR_INT ']' ASSIGN expresie { char valoare[50]; sprintf(valoare,"%d",evalAST($6.AST)); asignare_pt_element_vector($1,$3,valoare, "Integer");}
                 | ID '[' NR_INT ']' ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f",$6); asignare_pt_element_vector($1,$3,valoare, "Float");}
                 | ID '[' NR_INT ']' ASSIGN STRING { asignare_pt_element_vector($1,$3,$6, "String");}
                 //| ID ASSIGN ID '['NR_INT']' {asignare_cu_element_vector($1,$3,$5);}
                 ;
-/*
-expr: expr PLUS expr
-    | expr MINUS expr
-    | expr PROD expr
-    | expr DIV expr
-    |'(' expresie ')'
-    | ID
-    | NR_INT
-    | apel_functie
-    ;
-*/
+
 apel_functie :  ID '(' ')'    {if(functie_deja_declarata_pt_apel($1,empty_struct)==0){count_aux_apel=0; error_ne_decl_functie($1);}else{count_aux_apel=0; }}          
              | ID '(' lista_apel')' {int verific=functie_deja_declarata_pt_apel($1,aux_apel); if(verific==0){count_aux_apel=0; error_ne_decl_functie($1);}else{count_aux_apel=0; }}
              ;
@@ -351,8 +365,8 @@ lista_apel: param_apel
           ;
 param_apel : expresie { set_parametrii_apel("Integer",aux_apel);}
            | NR_REAL {set_parametrii_apel("Float",aux_apel);}
-           | ID  '(' ')' {if(functie_deja_declarata($1,empty_struct)==0){count_aux_apel=0; error_ne_decl_functie($1);} else{count_aux_apel=0; char* tip_apel; tip_apel=strdup(get_tip_dupa_nume($1));  set_parametrii_apel(tip_apel,aux_apel);}} 
-           | ID '(' lista_apel')' {int verific=functie_deja_declarata_pt_apel($1,aux_apel); if(verific==0){count_aux_apel=0; error_ne_decl_functie($1);} else{count_aux_apel=0; char* tip_apel; tip_apel=strdup(get_tip_dupa_nume($1));  set_parametrii_apel(tip_apel,aux_apel);}}
+          // | ID  '(' ')' {if(functie_deja_declarata($1,empty_struct)==0){count_aux_apel=0; error_ne_decl_functie($1);} else{count_aux_apel=0; char* tip_apel; tip_apel=strdup(get_tip_dupa_nume($1));  set_parametrii_apel(tip_apel,aux_apel);}} 
+          // | ID '(' lista_apel')' {int verific=functie_deja_declarata_pt_apel($1,aux_apel); if(verific==0){count_aux_apel=0; error_ne_decl_functie($1);} else{count_aux_apel=0; char* tip_apel; tip_apel=strdup(get_tip_dupa_nume($1));  set_parametrii_apel(tip_apel,aux_apel);}}
            ;
 
 statement: ID INCR {int verificare=verificare_exista_variabila($1); if(verificare==-1){error_ne_decl_variabila($1);}}
@@ -362,17 +376,37 @@ statement: ID INCR {int verificare=verificare_exista_variabila($1); if(verificar
          | DECR ID {int verificare=verificare_exista_variabila($2); if(verificare==-1){error_ne_decl_variabila($2);}}
          ;
     
-interogari: DACA '(' conditie ')' '{' cod_bloc '}'
-          | DACA '(' conditie ')' '{' cod_bloc '}' ALTFEL '{' cod_bloc '}'
+interogari: DACA '(' conditie_if')' '{' cod_bloc '}'
+          | DACA '(' conditie_if ')' '{' cod_bloc '}' ALTFEL '{' cod_bloc '}'
           ;
+
+conditie_if : conditie_if LESS conditie_if
+            | conditie_if GREATER conditie_if
+            | conditie_if LEQ conditie_if
+            | conditie_if GEQ conditie_if
+            | conditie_if EQ conditie_if
+            | conditie_if NEQ conditie_if
+            | conditie_if OR conditie_if
+            | conditie_if AND conditie_if
+            | conditie_if PLUS conditie_if
+            | conditie_if MINUS conditie_if
+            | conditie_if PROD conditie_if
+            | conditie_if DIV conditie_if
+            | ID {if(verificare_exista_variabila($1)==-1) error_ne_decl_variabila($1); }
+            | ID '(' ')'    {if(functie_deja_declarata_pt_apel($1,empty_struct)==0){count_aux_apel=0; error_ne_decl_functie($1);}else{count_aux_apel=0; }}   
+            | ID '(' lista_apel')' {int verific=functie_deja_declarata_pt_apel($1,aux_apel); if(verific==0){count_aux_apel=0; error_ne_decl_functie($1);}else{count_aux_apel=0; }}
+            | NR_INT
+            | '(' conditie_if ')'
+            ;
+
 			  
-conditie : expresie LESS expresie {verifica_conditia($1,1,$3);}	 			
-         | expresie GREATER expresie {verifica_conditia($1,2,$3);}				
-	 | expresie LEQ expresie {verifica_conditia($1,3,$3);}				
-	 | expresie GEQ expresie {verifica_conditia($1,4,$3);}			
-	 | expresie EQ expresie  {verifica_conditia($1,5,$3);}
-         | expresie NEQ expresie {verifica_conditia($1,6,$3);}
-         | expresie	         {verifica_conditia(1,7,1);}		
+conditie : expresie LESS expresie    {verifica_conditia(evalAST($1.AST),1,evalAST($3.AST));}	 			
+         | expresie GREATER expresie {verifica_conditia(evalAST($1.AST),2,evalAST($3.AST));}				
+	 | expresie LEQ expresie     {verifica_conditia(evalAST($1.AST),3,evalAST($3.AST));}			
+	 | expresie GEQ expresie     {verifica_conditia(evalAST($1.AST),4,evalAST($3.AST));}			
+	 | expresie EQ expresie      {verifica_conditia(evalAST($1.AST),5,evalAST($3.AST));}
+         | expresie NEQ expresie     {verifica_conditia(evalAST($1.AST),6,evalAST($3.AST));}
+         | expresie	             {verifica_conditia(0,7,0);}	
 	 ;
 bucle:  functie_for
      | functie_while
@@ -401,7 +435,7 @@ int variabila_deja_declarata(char* nume,char* vizibilitate){
         for (int i = 0; i < count_v; i++)
         {
                 if (strcmp(var[i].id, nume) == 0 && strcmp(var[i].vizibilitate, vizibilitate) == 0 ) 
-                { //printf("%lf\n",var[i].valoare);
+                { 
                 return i;
                 }
         }
@@ -425,6 +459,8 @@ void declarare_fara_initializare(char* tip,char* nume, int este_const,char* vizi
         var[count_v].id=strdup(nume);
         var[count_v].constante=0;
         var[count_v].vizibilitate=strdup(vizibilitate);
+        //var[count_v].valoare=(char*)malloc(4);
+        //strcpy(var[count_v].valoare,"0");
         count_v++;
 }
 void declarare_cu_initializare(char* tip,char* nume,int val,int este_const,char* vizibilitate){
@@ -485,9 +521,6 @@ void print_variabile(char* mesaj ,char* nume) // momentan in lucru ...
 {
         
         char* ptr=nume;
-        //strcpy(ptr,ptr+1);
-       // ptr=strtok(nume,"\"");
-       
         int gasit=0;
         
         for (int i = 0; i < count_v; i++)
@@ -603,60 +636,6 @@ char* get_tip_dupa_nume(char* nume){
 
 
 
-void scrieVariabileFisier()
-{
-      FILE* var_fisier_ptr;
-      var_fisier_ptr=fopen(fisier_variabile,"w+"); // dechidere fisier 
-      fprintf(var_fisier_ptr,"tip  id  valoare  vizibilitate  este_const  dimensiune\n");
-      fprintf(var_fisier_ptr,"---------------------------------------------------------\n");
-      fprintf(var_fisier_ptr,"\n\nGLOBAL:\n");
-      for(int i=0;i<count_v;i++){
-              if(strcmp(var[i].vizibilitate,"global")==0)
-              if(var[i].dimensiune==0){
-                fprintf(var_fisier_ptr,"%s  %s  %s  %s  %d  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
-              }
-              else{
-                fprintf(var_fisier_ptr,"%s  %s ", var[i].tip, var[i].id); 
-                for(int j=0;j<var[i].dimensiune;j++){
-                        fprintf(var_fisier_ptr,"%s ",var[i].val2[j]);
-                }
-                fprintf(var_fisier_ptr,"%s  %d  %d\n", var[i].vizibilitate,var[i].constante,var[i].dimensiune);   
-              }
-              
-      }
-      fprintf(var_fisier_ptr,"\n\nMAIN:\n");
-       for(int i=0;i<count_v;i++){
-              if(strcmp(var[i].vizibilitate,"main")==0)
-              if(var[i].dimensiune==0){
-                fprintf(var_fisier_ptr,"%s  %s  %s  %s  %d  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
-              }
-              else{
-                fprintf(var_fisier_ptr,"%s  %s ", var[i].tip, var[i].id); 
-                for(int j=0;j<var[i].dimensiune;j++){
-                        fprintf(var_fisier_ptr,"%s ",var[i].val2[j]);
-                }
-                fprintf(var_fisier_ptr,"%s  %d  %d\n", var[i].vizibilitate,var[i].constante,var[i].dimensiune);
-              }
-              
-      }
-
-       fprintf(var_fisier_ptr,"\n\nFUNCTII:\n");
-       for(int i=0;i<count_v;i++){
-              if(strstr(var[i].vizibilitate,"functie"))
-                fprintf(var_fisier_ptr,"%s  %s  %s  %s  %d  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
-              
-      }
-
-       fprintf(var_fisier_ptr,"\n\nCLASE:\n");
-       for(int i=0;i<count_v;i++){
-              if(strstr(var[i].vizibilitate,"clas"))
-                fprintf(var_fisier_ptr,"%s  %s  %s  %s  %d  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
-              
-      }
-
-
-      fclose(var_fisier_ptr);
-}
 
 int functie_deja_declarata(char* id,struct parametru *param)
 {       
@@ -777,29 +756,6 @@ void verifica_conditia(int nr1, int nr_conditie, int nr2)
         }
 }
 
-void scrieFunctiiInFisier()
-{
-        //id,tip,parametri,variabile
-        FILE* functii_fisier_ptr;
-        functii_fisier_ptr=fopen(fisier_functii,"w+");
-        fprintf(functii_fisier_ptr,"tip  id nr_parametrii     parametrii \n");
-        fprintf(functii_fisier_ptr,"---------------------------------------------------------\n");
-        for(int i=0;i<count_f;i++) {
-          // afisare tip, nume si nr parametrii
-          fprintf(functii_fisier_ptr,"%s %s %d ",functii[i].tip_return,functii[i].id,functii[i].nr_parametrii);
-
-          // afisare parametrii functie
-          for(int j=0; j<functii[i].nr_parametrii; j++) {
-                  fprintf(functii_fisier_ptr, "%s %s ", functii[i].parametrii_functie[j].tip, functii[i].parametrii_functie[j].id);
-          }
-
-          fprintf(functii_fisier_ptr, "\n");
-        }
-
-
-        fclose(functii_fisier_ptr);
-
-}
 
 void creeaza_clasa(char* tip){
         strcpy(clase[nr_clase].tip,tip);
@@ -1185,3 +1141,104 @@ int get_valoare_vector_dupa_nume(char* nume,int index_elem){
         }
 }
         
+
+void scrieVariabileFisier()
+{
+      FILE* var_fisier_ptr;
+      var_fisier_ptr=fopen(fisier_variabile,"w+"); // dechidere fisier 
+      fprintf(var_fisier_ptr,"tip | id  |  valoare | vizibilitate | este_const | dimensiune\n");
+      fprintf(var_fisier_ptr,"---------------------------------------------------------\n");
+      fprintf(var_fisier_ptr,"\n\nGLOBAL:\n");
+      for(int i=0;i<count_v;i++){
+              if(strcmp(var[i].vizibilitate,"global")==0)
+                fprintf(var_fisier_ptr,"%s  |  %s  |  %s  |  %s  |  %d  |  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
+              
+      }
+      fprintf(var_fisier_ptr,"\n\nMAIN:\n");
+       for(int i=0;i<count_v;i++){
+              if(strcmp(var[i].vizibilitate,"main")==0)
+                fprintf(var_fisier_ptr,"%s  |  %s  |  %s  |  %s  |  %d  |  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
+              
+      }
+
+       fprintf(var_fisier_ptr,"\n\nFUNCTII:\n");
+       for(int i=0;i<count_v;i++){
+              if(strstr(var[i].vizibilitate,"functie"))
+                fprintf(var_fisier_ptr,"%s  |  %s  |  %s  |  %s  |  %d  |  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
+              
+      }
+
+       fprintf(var_fisier_ptr,"\n\nCLASE:\n");
+       for(int i=0;i<count_v;i++){
+              if(strstr(var[i].vizibilitate,"clas"))
+                fprintf(var_fisier_ptr,"%s  |  %s  |  %s  |  %s  |  %d  |  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
+              
+      }
+
+
+      fclose(var_fisier_ptr);
+}
+void scrieFunctiiInFisier()
+{
+        //id,tip,parametri,variabile
+        FILE* functii_fisier_ptr;
+        functii_fisier_ptr=fopen(fisier_functii,"w+");
+        fprintf(functii_fisier_ptr,"tip | id | nr_parametrii   |  parametrii \n");
+        fprintf(functii_fisier_ptr,"---------------------------------------------------------\n");
+        for(int i=0;i<count_f;i++) {
+          // afisare tip, nume si nr parametrii
+          fprintf(functii_fisier_ptr,"%s | %s | %d: ",functii[i].tip_return,functii[i].id,functii[i].nr_parametrii);
+
+          // afisare parametrii functie
+          for(int j=0; j<functii[i].nr_parametrii; j++) {
+                  fprintf(functii_fisier_ptr, "%s %s ", functii[i].parametrii_functie[j].tip, functii[i].parametrii_functie[j].id);
+          }
+
+          fprintf(functii_fisier_ptr, "\n");
+        }
+
+
+        fclose(functii_fisier_ptr);
+}
+
+struct ast_node *buildAST(char* val_nod,struct ast_node *stanga, struct ast_node *dreapta,int tip )
+{       //creez nod nou si il returnez
+        struct ast_node *nodNou=(struct ast_node*)malloc(sizeof(struct ast_node));
+        nodNou->stanga=stanga;
+        nodNou->dreapta=dreapta;
+        nodNou->valoare=strdup(val_nod);
+        nodNou->tip=tip;
+        return(nodNou);
+}
+
+int evalAST(struct ast_node *ast)
+{
+        
+
+  if(ast != NULL ){
+       if(ast->tip == NUMBER ) return atoi(ast->valoare);
+       else 
+       if(ast->tip == IDENTIFIER) return get_valoare_dupa_nume(ast->valoare);
+       else{
+             
+                if(ast->tip == OP)
+                {
+                        if(strcmp(ast->valoare,"+")==0) return (evalAST(ast->stanga) + evalAST(ast->dreapta));
+                        else
+                        if(strcmp(ast->valoare,"-")==0) return (evalAST(ast->stanga) - evalAST(ast->dreapta));
+                        else
+                        if(strcmp(ast->valoare,"*")==0) return (evalAST(ast->stanga) * evalAST(ast->dreapta));
+                        else
+                        if(strcmp(ast->valoare,"/")==0) return (evalAST(ast->stanga) / evalAST(ast->dreapta));
+                }
+                else
+                {
+               // printf("ramura altceva \n");
+                return 0;
+                }
+        }
+  }
+
+  return 0;
+        
+}

@@ -352,7 +352,10 @@ conditie : expresie LESS expresie {verifica_conditia(evalAST($1.AST),1,evalAST($
 	 | expresie GEQ expresie  {verifica_conditia(evalAST($1.AST),4,evalAST($3.AST));}			
 	 | expresie EQ expresie   {verifica_conditia(evalAST($1.AST),5,evalAST($3.AST));}
          | expresie NEQ expresie  {verifica_conditia(evalAST($1.AST),6,evalAST($3.AST));}
-         | expresie	          {verifica_conditia(0,7,0);}	
+         | expresie	          {verifica_conditia(0,7,0);}
+         | conditie AND conditie  //{verifica_conditia(evalAST($1.AST),8,evalAST($3.AST));}
+         | conditie OR conditie   //{verifica_conditia(evalAST($1.AST),9,evalAST($3.AST));}	
+         
 	 ;
 bucle:  functie_for
      | functie_while
