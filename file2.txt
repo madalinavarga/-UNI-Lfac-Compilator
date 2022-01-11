@@ -127,5 +127,7 @@ fct(7.8);
 suma(fct(6.0),2,4);
 minus();
 
+vector_glob[2]=4;
+
 
 }

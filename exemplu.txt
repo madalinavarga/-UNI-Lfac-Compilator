@@ -1,0 +1,41 @@
+Integer x = 23;
+Integer x1;
+Integer x2;
+Float f1 = 50.0;
+String s="ana";
+Integer testFunction(Integer x, Float z) {
+  # puteti pune orice aici 
+  String s="ana";
+}
+
+Integer testFunction(Integer x, Integer z) {
+  #puteti pune orice aici
+  String s="ana";
+}
+
+Integer testFunction(Float x, Float z) {
+  #puteti pune orice aici
+  String s="ana";
+}
+
+Integer test(Integer param) {
+ # puteti pune orice aici
+ String s="ana";
+}
+
+Main () {
+  Integer x3=9;
+  Print("Sunt aici");
+  x=9;
+  x3 = x + 2;
+  Integer f2;
+  x2=6;
+	f2 = x + x2;
+    Print("Sunt aici f1");
+  Print("Sunt aici");
+	f1 = test (5) + x;
+  Print("Sunt aici");
+	x = s + f1;
+  test(f1);
+}
+

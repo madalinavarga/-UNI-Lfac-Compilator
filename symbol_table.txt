@@ -3,45 +3,20 @@ tip  id  valoare  vizibilitate  este_const  dimensiune
 
 
 GLOBAL:
-Float  x  9.800000  global  0  0
-Integer  y  7  global  0  0
-Integer  a  3  global  1  0
-String  s  "Sunt aici"  global  0  0
-Integer  var_globala  13  global  0  0
+Integer  x  10  global  0  0
+Integer  x1  61  global  0  0
+Integer  x2  30  global  0  0
+Integer  y  (null)  global  0  0
+Integer  vector 0 0 1 0 0 0 0 0 0 0 global  0  10
 
 
 MAIN:
-Integer  m  9  main  0  0
-Float  z  (null)  main  0  0
-zoo  z2  (null)  main  0  0
-mamifer  m1  (null)  main  0  0
-Integer  c  13  main  0  0
-Integer  m1.lup  8  main  0  0
-Integer  z2.hipopotam  16  main  0  0
-Integer  m1.urs  1  main  0  0
-Bool  z2.adevar  fals  main  0  0
-String  z2.s  "lenuta"  main  0  0
-Integer  data  20  main  0  0
-String  nume  "lenuta"  main  0  0
-Integer  p  (null)  main  0  0
-Float  fl  (null)  main  0  0
+Integer  x1  (null)  main  0  0
 
 
 FUNCTII:
-Integer  suma_var  109  functie-0  0  0
-Integer  suma_var  (null)  functie-1  0  0
-Float  z  10.100000  functie-1  0  0
-Integer  z1  20  functie-1  0  0
-Integer  minus_var  9  functie-2  0  0
+Integer  x1  (null)  functie-0  0  0
+Integer  x1  (null)  functie-1  0  0
 
 
 CLASE:
-String  s  (null)  class-0  0  0
-Integer  urs  (null)  class-0  0  0
-Float  girafa  (null)  class-0  0  0
-Integer  hipopotam  (null)  class-0  0  0
-Integer  lup  (null)  class-0  0  0
-Bool  adevar  (null)  class-0  0  0
-Integer  lup  (null)  class-1  0  0
-Integer  zebra  (null)  class-1  0  0
-Integer  urs  (null)  class-1  0  0

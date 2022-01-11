@@ -1,5 +1,5 @@
 tip  id nr_parametrii     parametrii 
 ---------------------------------------------------------
-Integer suma 2 Integer a Float b 
-Integer suma 3 Integer a Integer b Integer c 
-Integer minus 0 
+Integer testFunction 2 Integer x Float z 
+Integer testFunction 2 Integer x Integer z 
+Integer test 2 Integer param1 Integer param2 

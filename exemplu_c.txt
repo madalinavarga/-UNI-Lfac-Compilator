@@ -1,7 +1,8 @@
 Integer x ;
+Integer x1;
 Integer x2;
 Integer y;
-#Integer vector[10];
+Integer vector[10];
 
 Integer testFunction(Integer x, Float z) {
   Integer x1;
@@ -15,13 +16,13 @@ Integer test(Integer param1, Integer param2) {
   Integer x1;
 }
 Main () {
-          vector[2] = 1; x = 10; x1 = 20; x2 = 30;
-          if (x1 + test(x1,x2) < 5 + x1 && (x > 2 || x1 < 4+x2) || x == 2) {
-	   x = 2;
-           }
-            x = test(test(x1,3)+2, y+4) + 34 - y * vector[2];
-x1 = x + 5 * 10 + vector[2];
-print(“valoarea lui x1 este:”, x1) ;	
-print(“valoarea expresiei este:”, x2* 10) ;	
+      vector[2] = 1;
+      x = 10; 
+      x1 = 20; 
+      x2 = 30;
+      x1 = x + 5 * 10 + vector[2];
+      Print("valoarea lui x1 este:", x1) ;
+      Print("valoarea expresiei este:", x2* 10) ;
+
 }
 

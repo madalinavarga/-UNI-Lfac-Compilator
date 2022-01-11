@@ -92,6 +92,7 @@ void set_parametrii_apel(char* tip, struct parametru* aux);
 void error_ne_decl_functie(char* nume);
 char* get_tip_dupa_nume(char* nume);
 int functie_deja_declarata_pt_apel(char* id,struct parametru *param);
+int get_valoare_vector_dupa_nume(char* nume,int index_elem);
 
 
 char *citeste_fisier(char *file);
@@ -192,6 +193,7 @@ expresie : expresie PLUS expresie  {$$ = $1 + $3;}
          |'(' expresie ')' {$$ = $2;}
          | ID {$$=get_valoare_dupa_nume($1);} 
          | NR_INT {$$ = $1;} 
+         | ID '[' NR_INT ']' {$$=get_valoare_vector_dupa_nume($1,$3);}
          ;
 array_glob : TIP ID '[' NR_INT ']' {declara_vector($1,$2,$4,"global");}
       //| TIP ID '[' ']' ASSIGN '{' lista_valori '}'
@@ -328,7 +330,7 @@ asignare_main :  ID ASSIGN expresie    {char count_str[]="main"; char str_valoar
                 | ID '[' NR_INT ']' ASSIGN expresie { char valoare[50]; sprintf(valoare,"%d",$6); asignare_pt_element_vector($1,$3,valoare, "Integer");}
                 | ID '[' NR_INT ']' ASSIGN NR_REAL {char valoare[50]; sprintf(valoare,"%7.2f",$6); asignare_pt_element_vector($1,$3,valoare, "Float");}
                 | ID '[' NR_INT ']' ASSIGN STRING { asignare_pt_element_vector($1,$3,$6, "String");}
-                | ID ASSIGN ID '['NR_INT']' {asignare_cu_element_vector($1,$3,$5);}
+                //| ID ASSIGN ID '['NR_INT']' {asignare_cu_element_vector($1,$3,$5);}
                 ;
 /*
 expr: expr PLUS expr
@@ -1152,6 +1154,34 @@ void asignare_cu_element_vector(char* nume_var,char* nume_vector,int index_elem)
                               }
                       }
               } 
+        }
+}
+
+int get_valoare_vector_dupa_nume(char* nume,int index_elem){
+        int index_vector=verificare_exista_variabila(nume); 
+        if(index_vector==-1){
+                error_ne_decl_variabila(nume);
+        }
+        else{
+               if(index_elem>=var[index_vector].dimensiune || index_elem<0){
+                        char error_msg[250];
+                        bzero(error_msg,250);
+                        strcat(error_msg, "Index invalid");
+                        yyerror(error_msg);
+                        exit(0);   
+                } 
+                else{
+                        if(strcmp(var[index_vector].tip,"Integer")!=0){
+                               char error_msg[250];
+                                bzero(error_msg,250);
+                                strcat(error_msg, "Expresie poate fi doar integer");
+                                yyerror(error_msg);
+                                exit(0);   
+                        }
+                        else{
+                                return atoi(var[index_vector].val2[index_elem]);
+                        }
+                }
         }
 }
         
