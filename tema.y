@@ -18,6 +18,7 @@ struct ast_node{
         enum enum_tip tip;
 }; 
 
+
 //STRUCTURA VARIABILE + FUNCTII + OBIECTE
 struct variabile{
       char* tip;
@@ -53,6 +54,7 @@ struct obiecte{
         char* id;
         char* vizibilitate;
 }obiecte[100];
+
 
 //DECLARATII FUNCTII + VARIABILE GLOBALE  UTILIZATE
 int nr_obiecte=0,index_array=0;
@@ -123,6 +125,7 @@ char *citeste_fisier(char *file);
         struct ast_node *AST;
 }expresie;
 }
+
 
 //LEGATURA .l 
 %token PRINT CONST DACA ALTFEL PENTRU CAT_TIMP MAIN RETURN EXIT CLASS 
@@ -428,7 +431,7 @@ yyparse();
 
 
 int variabila_deja_declarata(char* nume,char* vizibilitate){
-        
+        //parcurgere structura cu variabila si verificare
         for (int i = 0; i < count_v; i++)
         {
                 if (strcmp(var[i].id, nume) == 0 && strcmp(var[i].vizibilitate, vizibilitate) == 0 ) 
@@ -486,13 +489,13 @@ int get_valoare_dupa_nume(char * nume)
         int gasit=0;
          for (int i = 0; i < count_v; i++)
          {
-                
+                //daca gaseste valoare si este integer => o returneaza
                  if(strcmp(var[i].id,nume)==0 && strcmp(var[i].tip,"Integer")==0){
                  gasit++;
                  int valoare=atoi(var[i].valoare);
                  return valoare;
                  }
-                 else{
+                 else{ //gaseste valoare si nu este integer=> eroare 
                          if(strcmp(var[i].id,nume)==0 && strcmp(var[i].tip,"Integer")!=0){
                                 char error_msg[250];
                                 sprintf(error_msg, "Expresie poate fi doar Integer");
@@ -502,7 +505,7 @@ int get_valoare_dupa_nume(char * nume)
                  }
          }
 
-         if(gasit==0) 
+         if(gasit==0) //daca nu exista variabila => eroare 
          {
                 char error_msg[250];
                 sprintf(error_msg, "Variabila %s nu exista", nume);
@@ -518,7 +521,7 @@ void print_variabile(char* mesaj ,char* nume)
         int gasit=0;
         for (int i = 0; i < count_v; i++)
          {
-                 //printf("variabile: %s %s\n",var[i].id,var[i].tip);
+                 //cautare dupa nume
                  if(strcmp(var[i].id,nume)==0){
                          gasit++;
                          printf("%s: %s\n",mesaj,var[i].valoare);
@@ -535,21 +538,21 @@ void print_variabile(char* mesaj ,char* nume)
 }
 
 void creaza_functie(char* tip, char* id,struct parametru *aux)
-{
+{       //mutam valorile din structura auxiliara in functie 
         functii[count_f].nr_parametrii=count_aux;
         functii[count_f].tip_return=strdup(tip);
         functii[count_f].id=strdup(id);
-        for(int i =0;i<count_aux;i++)
+        for(int i =0;i<count_aux;i++) // setam parametrii
         {
                 functii[count_f].parametrii_functie[i].id=strdup(aux[i].id);
                 functii[count_f].parametrii_functie[i].tip=strdup(aux[i].tip);
         }
-        count_f++;
-        count_aux=0;
+        count_f++; // incrementare nr functiilor
+        count_aux=0; // resetare aux
 
 }
 void asignare_exista_variabila(char* id , char* viziblitate ,char* valoare, int nr_tip)
-{
+{       //verificam daca exista variabila 
         int index=verificare_exista_variabila(id);
         if(index==-1){
                 error_ne_decl_variabila(id);
@@ -564,7 +567,7 @@ void asignare_exista_variabila(char* id , char* viziblitate ,char* valoare, int 
                         exit(0);
                 }
          for (int i = 0; i < count_v; i++){
-                if(strcmp(var[i].id,id)==0){ // acelasi nume
+                if(strcmp(var[i].id,id)==0){ // acelasi nume si global => pot folosi oriunde 
                   if(strcmp(var[i].vizibilitate,"global")==0) var[i].valoare=strdup(valoare);
                   else
                    if(strcmp(var[i].vizibilitate,viziblitate)==0) 
@@ -575,8 +578,7 @@ void asignare_exista_variabila(char* id , char* viziblitate ,char* valoare, int 
                            if(nr_tip==1 && strcmp(var[i].tip,"Float")==0)
                            {
                                    var[i].valoare=strdup(valoare);
-                                   
-
+               
                            }else
                            if(nr_tip==2 && strcmp(var[i].tip,"String")==0){
                                    var[i].valoare=strdup(valoare);
@@ -586,7 +588,7 @@ void asignare_exista_variabila(char* id , char* viziblitate ,char* valoare, int 
                                    var[i].valoare=strdup(valoare);
                            }else
                            {
-                                //printf("variabila trebuie declarata inainte\n"); exit(0);
+                                
                                 char error_msg[250];
                                 sprintf(error_msg, "Nepotrivire tipuri");
                                 yyerror(error_msg);

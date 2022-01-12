@@ -3,20 +3,17 @@ tip | id  |  valoare | vizibilitate | este_const | dimensiune
 
 
 GLOBAL:
-String  |  vector_s  |  (null)  |  global  |  0  |  5
-Integer  |  vector_i  |  (null)  |  global  |  0  |  3
-Integer  |  c  |  9  |  global  |  1  |  0
-String  |  s  |  "sir"  |  global  |  0  |  0
+Integer  |  x  |  23  |  global  |  0  |  0
+Integer  |  x1  |  (null)  |  global  |  0  |  0
+Integer  |  x2  |  0  |  global  |  0  |  0
+Float  |  f1  |  23  |  global  |  0  |  0
+String  |  s  |  "ana"  |  global  |  0  |  0
 
 
 MAIN:
-MyClass  |  M  |  (null)  |  main  |  0  |  0
-String  |  M.myString  |  "clasa"  |  main  |  0  |  0
-Integer  |  M.myNum  |  9  |  main  |  0  |  0
-Integer  |  x  |  13  |  main  |  0  |  0
-Integer  |  a  |  5  |  main  |  0  |  0
-Integer  |  p  |  0  |  main  |  0  |  0
 
 
 FUNCTII:
-Float  |  z  |    10.00  |  functie-0  |  0  |  0
+Integer  |  w  |  (null)  |  functie-0  |  0  |  0
+Integer  |  w  |  (null)  |  functie-1  |  0  |  0
+Integer  |  w  |  (null)  |  functie-2  |  0  |  0
