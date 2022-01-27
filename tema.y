@@ -823,7 +823,7 @@ void declarare_variabila_class(char* tip, char* nume,char* vizibilitate){
         clase[nr_clase].class_var[clase[nr_clase].nr_variabile].id=strdup(nume);
         char buf[20];
         sprintf(buf,"%s-%d",vizibilitate,nr_clase);
-        //declarare_fara_initializare(tip,nume, 0, buf);
+        declarare_fara_initializare(tip,nume, 0, buf);
         clase[nr_clase].nr_variabile++;
 }
 
@@ -1161,14 +1161,14 @@ void scrieVariabileFisier()
                 fprintf(var_fisier_ptr,"%s  |  %s  |  %s  |  %s  |  %d  |  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
               
       } 
-      /*
+
        fprintf(var_fisier_ptr,"\n\nCLASE:\n");
        for(int i=0;i<count_v;i++){
               if(strstr(var[i].vizibilitate,"clas"))
                 fprintf(var_fisier_ptr,"%s  |  %s  |  %s  |  %s  |  %d  |  %d\n", var[i].tip, var[i].id,var[i].valoare, var[i].vizibilitate,var[i].constante,var[i].dimensiune);
               
       }
-      */
+      
 
 
       fclose(var_fisier_ptr);
